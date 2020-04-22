@@ -1,0 +1,138 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "newProjectRoot": "projects",
+    "projects": {
+        "lib": {
+            "root": "lib",
+            "sourceRoot": "lib/src",
+            "projectType": "library",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "options": {
+                        "tsConfig": "lib/tsconfig.lib.json",
+                        "project": "ng-package.json"
+                    },
+                    "configurations": {
+                        "production": {
+                            "project": "ng-package.json"
+                        }
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "sourceMap": true,
+                        "main": "lib/test.ts",
+                        "tsConfig": "lib/tsconfig.spec.json",
+                        "karmaConfig": "lib/karma.conf.js"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "lib/tsconfig.lib.json",
+                            "lib/tsconfig.spec.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                }
+            }
+        },
+        "demo": {
+            "root": "",
+            "sourceRoot": "demo",
+            "projectType": "application",
+            "prefix": "demo",
+            "schematics": {},
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "build/demo",
+                        "index": "demo/index.html",
+                        "main": "demo/main.ts",
+                        "polyfills": "demo/polyfills.ts",
+                        "tsConfig": "demo/tsconfig.json",
+                        "assets": [
+                            "demo/favicon.ico",
+                            "demo/assets"
+                        ],
+                        "styles": [
+                            "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+                            "demo/styles/global.scss"
+                        ],
+                        "scripts": []
+                    },
+                    "configurations": {
+                        "production": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "demo/environments/environment.ts",
+                                    "with": "demo/environments/environment.prod.ts"
+                                }
+                            ],
+                            "tsConfig": "demo/tsconfig.prod.json",
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "demo:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "demo:build:production"
+                        }
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "demo/test.ts",
+                        "polyfills": "demo/polyfills.ts",
+                        "tsConfig": "demo/tsconfig.spec.json",
+                        "karmaConfig": "demo/karma.conf.js",
+                        "styles": [
+                            "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+                            "demo/styles/global.scss"
+                        ],
+                        "scripts": [],
+                        "assets": [
+                            "demo/favicon.ico",
+                            "demo/assets"
+                        ]
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "demo/tsconfig.json",
+                            "demo/tsconfig.spec.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "defaultProject": "lib"
+}

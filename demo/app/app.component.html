@@ -1,0 +1,19 @@
+<mat-button-toggle-group [value]="activeLanguage$ | async" (change)="selectLanguage($event.value)">
+    <mat-button-toggle *ngFor="let language of availableLanguages" [value]="language">{{ language }}</mat-button-toggle>
+</mat-button-toggle-group>
+
+<!--
+<br>
+<app-translation-examples></app-translation-examples>
+<br>
+<app-translation-examples [inlineLang]="'nl|static'"></app-translation-examples>
+<br>
+<app-translation-examples [providedLang]="'nl|static'"></app-translation-examples>
+<br>
+-->
+<app-translation-examples [providedScope]="'scope1'"></app-translation-examples>
+<!--
+<br>
+<app-translation-examples [providedLang]="'nl'" [providedScope]="'scope1'"></app-translation-examples>
+-->
+

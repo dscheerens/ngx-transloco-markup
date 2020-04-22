@@ -1,0 +1,15 @@
+/.idea
+/.ng_pkg_build
+/.settings
+/.vscode
+/build
+/coverage
+/tmp
+/out-tsc
+/node_modules
+.DS_Store
+.classpath
+.project
+Thumbs.db
+npm-debug.log
+*.iml

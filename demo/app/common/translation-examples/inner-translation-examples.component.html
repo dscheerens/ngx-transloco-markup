@@ -1,0 +1,7 @@
+<div>inlineLang = <code>{{ inlineLang === undefined ? 'undefined' : (inlineLang | json) }}</code></div>
+<div>providedLang = <code>{{ providedLang === undefined ? 'undefined' : (providedLang | json) }}</code></div>
+<div>providedScope = <code>{{ providedScope === undefined ? 'undefined' : (providedScope | json) }}</code></div>
+<div>{{ 'KEY-1' | transloco:undefined:inlineLang }}</div>
+<div>{{ 'KEY-2' | transloco:undefined:inlineLang }}</div>
+<div>{{ 'scope1.KEY-3' | transloco:undefined:inlineLang }}</div>
+<transloco key="GREETING" [params]="{ name: 'John' }"></transloco>

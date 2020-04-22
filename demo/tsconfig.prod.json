@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "paths": {
+            "ngx-transloco-markup": [
+                "../build/dist"
+            ]
+        }
+    }
+}

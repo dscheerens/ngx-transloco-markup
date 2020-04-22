@@ -1,0 +1,6 @@
+{
+    "KEY-1": "(key-1,en)",
+    "KEY-2": "(key-2,en)",
+    "KEY-3": "(key-3,en)",
+    "GREETING": "Hello [b]{{ name }}[/b], how are you [i]today[/i]?"
+}
