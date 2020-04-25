@@ -4,11 +4,11 @@ import { TRANSLOCO_TRANSPILER, TranslocoTranspiler } from '@ngneat/transloco';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TokenizeResult, TranslationMarkupTranspiler, TranspileResult, TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
-export interface StringInterpolationExpressionMatcher {
-    matchExpression(translation: string, offset: number): number | undefined;
+export interface InterpolationExpressionMatcher {
+    matchExpression(source: string, offset: number): number | undefined;
 }
 
-export function defaultStringInterpolationExpressionMatcher(translation: string, offset: number): number | undefined {
+export function defaultTranslationInterpolationExpressionMatcher(translation: string, offset: number): number | undefined {
     if (!translation.startsWith('{{', offset)) {
         return undefined;
     }
@@ -18,15 +18,15 @@ export function defaultStringInterpolationExpressionMatcher(translation: string,
     return expressionEnd >= 2 ? expressionEnd + 2 - offset : undefined;
 }
 
-export function defaultStringInterpolationExpressionMatcherFactory(): StringInterpolationExpressionMatcher {
-    return { matchExpression: defaultStringInterpolationExpressionMatcher };
+export function defaultTranslationInterpolationExpressionMatcherFactory(): InterpolationExpressionMatcher {
+    return { matchExpression: defaultTranslationInterpolationExpressionMatcher };
 }
 
-export const TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER = new InjectionToken<StringInterpolationExpressionMatcher>(
+export const TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER = new InjectionToken<InterpolationExpressionMatcher>(
     'TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER',
     {
         providedIn: 'root',
-        factory: defaultStringInterpolationExpressionMatcherFactory
+        factory: defaultTranslationInterpolationExpressionMatcherFactory
     }
 );
 
@@ -36,7 +36,7 @@ export class DefaultStringInterpolationTranspiler implements TranslationMarkupTr
     constructor(
         private readonly rendererFactory: TranslationMarkupRendererFactory,
         @Inject(TRANSLOCO_TRANSPILER) private readonly translocoTranspiler: TranslocoTranspiler,
-        @Inject(TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER) private readonly expressionMatcher: StringInterpolationExpressionMatcher
+        @Inject(TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER) private readonly expressionMatcher: InterpolationExpressionMatcher
     ) { }
 
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {

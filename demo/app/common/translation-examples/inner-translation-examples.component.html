@@ -4,4 +4,4 @@
 <div>{{ 'KEY-1' | transloco:undefined:inlineLang }}</div>
 <div>{{ 'KEY-2' | transloco:undefined:inlineLang }}</div>
 <div>{{ 'scope1.KEY-3' | transloco:undefined:inlineLang }}</div>
-<transloco key="GREETING" [params]="{ name: 'John' }"></transloco>
+<transloco key="GREETING" [params]="{ name: 'John', personUrl: 'http://www.example.com/' }" [transpilers]="transpilers"></transloco>

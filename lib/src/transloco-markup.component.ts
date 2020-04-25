@@ -48,7 +48,9 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
         const inlineLanguage$ = observeProperty(this as TranslocoMarkupComponent, 'inlineLanguage');
         const inlineScope$ = observeProperty(this as TranslocoMarkupComponent, 'inlineScope');
         const inlineTranspilers$ = observeProperty(this as TranslocoMarkupComponent, 'inlineTranspilers');
-        const mergeTranspilers$ = observeProperty(this as TranslocoMarkupComponent, 'mergeTranspilers');
+        const mergeTranspilers$ = observeProperty(this as TranslocoMarkupComponent, 'mergeTranspilers').pipe(
+            map((mergeTranspilers) => mergeTranspilers !== false)
+        );
 
         const language$ = combineLatest([inlineLanguage$, this.translocoService.langChanges$]).pipe(
             // TODO: obey to the (bugged?) Transloco language resolution rules.

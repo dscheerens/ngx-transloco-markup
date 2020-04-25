@@ -23,10 +23,15 @@ export class TranslationMarkupRendererFactory {
         };
     }
 
-    public createElementRenderer(elementTag: string, childRenderers?: TranslationMarkupRenderer[]): TranslationMarkupRenderer {
+    public createElementRenderer<K extends keyof HTMLElementTagNameMap>(
+        elementTag: K,
+        childRenderers?: TranslationMarkupRenderer[]
+    ): TranslationMarkupRenderer<HTMLElementTagNameMap[K]>;
+    public createElementRenderer(elementTag: string, childRenderers?: TranslationMarkupRenderer[]): TranslationMarkupRenderer<HTMLElement>;
+    public createElementRenderer(elementTag: string, childRenderers?: TranslationMarkupRenderer[]): TranslationMarkupRenderer<HTMLElement> {
         const document = this.document;
 
-        return function renderElement(translationParameters: HashMap): Element {
+        return function renderElement(translationParameters: HashMap): HTMLElement {
             const element = document.createElement(elementTag);
 
             for (const renderChild of childRenderers || []) {

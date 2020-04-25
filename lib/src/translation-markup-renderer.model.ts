@@ -1,3 +1,3 @@
 import { HashMap } from '@ngneat/transloco';
 
-export type TranslationMarkupRenderer = (translationParameters: HashMap) => Node;
+export type TranslationMarkupRenderer<T extends Node = Node> = (translationParameters: HashMap) => T;

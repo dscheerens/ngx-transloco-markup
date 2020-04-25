@@ -7,6 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable } from 'rxjs';
 import { TRANSLOCO_CONFIG, TRANSLOCO_LOADER, Translation, TranslocoLoader, translocoConfig } from '@ngneat/transloco';
+import { defaultTranslocoMarkupTranspilers } from 'ngx-transloco-markup';
 
 import { environment } from '../environments/environment';
 
@@ -47,7 +48,8 @@ export class TranslocoHttpLoader implements TranslocoLoader {
         {
             provide: TRANSLOCO_LOADER,
             useClass: TranslocoHttpLoader
-        }
+        },
+        defaultTranslocoMarkupTranspilers()
     ],
     declarations: [
         AppComponent
