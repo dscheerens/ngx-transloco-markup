@@ -1,5 +1,16 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { TRANSLOCO_LANG, TRANSLOCO_SCOPE, HashMap, MaybeArray, TranslocoScope, TranslocoService, InlineLoader } from '@ngneat/transloco';
+import {
+    TRANSLOCO_LANG,
+    TRANSLOCO_MISSING_HANDLER,
+    TRANSLOCO_SCOPE,
+    HashMap,
+    MaybeArray,
+    Translation,
+    TranslocoMissingHandler,
+    TranslocoScope,
+    TranslocoService,
+    InlineLoader
+} from '@ngneat/transloco';
 import { Subscription, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 
@@ -10,6 +21,8 @@ import { createTranslationMarkupRenderer } from './create-translation-markup-ren
 import { STRING_INTERPOLATION_TRANSPILER } from './string-interpolation-transpiler.token';
 import { TranslationMarkupTranspiler } from './translation-markup-transpiler.model';
 import { TRANSLATION_MARKUP_TRANSPILER } from './translation-markup-transpiler.token';
+import { selectFirstWhere } from './utils/iterable';
+import { notUndefined } from './utils/predicates';
 
 // tslint:disable:component-selector use-component-view-encapsulation no-input-rename
 @Component({
@@ -33,6 +46,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
     constructor(
         private readonly hostElement: ElementRef<HTMLElement>,
         private readonly translocoService: TranslocoService,
+        @Inject(TRANSLOCO_MISSING_HANDLER) private readonly missingHandler: TranslocoMissingHandler,
         @Optional() @Inject(TRANSLOCO_SCOPE) private readonly providedScope: MaybeArray<TranslocoScope> | null,
         @Optional() @Inject(TRANSLOCO_LANG) private readonly providedLanguage: string | null,
         @Optional() @Inject(TRANSLATION_MARKUP_TRANSPILER) private readonly providedTranspilers: MaybeArray<TranslationMarkupTranspiler> | null, // tslint:disable-line:max-line-length
@@ -79,11 +93,18 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
         );
 
         const translationText$ = combineLatest([translationKey$, translation$]).pipe(
-            map(([key, translation]) => ({
-                translation,
-                key,
-                value: String(key && translation[key] || key) // TODO: handle missing translations.
-            }))
+            map(([key, translation]) => {
+                if (key === undefined) {
+                    return { value: '', translation };
+                }
+
+                const useFallbackTranslation = this.translocoService.config.missingHandler!.useFallbackTranslation || false;
+                const firstFallbackLanguage = asArray(this.translocoService.config.fallbackLang || [])[0];
+                const fallbackTranslation =
+                    useFallbackTranslation && firstFallbackLanguage ? [this.translocoService.getTranslation(firstFallbackLanguage)] : [];
+
+                return this.getTranslationValue(key, [translation, ...fallbackTranslation]);
+            })
         );
 
         const transpilers$ = combineLatest([inlineTranspilers$, mergeTranspilers$]).pipe(
@@ -106,6 +127,35 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    private getTranslationValue(key: string, translations: Translation[]): { value: string; translation: Translation } {
+        const allowEmptyValues = this.translocoService.config.missingHandler!.allowEmpty;
+
+        const result = selectFirstWhere(
+            translations,
+            (translation) => {
+                const value = translation[key];
+
+                if (value === undefined || value === '' && !allowEmptyValues) {
+                    return undefined;
+                }
+
+                return { value: String(value), translation };
+            },
+            notUndefined
+        );
+
+        return result || {
+            value: this.missingHandler.handle(
+                key,
+                {
+                    activeLang: this.translocoService.getActiveLang(),
+                    ...this.translocoService.config
+                }
+            ),
+            translation: translations[0]
+        };
     }
 }
 

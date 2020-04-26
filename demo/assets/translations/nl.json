@@ -1,5 +1,6 @@
 {
     "KEY-1": "(key-1,nl)",
     "KEY-2": "(key-2,nl)",
-    "KEY-3": "(key-3,nl)"
+    "KEY-3": "(key-3,nl)",
+    "GREETING": "Hoi [b][link:personUrl]{{ name }}[/link][/b], hoe gaat het [i][moment][/i]?"
 }
