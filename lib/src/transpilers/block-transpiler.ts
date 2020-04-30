@@ -32,12 +32,13 @@ export abstract class BlockTranspiler implements TranslationMarkupTranspiler {
         while (offset < tokens.length && !this.isCloseTag(tokens[offset])) {
             const transpileResult = context.transpile(tokens, offset, context);
 
-            if (!transpileResult) {
-                break;
+            if (transpileResult) {
+                childRenderers.push(transpileResult.renderer);
+                offset = transpileResult.nextOffset;
+            } else {
+                offset++;
             }
 
-            childRenderers.push(transpileResult.renderer);
-            offset = transpileResult.nextOffset;
         }
 
         return {

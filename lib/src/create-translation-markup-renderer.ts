@@ -31,12 +31,12 @@ function tokenize(translation: string, transpilers: TranslationMarkupTranspiler[
     while (offset < translation.length) {
         const tokenizeResult = selectFirstWhere(transpilers, (transpiler) => transpiler.tokenize(translation, offset), notUndefined);
 
-        if (!tokenizeResult) {
-            break;
+        if (tokenizeResult) {
+            offset = tokenizeResult.nextOffset;
+            tokens.push(tokenizeResult.token);
+        } else {
+            offset++;
         }
-
-        offset = tokenizeResult.nextOffset;
-        tokens.push(tokenizeResult.token);
     }
 
     return tokens;
@@ -54,12 +54,13 @@ function transpile(tokens: unknown[], transpilers: TranslationMarkupTranspiler[]
     while (offset < tokens.length) {
         const transpileResult = transpilerContext.transpile(tokens, offset, transpilerContext);
 
-        if (!transpileResult) {
-            break;
+        if (transpileResult) {
+            offset = transpileResult.nextOffset;
+            renderers.push(transpileResult.renderer);
+        } else {
+            offset++;
         }
 
-        offset = transpileResult.nextOffset;
-        renderers.push(transpileResult.renderer);
     }
 
     return renderers;
