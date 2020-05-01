@@ -9,10 +9,11 @@ import {
     TranslocoMissingHandler,
     TranslocoScope,
     TranslocoService,
-    InlineLoader
+    InlineLoader,
+    getPipeValue,
 } from '@ngneat/transloco';
-import { Subscription, combineLatest } from 'rxjs';
-import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { Subscription, combineLatest, Observable, of, concat, EMPTY } from 'rxjs';
+import { distinctUntilChanged, map, switchMap, first, skip, shareReplay } from 'rxjs/operators';
 
 import { StringLiteralTranspiler } from './transpilers/string-literal-transpiler';
 import { asArray } from './utils/array';
@@ -66,11 +67,14 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
             map((mergeTranspilers) => mergeTranspilers !== false)
         );
 
-        const language$ = combineLatest([inlineLanguage$, this.translocoService.langChanges$]).pipe(
-            // TODO: obey to the (bugged?) Transloco language resolution rules.
-            map(([inlineLanguage, activeLanguage]) => getLanguageName(inlineLanguage || this.providedLanguage || activeLanguage)),
-            distinctUntilChanged()
+        const langChanges$ = this.translocoService.langChanges$;
+
+        const activeLanguage$ = this.translocoService.config.reRenderOnLangChange ? langChanges$ : langChanges$.pipe(
+            first(),
+            shareReplay({ bufferSize: 1, refCount: true })
         );
+
+        const language$ = resolveLanguage(inlineLanguage$, of(this.providedLanguage || undefined), activeLanguage$);
 
         const scopes$ = inlineScope$.pipe(
             map((inlineScope) => inlineScope || this.providedScope),
@@ -159,8 +163,22 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
     }
 }
 
-function getLanguageName(language: string): string {
-    return language.split('|')[0];
+function resolveLanguage(...languageSpecifiers: Observable<string | undefined>[]): Observable<string> {
+    return languageSpecifiers.reduceRight<Observable<string>>(
+        (downstreamLanguage$, languageSpecifier$) => languageSpecifier$.pipe(switchMap((languageSpecifier) => {
+            if (languageSpecifier === undefined) {
+                return downstreamLanguage$;
+            }
+
+            const [isStatic, language] = getPipeValue(languageSpecifier, 'static');
+
+            return concat(
+                of(language),
+                isStatic ? EMPTY : downstreamLanguage$.pipe(skip(1))
+            );
+        })),
+        of('')
+    ).pipe(distinctUntilChanged());
 }
 
 function getScopeName(scope: TranslocoScope): string | undefined {
