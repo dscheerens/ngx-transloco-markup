@@ -1,0 +1,13 @@
+<mat-card>
+    <mat-card-title>
+        {{ TRANSLATIONS.TITLE | transloco }}
+    </mat-card-title>
+    <mat-card-content>
+        <mat-form-field appearance="fill" class="no-bottom-padding">
+            <mat-label>{{ TRANSLATIONS.NAME | transloco }}</mat-label>
+            <input matInput [formControl]="formControls.name">
+        </mat-form-field>
+
+        <transloco [key]="TRANSLATIONS.GREETING" [params]="{ name: formControls.name.value$ | async }"></transloco>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,16 @@
+<div class="content">
+    <div class="left">
+        <span class="title">Transloco &lt;Markup&gt;</span>
+    </div>
+    <div class="right">
+        <button
+            *ngFor="let languageOption of languageOptions"
+            mat-icon-button
+            class="image-button"
+            [class.active]="(activeLanguage$ | async) === languageOption.languageId"
+            (click)="setActiveLanguage(languageOption.languageId)"
+        >
+            <img class="icon" src="/assets/images/country-flags/{{languageOption.icon}}">
+        </button>
+    </div>
+</div>

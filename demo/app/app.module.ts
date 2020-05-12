@@ -6,12 +6,13 @@ import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable } from 'rxjs';
-import { TRANSLOCO_CONFIG, TRANSLOCO_LOADER, Translation, TranslocoLoader, translocoConfig } from '@ngneat/transloco';
+import { TRANSLOCO_CONFIG, TRANSLOCO_LOADER, Translation, TranslocoLoader, translocoConfig, TranslocoModule } from '@ngneat/transloco';
 import { defaultTranslocoMarkupTranspilers } from 'ngx-transloco-markup';
 
 import { environment } from '../environments/environment';
 
-import { TranslationExamplesModule } from './common/translation-examples';
+import { NavigationBarModule } from './common/view/navigation-bar';
+import { BasicFeatureModule } from './features/basic';
 import { AppComponent } from './app.component';
 
 @Injectable({ providedIn: 'root' })
@@ -32,21 +33,23 @@ export class TranslocoHttpLoader implements TranslocoLoader {
         HttpClientModule,
         RouterModule.forRoot([]),
         BrowserAnimationsModule,
-        TranslationExamplesModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
+        NavigationBarModule,
+        BasicFeatureModule,
+        TranslocoModule
     ],
     providers: [
         {
             provide: TRANSLOCO_CONFIG,
             useValue: translocoConfig({
-                availableLangs: ['de', 'en', 'fr', 'nl', 'pt'],
+                availableLangs: ['en', 'nl'],
                 defaultLang: 'en',
                 reRenderOnLangChange: true,
                 prodMode: environment.production,
-                fallbackLang: ['nl', 'en'],
-                missingHandler: {
-                    useFallbackTranslation: true
-                }
+                // fallbackLang: ['nl', 'en'],
+                // missingHandler: {
+                //     useFallbackTranslation: true
+                // }
             })
         },
         {

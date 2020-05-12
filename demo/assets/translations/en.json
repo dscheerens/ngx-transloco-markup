@@ -1,6 +1,7 @@
 {
-    "KEY-1": "(key-1,en)",
-    "KEY-2": "(key-2,en)",
-    "KEY-3": "(key-3,en)",
-    "GREETING": "Hello [b][link:personUrl]{{ name }}[/link][/b], how are you [i][moment][/i]?"
+    "BASIC": {
+        "TITLE": "Basic example",
+        "NAME": "Name",
+        "GREETING": "Hi [b]{{ name }}[/b], welcome to [i]TRANSLOCO [b]<MARKUP>[/b][/i]"
+    }
 }

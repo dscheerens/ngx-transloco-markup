@@ -19,7 +19,6 @@
     "type": "git",
     "url": "https://github.com/dscheerens/ngx-transloco-markup"
   },
-  "private": true,
   "scripts": {
     "ng": "ng",
     "start": "ng serve --project=demo",
@@ -55,7 +54,7 @@
     "@angular/platform-browser-dynamic": "^8.2.14",
     "@angular/router": "^8.2.14",
     "@dscheerens/tslint-presets": "^7.0.0",
-    "@ngneat/transloco": "^2.16.0",
+    "@ngneat/transloco": "^2.17.0",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.8",
     "ci-info": "^2.0.0",
@@ -68,6 +67,7 @@
     "karma-jasmine": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "ng-packagr": "^5.7.1",
+    "ngx-typesafe-forms": "^1.0.0",
     "rxjs": "^6.5.4",
     "tsickle": "0.37.0",
     "tslib": "^1.10.0",

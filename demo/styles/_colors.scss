@@ -1,0 +1,6 @@
+@import './app-theme';
+
+$panel-background: mat-color(map-get($app-theme, background), background);
+$toolbar-background: mat-color(map-get($app-theme, background), app-bar);
+$primary: mat-color(map-get($app-theme, primary));
+$divider: mat-color(map-get($app-theme, foreground), divider);

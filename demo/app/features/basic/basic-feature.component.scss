@@ -1,0 +1,12 @@
+:host {
+    display: block;
+}
+
+mat-card-content {
+    display: flex;
+    align-items: center;
+
+    > *:not(:first-child) {
+        margin-left: 1rem;
+    }
+}

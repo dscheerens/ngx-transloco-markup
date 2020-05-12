@@ -1,0 +1,47 @@
+@import '_colors';
+
+:host {
+    display: block;
+}
+
+.content {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $toolbar-background;
+    border-bottom: 1px solid $divider;
+
+    .left, .right {
+        > *:not(:first-child) {
+            margin-left: 0.5rem;
+        }
+    }
+}
+
+.title {
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+img.icon {
+    width: 24px;
+    height: 24px;
+}
+
+button[mat-icon-button].image-button {
+
+    transition: border-color 300ms, background-color 300ms;
+
+    border: 1px solid transparent;
+
+    &.active {
+        border-color: rgba($primary, 0.2);
+        background-color: rgba($primary, 0.1);
+    }
+
+    & ::ng-deep > .mat-button-wrapper {
+        display: block;
+        line-height: 24px;;
+    }
+}
