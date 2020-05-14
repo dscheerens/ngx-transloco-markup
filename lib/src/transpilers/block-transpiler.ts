@@ -58,6 +58,6 @@ export abstract class BlockTranspiler implements TranslationMarkupTranspiler {
     }
 }
 
-class BlockBoundary {
+export class BlockBoundary {
     constructor(public readonly token: string) { }
 }

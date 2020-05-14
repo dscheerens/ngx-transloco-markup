@@ -1,5 +1,3 @@
-export type Link = string | ExternalLink;
-
 export interface ExternalLink {
     url: string;
     target?: string;

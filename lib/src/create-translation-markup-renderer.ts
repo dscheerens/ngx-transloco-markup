@@ -24,7 +24,7 @@ export function createTranslationMarkupRenderer(
     };
 }
 
-function tokenize(translation: string, transpilers: TranslationMarkupTranspiler[]): unknown[] {
+export function tokenize(translation: string, transpilers: TranslationMarkupTranspiler[]): unknown[] {
     const tokens: unknown[] = [];
     let offset = 0;
 
@@ -42,7 +42,11 @@ function tokenize(translation: string, transpilers: TranslationMarkupTranspiler[
     return tokens;
 }
 
-function transpile(tokens: unknown[], transpilers: TranslationMarkupTranspiler[], translation: Translation): TranslationMarkupRenderer[] {
+export function transpile(
+    tokens: unknown[],
+    transpilers: TranslationMarkupTranspiler[],
+    translation: Translation
+): TranslationMarkupRenderer[] {
     const transpilerContext = {
         transpile: createRootTranspilerFunction(transpilers),
         translation
@@ -66,7 +70,7 @@ function transpile(tokens: unknown[], transpilers: TranslationMarkupTranspiler[]
     return renderers;
 }
 
-function createRootTranspilerFunction(transpilers: TranslationMarkupTranspiler[]): TranslationMarkupTranspilerFunction {
+export function createRootTranspilerFunction(transpilers: TranslationMarkupTranspiler[]): TranslationMarkupTranspilerFunction {
     return function transpileFromRoot(
         tokens: unknown[],
         offset: number,
