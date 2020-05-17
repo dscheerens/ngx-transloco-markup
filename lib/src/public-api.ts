@@ -1,7 +1,7 @@
 export { BlockTranspiler } from './transpilers/block-transpiler';
-export { BoldTextMarkupTranspiler } from './transpilers/bold-text-markup-transpiler';
+export { BoldTextTranspiler } from './transpilers/bold-text-transpiler';
 export { TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER, InterpolationExpressionMatcher } from './transpilers/default-string-interpolation-transpiler';
-export { ItalicTextMarkupTranspiler } from './transpilers/italic-text-markup-transpiler';
+export { ItalicTextTranspiler } from './transpilers/italic-text-transpiler';
 export { LinkTranspiler } from './transpilers/link-transpiler';
 export { SubstitutionTranspiler } from './transpilers/substitution-transpiler';
 export { SubstitutionLinkTranspiler, SubstitutionLinkTranspilerFactory } from './transpilers/substitution-link-transpiler';

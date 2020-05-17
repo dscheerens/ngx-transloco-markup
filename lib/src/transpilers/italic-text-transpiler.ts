@@ -6,16 +6,16 @@ import { TranslationMarkupRendererFactory } from '../translation-markup-renderer
 import { BlockTranspiler } from './block-transpiler';
 
 @Injectable()
-export class BoldTextMarkupTranspiler extends BlockTranspiler {
+export class ItalicTextTranspiler extends BlockTranspiler {
 
     constructor(
         private readonly rendererFactory: TranslationMarkupRendererFactory
     ) {
-        super('[b]', '[/b]');
+        super('[i]', '[/i]');
     }
 
     protected createRenderer(childRenderers: TranslationMarkupRenderer[]): TranslationMarkupRenderer {
-        return this.rendererFactory.createElementRenderer('b', childRenderers);
+        return this.rendererFactory.createElementRenderer('i', childRenderers);
     }
 
 }
