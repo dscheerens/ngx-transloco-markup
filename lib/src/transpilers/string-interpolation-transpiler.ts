@@ -31,7 +31,7 @@ export const TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER = new InjectionToken<I
 );
 
 @Injectable({ providedIn: 'root' })
-export class DefaultStringInterpolationTranspiler implements TranslationMarkupTranspiler {
+export class StringInterpolationTranspiler implements TranslationMarkupTranspiler {
 
     constructor(
         private readonly rendererFactory: TranslationMarkupRendererFactory,

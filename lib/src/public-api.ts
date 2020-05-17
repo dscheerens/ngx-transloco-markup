@@ -1,6 +1,9 @@
 export { BlockTranspiler } from './transpilers/block-transpiler';
 export { BoldTextTranspiler } from './transpilers/bold-text-transpiler';
-export { TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER, InterpolationExpressionMatcher } from './transpilers/default-string-interpolation-transpiler';
+export {
+    TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER,
+    InterpolationExpressionMatcher
+} from './transpilers/string-interpolation-transpiler';
 export { ItalicTextTranspiler } from './transpilers/italic-text-transpiler';
 export { LinkTranspiler } from './transpilers/link-transpiler';
 export { SubstitutionTranspiler } from './transpilers/substitution-transpiler';
