@@ -42,7 +42,7 @@ export abstract class BlockTranspiler implements TranslationMarkupTranspiler {
         }
 
         return {
-            nextOffset: offset + 1,
+            nextOffset: offset + (offset < tokens.length ? 1 : 0),
             renderer: this.createRenderer(childRenderers)
         };
     }
