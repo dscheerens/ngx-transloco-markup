@@ -100,8 +100,8 @@ const LINK_END_TOKEN = '[/link]';
 
 const LINK_START_TOKEN = '[link:';
 
-const LINK_END = new (class LinkEnd {})();
+export const LINK_END = new (class LinkEnd {})();
 
-class LinkStart {
+export class LinkStart {
     constructor(public readonly parameterKey: string) { }
 }
