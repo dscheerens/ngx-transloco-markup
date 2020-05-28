@@ -41,6 +41,6 @@ export abstract class SubstitutionTranspiler implements TranslationMarkupTranspi
 
 }
 
-class SubstitutionToken {
+export class SubstitutionToken {
     constructor(public readonly token: string) { }
 }
