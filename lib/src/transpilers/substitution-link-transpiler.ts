@@ -23,8 +23,17 @@ export class SubstitutionLinkTranspilerFactory {
         this.linkRenderers = !linkRenderers ? [] : Array.isArray(linkRenderers) ? linkRenderers : [linkRenderers];
     }
 
-    public create(token: string, options: SubstitutionLinkTranspilerOptions): SubstitutionLinkTranspiler {
-        return new SubstitutionLinkTranspiler(token, options, this.rendererFactory, this.linkRenderers);
+    public create(parameterKey: string): SubstitutionLinkTranspiler;
+    public create(token: string, options: SubstitutionLinkTranspilerOptions): SubstitutionLinkTranspiler; // tslint:disable-line:unified-signatures max-line-length
+    public create(parameterKeyOrToken: string, options?: SubstitutionLinkTranspilerOptions): SubstitutionLinkTranspiler {
+        if (options === undefined) {
+            return this.create(`[${parameterKeyOrToken}]`, {
+                label: { resolve: (params) => params[parameterKeyOrToken].label },
+                link: { resolve: (params) => params[parameterKeyOrToken].label }
+            });
+        }
+
+        return new SubstitutionLinkTranspiler(parameterKeyOrToken, options, this.rendererFactory, this.linkRenderers);
     }
 }
 
