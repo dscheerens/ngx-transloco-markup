@@ -7,7 +7,8 @@ export {
 export { ItalicTextTranspiler } from './transpilers/italic-text-transpiler';
 export { LinkTranspiler } from './transpilers/link-transpiler';
 export { SubstitutionTranspiler } from './transpilers/substitution-transpiler';
-export { SubstitutionLinkTranspiler, SubstitutionLinkTranspilerFactory } from './transpilers/substitution-link-transpiler';
+export { SubstitutionLinkTranspiler } from './transpilers/substitution-link-transpiler';
+export { SubstitutionLinkTranspilerFactory } from './transpilers/substitution-link-transpiler-factory';
 export { defaultTranslocoMarkupTranspilers } from './default-transloco-markup-transpilers';
 export * from './link-renderer.model';
 export * from './link.model';
