@@ -1,6 +1,7 @@
 import { Injectable, Optional, Inject } from '@angular/core';
 import { HashMap } from '@ngneat/transloco';
 
+import { asArray } from '../utils/array';
 import { TokenizeResult, TranslationMarkupTranspiler, TranspileResult, TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
@@ -15,7 +16,7 @@ export class LinkTranspiler implements TranslationMarkupTranspiler {
         private readonly rendererFactory: TranslationMarkupRendererFactory,
         @Inject(LinkRenderer) @Optional() linkRenderers: LinkRenderer<unknown> | LinkRenderer<unknown>[] | null
     ) {
-        this.linkRenderers = !linkRenderers ? [] : Array.isArray(linkRenderers) ? linkRenderers : [linkRenderers];
+        this.linkRenderers = !linkRenderers ? [] : asArray(linkRenderers);
     }
 
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
