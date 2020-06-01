@@ -99,35 +99,35 @@ describe('StringInterpolationTranspiler', () => {
             const externalLinkObjectLinkRenderer = new ExternalLinkObjectLinkRenderer();
 
             const renderStringLinkSpy = spyOn(stringLinkRenderer, 'render');
-            const rendeExternalLinkObjectLinkSpy = spyOn(externalLinkObjectLinkRenderer, 'render');
+            const renderExternalLinkObjectLinkSpy = spyOn(externalLinkObjectLinkRenderer, 'render');
 
             const { transpiler, context } = createTestTranspiler([stringLinkRenderer, externalLinkObjectLinkRenderer]);
 
             const renderLink = transpiler.transpile([new LinkStart('testLink'), LINK_END], 0, context)!.renderer;
 
             expect(renderStringLinkSpy).not.toHaveBeenCalled();
-            expect(rendeExternalLinkObjectLinkSpy).not.toHaveBeenCalled();
+            expect(renderExternalLinkObjectLinkSpy).not.toHaveBeenCalled();
 
             renderLink({ testLink: 'https://www.example.com/' });
 
             expect(renderStringLinkSpy).toHaveBeenCalled();
-            expect(rendeExternalLinkObjectLinkSpy).not.toHaveBeenCalled();
+            expect(renderExternalLinkObjectLinkSpy).not.toHaveBeenCalled();
 
             renderStringLinkSpy.calls.reset();
-            rendeExternalLinkObjectLinkSpy.calls.reset();
+            renderExternalLinkObjectLinkSpy.calls.reset();
 
             renderLink({ testLink: { url: 'https://www.example.com/' } });
 
             expect(renderStringLinkSpy).not.toHaveBeenCalled();
-            expect(rendeExternalLinkObjectLinkSpy).toHaveBeenCalled();
+            expect(renderExternalLinkObjectLinkSpy).toHaveBeenCalled();
 
             renderStringLinkSpy.calls.reset();
-            rendeExternalLinkObjectLinkSpy.calls.reset();
+            renderExternalLinkObjectLinkSpy.calls.reset();
 
             renderLink({ testLink: { thisIs: 'not a supported link' } });
 
             expect(renderStringLinkSpy).not.toHaveBeenCalled();
-            expect(rendeExternalLinkObjectLinkSpy).not.toHaveBeenCalled();
+            expect(renderExternalLinkObjectLinkSpy).not.toHaveBeenCalled();
         });
     });
 });
