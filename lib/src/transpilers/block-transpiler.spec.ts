@@ -110,5 +110,35 @@ describe('BlockTranspiler', () => {
                 }
             }
         });
+
+        it('recursively transpiles its content', () => {
+            const { transpiler, context } = createTestTranspiler();
+
+            const start = new BlockBoundary('<<<');
+            const end = new BlockBoundary('>>>');
+
+            const testCases = [
+                { tokens: [start], expectedRecursiveTranspileOffsets: [] },
+                { tokens: [end, start], expectedRecursiveTranspileOffsets: [] },
+                { tokens: [start, end], expectedRecursiveTranspileOffsets: [] },
+                { tokens: [start, 0, end], expectedRecursiveTranspileOffsets: [1] },
+                {
+                    tokens: [start, 0, start, 0, end, start, start, 0, end, end, start, end, end],
+                    expectedRecursiveTranspileOffsets: [1, 2, 3, 5, 6, 7, 10]
+                },
+            ];
+
+            const rootTranspilerSpy = spyOn(context, 'transpile').and.callThrough();
+
+            for (const { tokens, expectedRecursiveTranspileOffsets } of testCases) {
+                rootTranspilerSpy.calls.reset();
+
+                transpiler.transpile(tokens, 0, context);
+
+                const actualRecursiveTranspileOffsets = rootTranspilerSpy.calls.all().map((call) => call.args[1]);
+
+                expect(actualRecursiveTranspileOffsets).toEqual(expectedRecursiveTranspileOffsets);
+            }
+        });
     });
 });
