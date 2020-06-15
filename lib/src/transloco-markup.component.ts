@@ -56,8 +56,6 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit(): void {
-        this.translocoService.selectTranslation();
-
         const translationKey$ = observeProperty(this as TranslocoMarkupComponent, 'translationKey');
         const translationParameters$ = observeProperty(this as TranslocoMarkupComponent, 'translationParameters');
         const inlineLanguage$ = observeProperty(this as TranslocoMarkupComponent, 'inlineLanguage');
