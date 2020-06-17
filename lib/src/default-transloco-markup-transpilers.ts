@@ -7,6 +7,12 @@ import { StringLinkRenderer, ExternalLinkObjectLinkRenderer } from './default-li
 import { LinkRenderer } from './link-renderer.model';
 import { TRANSLATION_MARKUP_TRANSPILER } from './translation-markup-transpiler.token';
 
+/**
+ * Factory function for the default set of markup transpilers. Can be included in the providers array of an `@NgModule` or `@Component`
+ * decorated class.
+ *
+ * @returns A `Provider` array for the default Transloco markup transpilers.
+ */
 export function defaultTranslocoMarkupTranspilers(): Provider[] {
     return [
         { provide: TRANSLATION_MARKUP_TRANSPILER, useClass: BoldTextTranspiler, multi: true },

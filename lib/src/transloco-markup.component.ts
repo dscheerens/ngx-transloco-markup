@@ -147,8 +147,8 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
             )
         );
 
-        // Define the translationText$ stream that emits the (unparsed) translation text that is to be displayed.
-        const translationText$ = combineLatest([translationKey$, translation$]).pipe(
+        // Define the translationValue$ stream that emits the (unparsed) translation text that is to be displayed.
+        const translationValue$ = combineLatest([translationKey$, translation$]).pipe(
             map(([key, translation]) => {
                 if (key === undefined) {
                     return { value: '', translation };
@@ -174,7 +174,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
         );
 
         // Finally we can create the render$ stream that emits the rendering function based on the translation text and the tranpilers.
-        const render$ = combineLatest([translationText$, transpilers$]).pipe(
+        const render$ = combineLatest([translationValue$, transpilers$]).pipe(
             map(([{ translation, value }, transpilers]) => createTranslationMarkupRenderer(value, transpilers, translation))
         );
 
