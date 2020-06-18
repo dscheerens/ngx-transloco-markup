@@ -23,7 +23,7 @@ export class SubstitutionLinkTranspilerFactory {
         if (options === undefined) {
             return this.create(`[${parameterKeyOrToken}]`, {
                 label: { resolve: (params) => params[parameterKeyOrToken].label },
-                link: { resolve: (params) => params[parameterKeyOrToken].label }
+                link: { resolve: (params) => params[parameterKeyOrToken].link }
             });
         }
 
