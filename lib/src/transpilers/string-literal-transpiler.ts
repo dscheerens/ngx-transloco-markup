@@ -3,13 +3,22 @@ import { Injectable } from '@angular/core';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TokenizeResult, TranslationMarkupTranspiler, TranspileResult } from '../translation-markup-transpiler.model';
 
+/**
+ * Transpiler used to capture literal translation texts. This transpiler will always be used as the last transpiler during the tokenization
+ * and transpilation process, so it can catch any character that would otherwise not be transpiled.
+ */
 @Injectable({ providedIn: 'root' })
 export class StringLiteralTranspiler implements TranslationMarkupTranspiler {
 
+    /**
+     * Creates a new `StringLiteralTranspiler` that uses the specified renderer factory.
+     */
     constructor(
+        /** Renderer factory used for creating the renderer that renders the literal string text in a text node. */
         private readonly rendererFactory: TranslationMarkupRendererFactory
     ) { }
 
+    /** @inheritdoc */
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
         return {
             nextOffset: offset + 1,
@@ -17,6 +26,7 @@ export class StringLiteralTranspiler implements TranslationMarkupTranspiler {
         };
     }
 
+    /** @inheritdoc */
     public transpile(tokens: unknown[], start: number): TranspileResult | undefined {
         let end = start;
 

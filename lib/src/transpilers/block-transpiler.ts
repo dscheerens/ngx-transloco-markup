@@ -1,5 +1,10 @@
-import { TokenizeResult, TranslationMarkupTranspiler, TranspileResult, TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
+import {
+    TokenizeResult,
+    TranslationMarkupTranspiler,
+    TranspileResult,
+    TranslationMarkupTranspilerContext
+} from '../translation-markup-transpiler.model';
 
 /**
  * Base class for transpilers that can transpile contents of a block that is bounded by specific start and end tokens.
