@@ -88,10 +88,7 @@ The code snippet below shows an example of how this would be used in a component
   template: `
     <transloco
       [key]="'GREETING'"
-      [params]="{
-        name: firstName + ' ' + lastName
-        website: 'https://www.example.com/'
-      }"
+      [params]="{ name: firstName + ' ' + lastName, website: 'https://www.example.com/' }"
     ></transloco>
   `
 })
@@ -103,7 +100,28 @@ export class ExampleComponent {
 
 ## `<transloco>` component API
 
-_(todo)_
+The `<transloco>` component has the following input properties:
+
+* **`key`** (_string_) -
+  Key that defines which translation value should be displayed.
+  If no key is specified or the key is `undefined`, nothing will be displayed by the `<transloco>` component.
+* **`params`** ([_HashMap_](https://github.com/ngneat/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/types.ts#L1)) -
+  An object containing the translation parameters, which will be used to expand interpolation expressions (`{{ paramKey }}`).
+* **`lang`** (string) -
+  Language in which the text should be displayed.
+  Usually you do not need to specify this, unless you want to override the default language.
+  The default language is either the current language of the [`TranslocoService`](https://github.com/ngneat/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/transloco.service.ts), or the language that was specified using the [`TRANSLOCO_LANG`](https://github.com/ngneat/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/transloco-lang.ts) injection token.
+* **`scope`** (string) -
+  Scope which is to be used.
+  If this property is specified it will override the scope provide via the [`TRANSLOCO_SCOPE`](https://github.com/ngneat/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/transloco-scope.ts) injection token.
+* **`transpilers`** (_TranslationMarkupTranspiler | TranslationMarkupTranspiler[]_)
+  Transpilers that will be available for rendering the translation value.
+  These are merged with transpilers provided via dependency injection, unless the `mergeTranspilers` option is set to `false` (see below).
+  When the transpilers are merged, inline providers will take precedence over the provided transpilers.
+* **`mergeTranspilers`** (_boolean_)
+  Specifies whether the inline transpilers are merged with the provided transpilers.
+  When set to `false`, only the inline transpilers will be used, unless no inline transpilers have been specified.
+  Defaults to `true`.
 
 ## Defining markup transpiler availability
 
