@@ -55,6 +55,7 @@ When including the default transpilers, the following markup is supported:
 * Bold text: `[b]...[/b]`
 * Italic text: `[i]...[/i]`
 * Links: `[link:parameterKey]...[/link]`, where `parameterKey` should be replaced with a key of the translation parameter that contains the URL or link object.
+  Note that there is a better alternative to defining links in your translation values, by making use of [contextual link tokens](#contextual-links).
 
 Next, you will need to add the `TranslocoMarkupModule` to the module(s) in which you want to use the `<transloco>` component:
 
@@ -136,7 +137,45 @@ The `<transloco>` component has the following input properties:
 
 ## Defining markup transpiler availability
 
-_(todo)_
+As mentioned before, one of the features of `ngx-transloco-markup` is that you have full control over which transpilers will be available and at what level.
+This allows you to limit the markup options to just what is necessary within a particular context.
+
+The [getting started](#getting-started) section demonstrated how to make the default transpilers available everywhere in the application by providing them in the application root module.
+If you do not wish for a transpiler to be available everywhere, but only for a part of the application you can specify it at a different level:
+
+* **inline** - the narrowest scope at which a transpiler can be made available.
+  Pass the transpiler instance to the `transpilers` input property of the `<transloco>` component.
+  This will make the transpiler available just for that particular use of the `<transloco>` component.
+
+* **component** - defined as part of the providers array of a component, e.g.:
+  ```typescript
+  @Component({
+    selector: 'app-fancy-something'
+    template: 'A very [rainbow]colorful[/rainbow] text!',
+    providers: [
+      { provide: TRANSLATION_MARKUP_TRANSPILER, useClass: RainbowTextTranspiler, multi: true }
+    ]
+  })
+  export class FancyComponent { }
+  ```
+  When a transpiler is defined in this way, all usages of the `<transloco>` component will support the
+  transpiler within the context of the `FancyComponent` context.
+  This includes both the template of the component itself, but also for all child components that might be using the `<transloco>` component.
+
+* **lazy-loaded module** - defined in the providers array of a lazy loaded module.
+  This will make the transpiler available within all components that are part of the lazy
+  loaded module.
+  Note that the transpiler does not necessarily need to be defined in the root of the lazy loaded module.
+  If one if the transitively imported modules specifies a provider for the transpiler, then it will be
+  available for the whole lazy loaded module.
+
+* **root module** - defined in the providers array of the root (application) module, or in one of the transitively imported modules.
+  A markup transpiler provider that is defined in this way will be available everywhere in the application, meaning this is the widest scope at which a transpiler can be defined.
+
+The **component**, **lazy-loaded module** and **root module** transpiler levels all make use of Angular's dependency injection system.
+A tranpsiler defined at one of those levels needs to be specified using the `TRANSLATION_MARKUP_TRANSPILER` injection token and it also needs to be a multi provider (`multi: true`).
+
+Note that the provided transpilers can be discarded for a particular usage of the `<transloco>` component, by setting the `mergeTranspilers` input property to `false`.
 
 ## Contextual links
 
