@@ -1,5 +1,6 @@
 import { HashMap } from '@ngneat/transloco';
 
+import { ResolveLinkSpecification } from '../models/resolve-link-specification.model';
 import { LinkRenderer } from '../link-renderer.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
@@ -30,7 +31,7 @@ export interface SubstitutionLinkTranspilerOptions {
      * - A dynamically resolved link using a function that receives the translation parameters as input:
      *   `{ resolve: (params) => 'https://petstore.com/' + params.petType }`
      */
-    link: { static: unknown } | { parameterKey: string } | { resolve(translationParams: HashMap): unknown };
+    link: ResolveLinkSpecification;
 
 }
 

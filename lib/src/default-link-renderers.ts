@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { isExternalLinkObject, ExternalLink } from './models/external-link.model';
 import { LinkRenderer } from './link-renderer.model';
-import { isExternalLinkObject, ExternalLink } from './link.model';
 
 /**
  * Link renderer for string values, where the value is interpreted as the URL to an external resource. The renderer will set the browser

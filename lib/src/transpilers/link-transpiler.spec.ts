@@ -18,7 +18,7 @@ function createTestTranspiler(
     return { transpiler, context };
 }
 
-describe('StringInterpolationTranspiler', () => {
+describe('LinkTranspiler', () => {
     describe('tokenize function', () => {
         it('recognizes link blocks in translations', () => {
             const { transpiler } = createTestTranspiler();
