@@ -6,7 +6,7 @@ import { TranslationMarkupRendererFactory } from '../translation-markup-renderer
 import { BlockTranspiler } from './block-transpiler';
 
 /**
- * Transpiler that parses bold tags (`[b]...[\b]`) and creates a renderer that wraps the content in an HTML bold element (`<b>...<\b>`).
+ * Transpiler that parses bold tags (`[b]...[/b]`) and creates a renderer that wraps the content in an HTML bold element (`<b>...</b>`).
  */
 @Injectable()
 export class BoldTextTranspiler extends BlockTranspiler {

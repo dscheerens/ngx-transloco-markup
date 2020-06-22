@@ -6,7 +6,7 @@ import { TranslationMarkupRendererFactory } from '../translation-markup-renderer
 import { BlockTranspiler } from './block-transpiler';
 
 /**
- * Transpiler that parses italic tags (`[i]...[\i]`) and creates a renderer that wraps the content in an HTML italic element (`<i>...<\i>`).
+ * Transpiler that parses italic tags (`[i]...[/i]`) and creates a renderer that wraps the content in an HTML italic element (`<i>...</i>`).
  */
 @Injectable()
 export class ItalicTextTranspiler extends BlockTranspiler {
