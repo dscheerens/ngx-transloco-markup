@@ -4,18 +4,21 @@ import { LinkRenderer } from '../link-renderer.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
-import { SubstitutionLinkTranspiler, SubstitutionLinkTranspilerOptions } from './substitution-link-transpiler';
+import {
+    ContextualLinkSubstitutionTranspiler,
+    ContextualLinkSubstitutionTranspilerOptions
+} from './contextual-link-substitution-transpiler';
 import { SubstitutionToken } from './substitution-transpiler';
 
 function createTestTranspiler(
     options: Partial<{
         token: string;
-        label: SubstitutionLinkTranspilerOptions['label'];
-        link: SubstitutionLinkTranspilerOptions['link'];
+        label: ContextualLinkSubstitutionTranspilerOptions['label'];
+        link: ContextualLinkSubstitutionTranspilerOptions['link'];
         linkRenderers: LinkRenderer<unknown>[];
     }> = {}
-): { transpiler: SubstitutionLinkTranspiler; context: TranslationMarkupTranspilerContext } {
-    const transpiler = new SubstitutionLinkTranspiler(
+): { transpiler: ContextualLinkSubstitutionTranspiler; context: TranslationMarkupTranspilerContext } {
+    const transpiler = new ContextualLinkSubstitutionTranspiler(
         options.token || '[*]',
         {
             label: options.label || { static: '???' },
@@ -33,7 +36,7 @@ function createTestTranspiler(
     return { transpiler, context };
 }
 
-describe('SubstitutionLinkTranspiler', () => {
+describe('ContextualLinkSubstitutionTranspiler', () => {
 
     describe('tokenize function', () => {
         it('recognizes substitution tokens', () => {

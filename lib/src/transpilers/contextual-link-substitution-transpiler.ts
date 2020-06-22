@@ -8,9 +8,9 @@ import { TranslationMarkupRenderer } from '../translation-markup-renderer.model'
 import { SubstitutionTranspiler } from './substitution-transpiler';
 
 /**
- * Configuration options for the `SubstitutionLinkTranspiler`.
+ * Configuration options for the `ContextualLinkSubstitutionTranspiler`.
  */
-export interface SubstitutionLinkTranspilerOptions {
+export interface ContextualLinkSubstitutionTranspilerOptions {
 
     /**
      * Property that defines how to resolve the label text of the link that is to be rendered. The label can be resolved in three different
@@ -39,17 +39,17 @@ export interface SubstitutionLinkTranspilerOptions {
  * A substitution transpiler that replaces a specific token with a link. This transpiler is quite useful for defining tokens that are only
  * valid within a specific context (i.e. a limited set of translation entries).
  */
-export class SubstitutionLinkTranspiler extends SubstitutionTranspiler {
+export class ContextualLinkSubstitutionTranspiler extends SubstitutionTranspiler {
 
     /**
-     * Creates a new `SubstitutionLinkTranspiler` for the specified token and which uses the provided options.
+     * Creates a new `ContextualLinkSubstitutionTranspiler` for the specified token and which uses the provided options.
      */
     constructor(
         /** The token which will be substituted with a link. */
         token: string,
 
         /** Options that define how to resolve the label text and link model. */
-        private readonly options: SubstitutionLinkTranspilerOptions,
+        private readonly options: ContextualLinkSubstitutionTranspilerOptions,
 
         /** Renderer factory used to create the renderer for the HTML anchor element that will be substituted in place of the token. */
         private readonly rendererFactory: TranslationMarkupRendererFactory,
