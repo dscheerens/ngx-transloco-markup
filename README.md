@@ -179,6 +179,62 @@ Note that the provided transpilers can be discarded for a particular usage of th
 
 ## Contextual links
 
+The default providers you get out-of-the-box with `defaultTranslocoMarkupTranspilers()`, includes a link transpiler, that supports the following syntax: `[link:parameterKey]...[/link]`.
+This is a generic syntax that can be used free of any context.
+While that makes for an easy setup, it does add a bit of clutter to your translations.
+
+That clutter can be reduced by introducing contextual markup tokens: customized syntax that can be used for within a specific context.
+It is not uncommon, for example, to refer to some entity by its name or (some other descriptive property) and be able to link to a detail view of that entity.
+Consider the scenario of a web shop, where adding an item to the basket would display the following message:
+
+```json
+{
+    "PRODUCT_ADDED": "Added [link:productUrl]{{ productName }}[/link] to the basket."
+}
+```
+
+In this case the entity is a product, for which both a name and URL are referenced in the translation.
+If instead a context specific transpiler was created for the product entity, the translation could be simplified to:
+
+```json
+{
+    "PRODUCT_ADDED": "Added [product] to the basket."
+}
+```
+
+Obviously `ngx-transloco-markup` will not recognize the `[product]` token by default, so you will need to create your own transpiler and make it [available](#defining-markup-transpiler-availability) to the `<transloco>` component.
+You can find out how that do that in the _[creating your own markup transpilers](#creating-your-own-markup-transpilers)_ section.
+
+Since the need for contextual link transpilers is quite common, `ngx-transloco-markup` provides a `ContextualLinkTranspilerFactory` to simplify their creation.
+This factory can be injected in your components or provider factory function and allows you to create two types of contextual link transpilers.
+
+The first type that can be created is a `ContextualLinkSubstitutionTranspiler`.
+This type of transpiler simply substitutes a specific token (substring) in a translation value with a link.
+Such a transpiler would be needed to support the `[product]` token of the example translation shown above.
+An instance of this type of transpiler can be created using the `ContextualLinkTranspilerFactory.createSubstitutionTranspiler` function, which supports two call signatures:
+
+* `createSubstitutionTranspiler(parameterKey: string)`
+
+  This is the simplest form, which creates a transpiler that substitutes a token `[parameterKey]` with a link.
+  The label that is displayed the link is determined by the value of `parameterKey.label` property within the translation parameters.
+  Similarly, the link target is resolved via the `parameterKey.link` property.
+
+* `createSubstitutionTranspiler(token: string, options: ContextualLinkSubstitutionTranspilerOptions)`
+
+  With this call signature you are given more control.
+  First, you need to specify what token will be converted to a link by the transpiler.
+  That can be anything, e.g. `'<banana>'`, `'$website'` or just `'???'` (although I would not recommend the latter).
+  Just be aware that the chosen token can collide with other transpilers that support a similar grammar.
+
+  In addition to the token you will need to specify how the label and link target are resolved, via the `options` object.
+  This object has two properties, `label` and `link`.
+  Both allow you to define a resolving method, which can be one of the following:
+
+  * `{ static: ... }` - A static value for the label or link.
+  * `{ parameterKey: ... }` - A value that is obtained from the property with the specified key in the translation parameters.
+  * `{ resolve: (translationParams) => ... }` - A resolver function where can dynamically construct the label or link (using the translation parameters if necessary).
+
+
 _(todo)_
 
 ## Creating your own markup transpilers
