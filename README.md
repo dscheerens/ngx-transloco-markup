@@ -179,7 +179,7 @@ Note that the provided transpilers can be discarded for a particular usage of th
 
 ## Contextual links
 
-The default providers you get out-of-the-box with `defaultTranslocoMarkupTranspilers()`, includes a link transpiler, that supports the following syntax: `[link:parameterKey]...[/link]`.
+The default providers you get out-of-the-box with `defaultTranslocoMarkupTranspilers()`, includes a link transpiler that supports the following syntax: `[link:parameterKey]...[/link]`.
 This is a generic syntax that can be used free of any context.
 While that makes for an easy setup, it does add a bit of clutter to your translations.
 
@@ -206,7 +206,7 @@ Obviously `ngx-transloco-markup` will not recognize the `[product]` token by def
 You can find out how that do that in the _[creating your own markup transpilers](#creating-your-own-markup-transpilers)_ section.
 
 Since the need for contextual link transpilers is quite common, `ngx-transloco-markup` provides a `ContextualLinkTranspilerFactory` to simplify their creation.
-This factory can be injected in your components or provider factory function and allows you to create two types of contextual link transpilers.
+This factory can be injected in your components and provider factory functions, allowing you to create two types of contextual link transpilers.
 
 The first type that can be created is a `ContextualLinkSubstitutionTranspiler`.
 This type of transpiler simply substitutes a specific token (substring) in a translation value with a link.
@@ -224,7 +224,7 @@ An instance of this type of transpiler can be created using the `ContextualLinkT
   With this call signature you are given more control.
   First, you need to specify what token will be converted to a link by the transpiler.
   That can be anything, e.g. `'<banana>'`, `'$website'` or just `'???'` (although I would not recommend the latter).
-  Just be aware that the chosen token can collide with other transpilers that support a similar grammar.
+  Just be aware that the chosen token can collide with other transpilers that supports a similar grammar.
 
   In addition to the token you will need to specify how the label and link target are resolved, via the `options` object.
   This object has two properties, `label` and `link`.
@@ -234,8 +234,26 @@ An instance of this type of transpiler can be created using the `ContextualLinkT
   * `{ parameterKey: ... }` - A value that is obtained from the property with the specified key in the translation parameters.
   * `{ resolve: (translationParams) => ... }` - A resolver function where can dynamically construct the label or link (using the translation parameters if necessary).
 
+Another type of transpiler that can be created by the `ContextualLinkTranspilerFactory` is the `ContextualLinkBlockTranspiler`, which supports the following syntax: `[linkToken]...[/linkToken]`.
+In contrast to the substitution transpiler, the block transpiler will render the contents of the block as a link.
+This is useful in case you need additional markup within the link or if the link text itself does not depend on an entity but is something that needs to be translated.
 
-_(todo)_
+The factory also provides two signatures of the `ContextualLinkTranspilerFactory.createBlockTranspiler` function for creating `ContextualLinkBlockTranspiler` instances:
+
+* `createBlockTranspiler(parameterKey: string)`
+
+  Creates a link block transpiler that resolves the link target based on the specified key in the translation parameters object.
+  The start and end token are equivalent to `[parameterKey]` and `[/parameterKey]`.
+
+* `createBlockTranspiler(startToken: string, endToken: string, resolveLinkSpecification: ResolveLinkSpecification)`
+
+  This alternative form gives you the freedom to choose the start and end token for the link block transpiler.
+  Also, the method for resolving the link target can be specified in one of the following ways:
+
+  * `{ static: ... }` - A static value for the link.
+  * `{ parameterKey: ... }` - A value that is obtained from the property with the specified key in the translation parameters.
+  * `{ resolve: (translationParams) => ... }` - A resolver function where can dynamically construct the link (using the translation parameters if necessary).
+
 
 ## Creating your own markup transpilers
 
