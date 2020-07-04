@@ -189,7 +189,7 @@ Consider the scenario of a web shop, where adding an item to the basket would di
 
 ```json
 {
-    "PRODUCT_ADDED": "Added [link:productUrl]{{ productName }}[/link] to the basket."
+  "PRODUCT_ADDED": "Added [link:productUrl]{{ productName }}[/link] to the basket."
 }
 ```
 
@@ -198,7 +198,7 @@ If instead a context specific transpiler was created for the product entity, the
 
 ```json
 {
-    "PRODUCT_ADDED": "Added [product] to the basket."
+  "PRODUCT_ADDED": "Added [product] to the basket."
 }
 ```
 
@@ -256,5 +256,62 @@ The factory also provides two signatures of the `ContextualLinkTranspilerFactory
 
 
 ## Creating your own markup transpilers
+
+The whole architecture of `ngx-transloco-markup` is based on the concept of transpilers: small units that are responsible for converting (part) of translation values into rendering functions.
+For example the `BoldTextTranspiler` is capable of recognizing blocks that start with `[b]` and end with `[/b]`.
+Once it has recognized such a block, it transforms it to a rendering function that creates `<b>` HTML element and appends the content between the start and end tags to that element.
+
+While the `ngx-transloco-markup` library ships with a set of standard transpilers for the most common use cases, there are surely a lot of other different markup requirements which are not supported out-of-the-box.
+Instead of trying to cover all these different requirements into a single library, you are offered the option to expand the set of transpilers if necessary.
+
+Creating your own transpiler is as simple as instantiating an object that conforms to the `TranslationMarkupTranspiler` interface (shown below) and make it [available](#defining-markup-transpiler-availability) at the right place in the application for the `<transloco>` component.
+
+```typescript
+export interface TranslationMarkupTranspiler {
+  tokenize(
+    translation: string,
+    offset: number
+  ): TokenizeResult | undefined;
+
+  transpile(
+    tokens: unknown[],
+    offset: number,
+    context: TranslationMarkupTranspilerContext
+  ): (TranspileResult | undefined);
+}
+```
+
+As can be seen in the interface definition of the `TranslationMarkupTranspiler` above, a transpiler needs to implement two functions: `tokenize` and `transpile`.
+This is because the process is performed in two phases:
+
+* A _tokenization_ phase, where the translation value (a string) is converted into a sequence of tokens.
+* The second phase is where the actual _transpilation_ happens: the sequence of tokens is converted into one (or more) rendering functions.
+
+Each of these two functions can either return a result model or `undefined`, where the
+latter is used to indicate that the transpiler is unable to parse the input at the specified position.
+The `<transloco>` component uses a sequence of transpilers to parse translation values.
+If a transpiler cannot parse the input at specific position, then the next transpiler in the sequence will be asked to so, and so forth, until there is one that is able to parse the input.
+
+Note that there will always be an implicit fallback transpiler present to capture literal text.
+You don't need to specify this transpiler, as the `<transloco>` component always appends this transpiler to end of the transpiler sequence.
+
+### Tokenization
+
+Although the tokenization phase theoretically could be omitted, it simplifies the transpilation phase.
+Mostly on conceptual level, but also performance wise.
+This is why `ngx-transloco-markup` converts translation values first into a sequence of tokens, before transpiling it into rendering functions.
+
+The result model for the `tokenize` function is as follows:
+
+```typescript
+export interface TokenizeResult {
+  nextOffset: number;
+  token: unknown;
+}
+```
+
+_(todo)_
+
+### Transpilation
 
 _(todo)_
