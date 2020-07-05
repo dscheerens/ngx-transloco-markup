@@ -20,6 +20,7 @@ Fortunately, thanks to the extensible architecture, you can do this quite easily
 - [Creating your own markup transpilers](#creating-your-own-markup-transpilers)
   - [Tokenization](#tokenization)
   - [Transpilation](#transpilation)
+  - [Custom transpiler example: colored text](#custom-transpiler-example-colored-text)
 
 ## Installation
 
@@ -32,7 +33,7 @@ Next you'll need to install the `ngx-transloco-markup` package from NPM:
 npm install --save ngx-transloco-markup
 ```
 
-If you are using the Angular CLI to build and test your application this all you need to do for the installation.
+If you are using the Angular CLI to build and test your application, then this all you need to do for the installation.
 For custom build setups: the library is published in the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview), so it provides several distribution bundles that are compatible with most build tools.
 
 ## Getting started
@@ -360,3 +361,79 @@ Given a translation parameters object, the rendering function should be able to 
 A completely transpiled translation value will result in one or more rendering functions.
 Once the translation actually should be rendered, all of these functions are invoked with the translation parameters, resulting in one or more DOM Nodes.
 These nodes are then added as children to the `<transloco>` component, thereby making the rendered translation visible in the application.
+
+### Custom transpiler example: colored text
+
+To illustrate how to create your own custom transpiler, let's craft a transpiler to add some color to your translations.
+It supports the following syntax `[c:cssColorValue]...[/c]`, where `cssColorValue` should be replaced by a valid CSS color, e.g. `#123abc`, `rgba(123, 45, 67, 0.5)`, `orange`, etc.
+
+First thing we need is a way to represent the tokens.
+For that we will be using the following:
+
+```typescript
+class ColorStart {
+    constructor(
+        public readonly cssColorValue: string
+    ) { }
+}
+
+const COLOR_END = new (class ColorEnd {})();
+```
+
+The start token of a color block will be an instance of the `ColorStart` tag.
+This token also stores the CSS color value that will be applied to its content.
+
+Since the end token of a color block doesn't need to store any information, this can just be a constant value.
+Here we chose create a singleton instance of the `ColorEnd` class.
+Although simple unique value, such as a string or [`Symbol`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol), would also be sufficient, the `ColorEnd` class makes for a nice symmetry with the `ColorStart` class.
+
+With the token representations set up, we can now implement the `tokenize` function:
+
+```typescript
+@Injectable()
+export class LinkTranspiler implements TranslationMarkupTranspiler {
+  public tokenize(translation: string, offset: number): TokenizeResult | undefined {
+    return (
+      recognizeColorStartToken(translation, offset) ||
+      recognizeColorEndToken(translation, offset)
+    );
+  }
+
+  // TODO: transpile function
+}
+
+function recognizeColorStartToken(translation: string, offset: number): TokenizeResult | undefined {
+  const COLOR_START_TOKEN = '[c:'
+
+  if (!translation.startsWith(COLOR_START_TOKEN, offset)) {
+    return undefined;
+  }
+
+  const end = translation.indexOf(']', offset + COLOR_START_TOKEN.length);
+
+  if (end < 0) {
+      return undefined;
+  }
+
+  const cssColorValue = translation.substring(offset + COLOR_START_TOKEN.length, end);
+
+  return {
+    nextOffset: end + 1,
+    token: new ColorStart(cssColorValue)
+  };
+}
+
+function recognizeColorEndToken(translation: string, offset: number): TokenizeResult | undefined {
+  const COLOR_END_TOKEN = '[/c]';
+
+  if (!translation.startsWith(COLOR_END_TOKEN, offset)) {
+    return undefined;
+  }
+
+  return {
+    nextOffset: offset + COLOR_END_TOKEN.length,
+    token: COLOR_END
+  };
+}
+```
+_(...todo...)_
