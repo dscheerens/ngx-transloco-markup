@@ -310,8 +310,42 @@ export interface TokenizeResult {
 }
 ```
 
-_(todo)_
+Apart from the token, the model also specifies the next offset where the tokenization process should continue.
+Using the `BoldTextTranspiler` as example, tokenizing the string `'trans[b]loco[/b]'`, will a token at offsets 5 and 12 and where the `nextOffset` value is equal to 8 and 16 respectively.
+For all other offsets, the `tokenize` function will return undefined.
+
+One thing to note here is that tokens are typed as `unkown`.
+This is because the set of transpilers is not closed, meaning we cannot know upfront what type of tokens will be generated.
 
 ### Transpilation
 
-_(todo)_
+Once the translation value (a string) has been converted to a sequence of tokens, the transpilation phase is executed.
+It is during this phase that the `tranpile` function of the transpilers is called.
+As input it receives the sequence of tokens, the parse offset (within the token sequence)
+and a `TranslationMarkupTranspilerContext` object.
+This object has two properties:
+
+* `transpile` - a function that can be used to recursively transpile the token sequence for transpilers that support nested content.
+* `translation` - a dictionary object containing the translation values for the active language.
+
+As mentioned before, tokens are represented with the `unknown` type.
+A transpiler therefore should recognize supported tokens using strict equality comparison (`===`), `typeof`-checks, `instanceof`-checks or _[type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards)_ functions.
+Once a supported (sub)sequence of tokens is parsed at the specified offset a `TranspileResult` object (interface is shown below) should be returned.
+This object contains the offset of the next token where the transpilation process should continue.
+
+```typescript
+export interface TranspileResult {
+  nextOffset: number;
+  renderer: TranslationMarkupRenderer;
+}
+
+export type TranslationMarkupRenderer<T extends Node = Node> = (translationParameters: HashMap) => T;
+```
+
+More importantly, a `TranspileResult` object also includes a rendering function.
+This function ultimately encodes the rendering logic that displays translations with markup.
+Given a translation parameters object, the rendering function should be able to produce a [DOM Node](https://developer.mozilla.org/en-US/docs/Web/API/Node).
+
+A completely transpiled translation value will result in one or more rendering functions.
+Once the translation actually should be rendered, all of these functions are invoked with the translation parameters, resulting in one or more DOM Nodes.
+These nodes are then added as children to the `<transloco>` component, thereby making the rendered translation visible in the application.
