@@ -10,6 +10,17 @@ This allows for a much simpler syntax in your translation files and you no longe
 While this library ships with support for the most common markup use cases, you might wish to create your own customized markup rendering.
 Fortunately, thanks to the extensible architecture, you can do this quite easily.
 
+## Table of contents
+
+- [Installation](#installation)
+- [Getting started](#getting-started)
+- [`<transloco>` component API](#transloco-component-api)
+- [Defining markup transpiler availability](#defining-markup-transpiler-availability)
+- [Contextual links](#contextual-links)
+- [Creating your own markup transpilers](#creating-your-own-markup-transpilers)
+  - [Tokenization](#tokenization)
+  - [Transpilation](#transpilation)
+
 ## Installation
 
 Since this library is an extension for Transloco, first make sure your application has been configured to use transloco.
