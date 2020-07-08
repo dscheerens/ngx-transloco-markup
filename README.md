@@ -50,7 +50,7 @@ That will be covered in later sections.
 
 First let's add the default transpilers to the root module of your application (usually called `AppModule`):
 
-```Typescript
+```typescript
 import { defaultTranslocoMarkupTranspilers } from 'ngx-transloco-markup';
 
 @NgModule({
@@ -71,7 +71,7 @@ When including the default transpilers, the following markup is supported:
 
 Next, you will need to add the `TranslocoMarkupModule` to the module(s) in which you want to use the `<transloco>` component:
 
-```Typescript
+```typescript
 import { TranslocoMarkupModule } from 'ngx-transloco-markup';
 
 @NgModule({
@@ -95,7 +95,7 @@ When the `GREETING` entry is rendered by the `<transloco>` component, it will di
 Also, the _website_ text will be rendered as a link that points to the value of the `website` translation parameter.
 The code snippet below shows an example of how this would be used in a component.
 
-```Typescript
+```typescript
 @Component({
   selector: 'app-example',
   template: `
@@ -391,7 +391,7 @@ With the token representations set up, we can now implement the `tokenize` funct
 
 ```typescript
 @Injectable()
-export class LinkTranspiler implements TranslationMarkupTranspiler {
+export class ColorTranspiler implements TranslationMarkupTranspiler {
   public tokenize(translation: string, offset: number): TokenizeResult | undefined {
     return (
       recognizeColorStartToken(translation, offset) ||
@@ -436,4 +436,102 @@ function recognizeColorEndToken(translation: string, offset: number): TokenizeRe
   };
 }
 ```
-_(...todo...)_
+
+The `tokenize` function makes use of two utility functions: `recognizeColorStartToken` and `recognizeColorEndToken`.
+Since there is nothing special to mention about their implementation (they should be self-explanatory), let's proceed with the implementation of the `transpile` function.
+
+First, we need to decide how the parse the token sequence.
+Given a sequence of tokens and a specific position within that sequence, the token at that position must be an instance of `ColorStart`, so that will be our first check.
+This token will also give us the CSS color value needed later to construct rendering function.
+
+Once verified that the (sub)sequence starts with a `ColorStart` token, next we need to (recursively)
+transpile the contents up until the `COLOR_END` token.
+The transpile function receives a context object as third argument, which contains a `transpile` function that can be used to transpile the contents.
+This will yield an array of `TranslationMarkupTranspiler` functions.
+A possible implementation for the `transpile` function is shown below.
+
+```typescript
+@Injectable()
+export class ColorTranspiler implements TranslationMarkupTranspiler {
+  public tokenize(translation: string, offset: number): TokenizeResult | undefined {
+    // ...
+  }
+
+  public transpile(
+    tokens: unknown[],
+    start: number,
+    context: TranslationMarkupTranspilerContext
+  ): TranspileResult | undefined {
+    const nextToken = tokens[start];
+
+    if (!(nextToken instanceof ColorStart)) {
+      return undefined;
+    }
+
+    const childRenderers: TranslationMarkupRenderer[] = [];
+    let offset = start + 1;
+    while (offset < tokens.length && tokens[offset] !== COLOR_END) {
+      const transpileResult = context.transpile(tokens, offset, context);
+
+      if (transpileResult) {
+        childRenderers.push(transpileResult.renderer);
+        offset = transpileResult.nextOffset;
+      } else {
+        offset++;
+      }
+
+    }
+
+    return {
+      nextOffset: offset + 1,
+      renderer: this.createRenderer(nextToken.cssColorValue, childRenderers)
+    };
+  }
+}
+```
+
+Next, there is only one thing left to do: we need to implement the `createRenderer` utility function.
+It is the responsibility of this function to create the renderer that combines all child renderers to render the contents with the desired color.
+Our desired rendering function should create some element (in this case a `<span>` element), set an inline color style and attach the rendered child nodes to the element.
+To simplify the implementation, we can make use of the `TranslationMarkupRendererFactory`, which can be obtained via dependency injection.
+The implementation therefore would look something like the following:
+
+```typescript
+@Injectable()
+export class ColorTranspiler implements TranslationMarkupTranspiler {
+
+  constructor(
+    private readonly rendererFactory: TranslationMarkupRendererFactory
+  ) { }
+
+  public tokenize(translation: string, offset: number): TokenizeResult | undefined {
+    // ...
+  }
+
+  public transpile(
+    tokens: unknown[],
+    start: number,
+    context: TranslationMarkupTranspilerContext
+  ): TranspileResult | undefined {
+    // ...
+  }
+
+  private createRenderer(
+    cssColorValue: string,
+    childRenderers: TranslationMarkupRenderer[]
+  ): TranslationMarkupRenderer {
+    const spanRenderer = this.rendererFactory.createElementRenderer('span', childRenderers);
+
+    function renderColorMarkup(translationParameters: HashMap): HTMLAnchorElement {
+      const spanElement = spanRenderer(translationParameters);
+
+      spanElement.style.color = cssColorValue;
+
+      return spanElement;
+    }
+
+    return renderColorMarkup;
+  }
+
+}
+```
