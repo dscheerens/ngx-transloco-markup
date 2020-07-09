@@ -21,6 +21,9 @@ Fortunately, thanks to the extensible architecture, you can do this quite easily
   - [Tokenization](#tokenization)
   - [Transpilation](#transpilation)
   - [Custom transpiler example: colored text](#custom-transpiler-example-colored-text)
+- [Further customization](#further-customization)
+  - [Custom string interpolation expressions](#custom-string-interpolation-expressions)
+  - [Supporting additional link model types](#supporting-additional-link-model-types)
 
 ## Installation
 
@@ -236,7 +239,7 @@ An instance of this type of transpiler can be created using the `ContextualLinkT
   With this call signature you are given more control.
   First, you need to specify what token will be converted to a link by the transpiler.
   That can be anything, e.g. `'<banana>'`, `'$website'` or just `'???'` (although I would not recommend the latter).
-  Just be aware that the chosen token can collide with other transpilers that supports a similar grammar.
+  Just be aware that the chosen token can collide with another transpiler that supports a similar grammar.
 
   In addition to the token you will need to specify how the label and link target are resolved, via the `options` object.
   This object has two properties, `label` and `link`.
@@ -372,9 +375,9 @@ For that we will be using the following:
 
 ```typescript
 class ColorStart {
-    constructor(
-        public readonly cssColorValue: string
-    ) { }
+  constructor(
+    public readonly cssColorValue: string
+  ) { }
 }
 
 const COLOR_END = new (class ColorEnd {})();
@@ -412,7 +415,7 @@ function recognizeColorStartToken(translation: string, offset: number): Tokenize
   const end = translation.indexOf(']', offset + COLOR_START_TOKEN.length);
 
   if (end < 0) {
-      return undefined;
+    return undefined;
   }
 
   const cssColorValue = translation.substring(offset + COLOR_START_TOKEN.length, end);
@@ -535,3 +538,13 @@ export class ColorTranspiler implements TranslationMarkupTranspiler {
 
 }
 ```
+
+## Further customization
+
+### Custom string interpolation expressions
+
+_(todo)_
+
+### Supporting additional link model types
+
+_(todo)_
