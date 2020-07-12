@@ -543,7 +543,75 @@ export class ColorTranspiler implements TranslationMarkupTranspiler {
 
 ### Custom string interpolation expressions
 
-_(todo)_
+One of Transloco's features is the support for interpolation expressions.
+Such expressions allow you to insert parameter values or other translations using the `{{ expression }}` syntax.
+The syntax and expression types can be customized.
+One example is the [message format](https://ngneat.github.io/transloco/docs/plugins/message-format) plugin to support translations that use the ICU syntax for expressing pluralization and gender.
+
+Transloco itself also uses a [transpiler](https://ngneat.github.io/transloco/docs/hack#the-transpiler) for this purpose: the `TranslocoTranspiler`.
+Plugins can override the default transloco Transpiler to support a different (customized) syntax and evaluation scheme for interpolation expressions.
+Since `ngx-transloco-markup` is meant to support all Transloco features, it also uses the `TranslocoTranspiler` to expand interpolation expressions.
+This means that it also supports custom implementations, like the _message format_ plugin.
+
+Due to the different transpiler architecture used by `ngx-transloco-markup`, you might need to help it
+recognize interpolation expressions when a custom syntax is used.
+For example, expressions supported by the _message format_ plugin only require single opening and closing curly-braces (`{ expression }`).
+Also, they might contain nested curly braces, e.g.: `{myCount, plural, =0 {no results} one {1 result} other {# results}}`.
+
+Custom interpolation expression can be recognized by `ngx-transloco-markup` if you provide a custom
+implementation of the `InterpolationExpressionMatcher` interface:
+
+```typescript
+export interface InterpolationExpressionMatcher {
+  matchExpression(source: string, offset: number): number | undefined;
+}
+```
+
+The interface has just one function `matchExpression` that returns the length of the interpolation expression (in number of characters) for a given translation value and position within that value.
+When no expression was found at the specified position, then `undefined` must be returned.
+
+An example implementation for the _message format_ plugin could be the following:
+
+```typescript
+export class MessageFormatInterpolationExpressionMatcher implements InterpolationExpressionMatcher {
+  public matchExpression(source: string, startOffset: number): number | undefined {
+    let offset = startOffset;
+    let level = 0;
+    do {
+      const character = source.charAt(offset);
+
+      if (character === '{') {
+        level++;
+      }
+      if (character === '}') {
+        level--;
+      }
+
+      offset++;
+    } while (level > 0 && offset < source.length)
+
+    const expressionLength = offset - startOffset;
+
+    return level === 0 && expressionLength > 1 ? expressionLength : undefined
+  }
+}
+```
+
+To make the custom `InterpolationExpressionMatcher` implementation available to `ngx-transloco-markup` register it as provider in root module of your application using the `TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER` injection token:
+
+```typescript
+import { TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER } from 'ngx-transloco-markup';
+
+@NgModule({
+  providers: [
+    {
+      provide: TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER,
+      useClass: MessageFormatInterpolationExpressionMatcher
+    }
+  ]
+})
+export class AppModule {}
+```
 
 ### Supporting additional link model types
 
