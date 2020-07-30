@@ -23,7 +23,7 @@ Fortunately, thanks to the extensible architecture, you can do this quite easily
   - [Custom transpiler example: colored text](#custom-transpiler-example-colored-text)
 - [Further customization](#further-customization)
   - [Custom string interpolation expressions](#custom-string-interpolation-expressions)
-  - [Supporting additional link model types](#supporting-additional-link-model-types)
+  - [Supporting additional link model renderers](#supporting-additional-link-model-renderers)
 
 ## Installation
 
@@ -613,6 +613,40 @@ import { TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER } from 'ngx-transloco-mark
 export class AppModule {}
 ```
 
-### Supporting additional link model types
+### Supporting additional link model renderers
 
-_(todo)_
+**ngx-transloco-markup** supports two type of link models out-of-the-box: string values and values that conform to the `ExternalLink` model.
+Both are treated as links that target a location outside of the application.
+Many applications, however, also need links that target a specific part within the application.
+If your application uses the Angular router, that this is usually achieved by means of a [router link directive](https://angular.io/api/router/RouterLink)).
+Since that directive cannot be used within translation values another method is necessary.
+
+To still be able to support router links (or other special link types) in translation values, you can specify additional link renderers.
+A link renderer should implement or extend the `LinkRenderer` (abstract) class:
+
+```typescript
+export abstract class LinkRenderer<T> {
+    public abstract supports(link: unknown): link is T;
+    public abstract render(link: T, targetElement: HTMLAnchorElement): void;
+}
+```
+
+Link renderers are used by the link transpilers to determine how a specific link should be applied to an
+`HTMLAnchorElement`.
+This setup allows for different types of link models that can have their own specific rendering method.
+A custom `LinkRenderer` can be registered by providing it at the right module (usually the application's root module), using the `LinkRenderer` abstract class as token:
+
+```typescript
+import { LinkRenderer } from 'ngx-transloco-markup';
+
+@NgModule({
+  providers: [
+    { provide: LinkRenderer, useClass: MyCustomeLinkRenderer, multi: true }
+  ]
+})
+export class AppModule { }
+```
+
+Since the need for router links is quite common a special renderer for such links is available.
+This renderer is provided in a separate NPM package: [`ngx-transloco-markup-router-link`](https://github.com/dscheerens/ngx-transloco-markup-router-link).
+Note that the renderer is not part of the `ngx-transloco-markup` core package, as it depends on the `@angular/router` package.
