@@ -9,8 +9,6 @@ import { TranslocoService } from '@ngneat/transloco';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
-    public title = 'Angular Demo App!';
-
     public availableLanguages!: string[];
     public activeLanguage$!: Observable<string>;
 
