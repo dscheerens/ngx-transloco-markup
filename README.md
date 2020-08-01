@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.org/dscheerens/ngx-transloco-markup.svg?branch=master)](https://travis-ci.org/dscheerens/ngx-transloco-markup) [![NPM Version](https://img.shields.io/npm/v/ngx-transloco-markup.svg)](https://www.npmjs.com/package/ngx-transloco-markup)
+[![Build Status](https://travis-ci.com/dscheerens/ngx-transloco-markup.svg?branch=master)](https://travis-ci.com/dscheerens/ngx-transloco-markup) [![NPM Version](https://img.shields.io/npm/v/ngx-transloco-markup.svg)](https://www.npmjs.com/package/ngx-transloco-markup)
 
 # ngx-transloco-markup: Markup support for Transloco
 
@@ -618,7 +618,7 @@ export class AppModule {}
 **ngx-transloco-markup** supports two type of link models out-of-the-box: string values and values that conform to the `ExternalLink` model.
 Both are treated as links that target a location outside of the application.
 Many applications, however, also need links that target a specific part within the application.
-If your application uses the Angular router, that this is usually achieved by means of a [router link directive](https://angular.io/api/router/RouterLink)).
+If your application uses the Angular router, then this is usually achieved by means of a [router link directive](https://angular.io/api/router/RouterLink)).
 Since that directive cannot be used within translation values another method is necessary.
 
 To still be able to support router links (or other special link types) in translation values, you can specify additional link renderers.
