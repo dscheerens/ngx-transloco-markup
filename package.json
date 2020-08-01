@@ -39,11 +39,11 @@
     "tslib": "^1.10.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.803.26",
-    "@angular-devkit/build-ng-packagr": "~0.803.26",
+    "@angular-devkit/build-angular": "0.803.28",
+    "@angular-devkit/build-ng-packagr": "0.803.28",
     "@angular/animations": "^8.2.14",
-    "@angular/cdk": "~8.2.3",
-    "@angular/cli": "^8.3.26",
+    "@angular/cdk": "^8.2.3",
+    "@angular/cli": "^8.3.28",
     "@angular/common": "^8.2.14",
     "@angular/compiler": "^8.2.14",
     "@angular/compiler-cli": "^8.2.14",
