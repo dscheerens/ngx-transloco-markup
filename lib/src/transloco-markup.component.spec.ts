@@ -1,6 +1,6 @@
 import { fakeAsync, flushMicrotasks } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { createComponentFactory } from '@ngneat/spectator'; // tslint:disable-line:no-implicit-dependencies
+import { createComponentFactory } from '@ngneat/spectator';
 import {
     TRANSLOCO_CONFIG,
     TRANSLOCO_LOADER,

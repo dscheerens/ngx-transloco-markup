@@ -23,7 +23,7 @@
     "ng": "ng",
     "start": "ng serve --project=demo",
     "serve.prod": "ng serve --project=demo --prod",
-    "lint": "tslint -p lib/tsconfig.lint.json -t stylish -c tslint.json",
+    "lint": "ng lint --project=lib",
     "test": "ng test --project=lib --watch=false --code-coverage",
     "test.watch": "ng test --project=lib --watch=true --code-coverage",
     "build": "ng build --project=lib --prod",

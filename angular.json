@@ -33,6 +33,7 @@
                 "lint": {
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
+                        "format": "stylish",
                         "tsConfig": [
                             "lib/tsconfig.lib.json",
                             "lib/tsconfig.spec.json"
