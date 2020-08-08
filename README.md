@@ -4,7 +4,7 @@
 
 This library is an extension for [Transloco](https://github.com/ngneat/transloco) that provides support for displaying translations with markup.
 **ngx-transloco-markup** offers an alternative to the Transloco [directive](https://ngneat.github.io/transloco/docs/translation-in-the-template#structural-directive) and [pipe](https://ngneat.github.io/transloco/docs/translation-in-the-template#pipe): the `<transloco>` component, that takes care of rendering your translations with markup.
-By using this component, you no longer need to split your translations or use a `[innerHtml]`-binding.
+By using this component, you no longer need to split your translations or use an `[innerHtml]`-binding.
 This allows for a much simpler syntax in your translation files and you no longer need to worry about potential markup-injection issues that could cause the layout of your application to break.
 
 While this library ships with support for the most common markup use cases, you might wish to create your own customized markup rendering.
@@ -199,7 +199,7 @@ This is a generic syntax that can be used free of any context.
 While that makes for an easy setup, it does add a bit of clutter to your translations.
 
 That clutter can be reduced by introducing contextual markup tokens: customized syntax that can be used for within a specific context.
-It is not uncommon, for example, to refer to some entity by its name or (some other descriptive property) and be able to link to a detail view of that entity.
+It is not uncommon, for example, to refer to some entity by its name (or some other descriptive property) and be able to link to a detail view of that entity.
 Consider the scenario of a web shop, where adding an item to the basket would display the following message:
 
 ```json
@@ -247,7 +247,7 @@ An instance of this type of transpiler can be created using the `ContextualLinkT
 
   * `{ static: ... }` - A static value for the label or link.
   * `{ parameterKey: ... }` - A value that is obtained from the property with the specified key in the translation parameters.
-  * `{ resolve: (translationParams) => ... }` - A resolver function where can dynamically construct the label or link (using the translation parameters if necessary).
+  * `{ resolve: (translationParams) => ... }` - A resolver function to dynamically construct the label or link (using the translation parameters if necessary).
 
 Another type of transpiler that can be created by the `ContextualLinkTranspilerFactory` is the `ContextualLinkBlockTranspiler`, which supports the following syntax: `[linkToken]...[/linkToken]`.
 In contrast to the substitution transpiler, the block transpiler will render the contents of the block as a link.
@@ -267,7 +267,7 @@ The factory also provides two signatures of the `ContextualLinkTranspilerFactory
 
   * `{ static: ... }` - A static value for the link.
   * `{ parameterKey: ... }` - A value that is obtained from the property with the specified key in the translation parameters.
-  * `{ resolve: (translationParams) => ... }` - A resolver function where can dynamically construct the link (using the translation parameters if necessary).
+  * `{ resolve: (translationParams) => ... }` - A resolver function to dynamically construct the link (using the translation parameters if necessary).
 
 
 ## Creating your own markup transpilers
@@ -326,8 +326,8 @@ export interface TokenizeResult {
 ```
 
 Apart from the token, the model also specifies the next offset where the tokenization process should continue.
-Using the `BoldTextTranspiler` as example, tokenizing the string `'trans[b]loco[/b]'`, will a token at offsets 5 and 12 and where the `nextOffset` value is equal to 8 and 16 respectively.
-For all other offsets, the `tokenize` function will return undefined.
+Using the `BoldTextTranspiler` as example, tokenizing the string `'trans[b]loco[/b]'`, will result in a token at offsets 5 and 12 and where the `nextOffset` value is equal to 8 and 16 respectively.
+For all other offsets, the `tokenize` function will return `undefined`.
 
 One thing to note here is that tokens are typed as `unkown`.
 This is because the set of transpilers is not closed, meaning we cannot know upfront what type of tokens will be generated.
@@ -618,7 +618,7 @@ export class AppModule {}
 **ngx-transloco-markup** supports two type of link models out-of-the-box: string values and values that conform to the `ExternalLink` model.
 Both are treated as links that target a location outside of the application.
 Many applications, however, also need links that target a specific part within the application.
-If your application uses the Angular router, then this is usually achieved by means of a [router link directive](https://angular.io/api/router/RouterLink)).
+If your application uses the Angular router, then this is usually achieved by means of a [router link directive](https://angular.io/api/router/RouterLink).
 Since that directive cannot be used within translation values another method is necessary.
 
 To still be able to support router links (or other special link types) in translation values, you can specify additional link renderers.
