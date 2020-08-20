@@ -119,7 +119,7 @@ describe('Transloco markup component', () => {
     });
 
     it('will rerender when the language is changed via the `TranslocoService` and the reRenderOnLangChange option is enabled', () => {
-        const { element, get } = createComponent({
+        const { element, inject } = createComponent({
             props: {
                 translationKey: 'TITLE',
             },
@@ -133,7 +133,7 @@ describe('Transloco markup component', () => {
             ]
         });
 
-        const translocoService = get(TranslocoService);
+        const translocoService = inject(TranslocoService);
 
         expect(element.textContent).toBe('Welcome to Transloco Markup');
 
@@ -143,13 +143,13 @@ describe('Transloco markup component', () => {
     });
 
     it('will not rerender when the language is changed via the `TranslocoService` and the reRenderOnLangChange option is disabled', () => {
-        const { element, get } = createComponent({
+        const { element, inject } = createComponent({
             props: {
                 translationKey: 'TITLE'
             }
         });
 
-        const translocoService = get(TranslocoService);
+        const translocoService = inject(TranslocoService);
 
         expect(element.textContent).toBe('Welcome to Transloco Markup');
 
@@ -159,7 +159,7 @@ describe('Transloco markup component', () => {
     });
 
     it('ignores the language changes of the `TranslocoService` when a static inline language is specified', () => {
-        const { element, get } = createComponent({
+        const { element, inject } = createComponent({
             props: {
                 translationKey: 'TITLE',
                 inlineLanguage: 'l33t|static'
@@ -174,7 +174,7 @@ describe('Transloco markup component', () => {
             ]
         });
 
-        const translocoService = get(TranslocoService);
+        const translocoService = inject(TranslocoService);
 
         expect(element.textContent).toBe('W31c0m3 70 7r4n5l0c0 M4rkup');
 
@@ -227,13 +227,13 @@ describe('Transloco markup component', () => {
     });
 
     it('uses the `TranslocoMissingHandler` to resolve translation texts for translations not available in the active language', () => {
-        const { element, get, component } = createComponent({
+        const { element, inject, component } = createComponent({
             props: {
                 translationKey: 'TITLE'
             }
         });
 
-        const missingHandler = get<TranslocoMissingHandler>(TRANSLOCO_MISSING_HANDLER);
+        const missingHandler = inject<TranslocoMissingHandler>(TRANSLOCO_MISSING_HANDLER);
         const handleMissingTranslationSpy = spyOn(missingHandler, 'handle').and.callThrough();
 
         expect(handleMissingTranslationSpy).not.toHaveBeenCalled();
@@ -255,7 +255,7 @@ describe('Transloco markup component', () => {
     });
 
     it('renders an empty texts for empty translation texts and the `allowEmptyValues` option is enabled in the Transloco config', () => {
-        const { element, get, component } = createComponent({
+        const { element, inject, component } = createComponent({
             props: {
                 translationKey: 'TITLE'
             },
@@ -269,7 +269,7 @@ describe('Transloco markup component', () => {
             ]
         });
 
-        const missingHandler = get<TranslocoMissingHandler>(TRANSLOCO_MISSING_HANDLER);
+        const missingHandler = inject<TranslocoMissingHandler>(TRANSLOCO_MISSING_HANDLER);
         const handleMissingTranslationSpy = spyOn(missingHandler, 'handle').and.callThrough();
 
         expect(handleMissingTranslationSpy).not.toHaveBeenCalled();
@@ -379,7 +379,7 @@ describe('Transloco markup component', () => {
     }));
 
     it('supports inlines scopes', () => {
-        const { element, get, fixture, component } = createComponent({
+        const { element, inject, fixture, component } = createComponent({
             props: {
                 translationKey: 'alt.SECRET',
                 inlineScope: 'alt'
@@ -387,7 +387,7 @@ describe('Transloco markup component', () => {
             detectChanges: false
         });
 
-        const testingLoader: TestingLoader = get<TestingLoader>(TRANSLOCO_LOADER);
+        const testingLoader: TestingLoader = inject<TestingLoader>(TRANSLOCO_LOADER);
 
         spyOn(testingLoader, 'getTranslation').and.callFake((path: string) => {
                 if (path === 'en') {
