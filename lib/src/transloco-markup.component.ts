@@ -26,7 +26,7 @@ import { Subscription, combineLatest, Observable, of, concat, EMPTY } from 'rxjs
 import { distinctUntilChanged, map, switchMap, first, skip, shareReplay } from 'rxjs/operators';
 
 import { StringLiteralTranspiler } from './transpilers/string-literal-transpiler';
-import { asArray } from './utils/array';
+import { RecursiveArray, asArray, asFlatArray } from './utils/array';
 import { observeProperty } from './utils/observe-property';
 import { createTranslationMarkupRenderer } from './create-translation-markup-renderer';
 import { STRING_INTERPOLATION_TRANSPILER } from './string-interpolation-transpiler.token';
@@ -91,7 +91,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
 
         /** Markup transpilers provided via the module/component injectors. */
         @Optional() @Inject(TRANSLATION_MARKUP_TRANSPILER) // tslint:disable-line:prefer-inline-decorator
-        private readonly providedTranspilers: MaybeArray<TranslationMarkupTranspiler> | null,
+        private readonly providedTranspilers: RecursiveArray<TranslationMarkupTranspiler> | null,
 
         /** Transpiler that is used for expanding string interpolation expressions. */
         @Inject(STRING_INTERPOLATION_TRANSPILER) private readonly stringInterpolationTranspiler: TranslationMarkupTranspiler,
@@ -167,7 +167,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
         const transpilers$ = combineLatest([inlineTranspilers$, mergeTranspilers$]).pipe(
             map(([inlineTranspilers, mergeTranspilers]) => [
                 ...(inlineTranspilers ? asArray(inlineTranspilers) : []),
-                ...(this.providedTranspilers && (!inlineTranspilers || mergeTranspilers) ? asArray(this.providedTranspilers) : []),
+                ...(this.providedTranspilers && (!inlineTranspilers || mergeTranspilers) ? asFlatArray(this.providedTranspilers) : []),
                 this.stringInterpolationTranspiler,
                 this.stringLiteralTranspiler
             ])

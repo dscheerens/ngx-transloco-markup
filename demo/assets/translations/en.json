@@ -3,5 +3,9 @@
         "TITLE": "Basic example",
         "NAME": "Name",
         "GREETING": "Hi [b]{{ name }}[/b], welcome to [i]TRANSLOCO [b]<MARKUP>[/b][/i]"
+    },
+    "CUSTOM_TRANSPILERS": {
+        "TITLE": "Custom transpilers",
+        "MESSAGE": "This an example message that uses [b][c:dodgerblue]custom ([i]non-standard[/i])[/c] [c:deepskyblue]transpilers[/b][/c]! :)"
     }
 }

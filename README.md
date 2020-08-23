@@ -16,6 +16,7 @@ Fortunately, thanks to the extensible architecture, you can do this quite easily
 - [Getting started](#getting-started)
 - [`<transloco>` component API](#transloco-component-api)
 - [Defining markup transpiler availability](#defining-markup-transpiler-availability)
+  - [Inherting transpilers from parent injectors](#inherting-transpilers-from-parent-injectors)
 - [Contextual links](#contextual-links)
 - [Creating your own markup transpilers](#creating-your-own-markup-transpilers)
   - [Tokenization](#tokenization)
@@ -191,6 +192,31 @@ The **component**, **lazy-loaded module** and **root module** transpiler levels 
 A tranpsiler defined at one of those levels needs to be specified using the `TRANSLATION_MARKUP_TRANSPILER` injection token and it also needs to be a multi provider (`multi: true`).
 
 Note that the provided transpilers can be discarded for a particular usage of the `<transloco>` component, by setting the `mergeTranspilers` input property to `false`.
+
+### Inherting transpilers from parent injectors
+
+Due to Angular's hierarchy of injectors you might run into the issue that specifying a transpiler at a certain level will override the set of transpilers defined at lower levels.
+For example if you make a transpiler available in a lazy loaded module, then this will override all transpilers from the root module.
+Often, this is not the intended effect.
+Instead you probably would like to add a transpiler to the existing set of transpilers.
+This is supported by **ngx-transloco-markup** by including `inheritTranspilers()` in the providers list of a module or component:
+
+```typescript
+import { inheritTranspilers } from 'ngx-transloco-markup';
+import { CustomTranspiler } from './transpilers';
+
+@NgModule({
+  providers: [
+    { provide: TRANSLATION_MARKUP_TRANSPILER, useClass: CustomTranspiler, multi: true },
+    inheritTranspilers() // <-- this will make all transpilers from the parent injector available
+  ]
+})
+export class LazyLoadedModuleWithAdditionalTranspilers { }
+```
+
+Keep in mind that the order of transpiler providers is important.
+If some of them can parse the same syntax, then the one that is provided first will win and therefore effectively overrides the others.
+This means you usually would need to put `inheritTranspilers()` after the other transpiler providers.
 
 ## Contextual links
 
@@ -406,7 +432,7 @@ export class ColorTranspiler implements TranslationMarkupTranspiler {
 }
 
 function recognizeColorStartToken(translation: string, offset: number): TokenizeResult | undefined {
-  const COLOR_START_TOKEN = '[c:'
+  const COLOR_START_TOKEN = '[c:';
 
   if (!translation.startsWith(COLOR_START_TOKEN, offset)) {
     return undefined;
@@ -525,7 +551,7 @@ export class ColorTranspiler implements TranslationMarkupTranspiler {
   ): TranslationMarkupRenderer {
     const spanRenderer = this.rendererFactory.createElementRenderer('span', childRenderers);
 
-    function renderColorMarkup(translationParameters: HashMap): HTMLAnchorElement {
+    function renderColorMarkup(translationParameters: HashMap): HTMLSpanElement {
       const spanElement = spanRenderer(translationParameters);
 
       spanElement.style.color = cssColorValue;
@@ -538,6 +564,8 @@ export class ColorTranspiler implements TranslationMarkupTranspiler {
 
 }
 ```
+
+A complete implementation of the colored text transpiler can be found in the demo application: [demo/app/features/custom-transpilers/colored-text-transpiler.ts](./demo/app/features/custom-transpilers/colored-text-transpiler.ts)
 
 ## Further customization
 
