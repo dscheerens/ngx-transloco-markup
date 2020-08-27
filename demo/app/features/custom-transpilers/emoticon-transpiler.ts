@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { TranslationMarkupRendererFactory, TranslationMarkupTranspiler, TranspileResult, TokenizeResult } from 'ngx-transloco-markup';
+import {
+    TranslationMarkupRendererFactory,
+    TranslationMarkupTranspiler,
+    TranslationMarkupTranspilerContext,
+    TranspileResult,
+    TokenizeResult
+} from 'ngx-transloco-markup';
 
 const EMOTICON_MAP = new Map<string, string>([
     [':)', '\u{1F642}'],
@@ -33,7 +39,7 @@ export class EmoticonTranspiler implements TranslationMarkupTranspiler {
         return undefined;
     }
 
-    public transpile(tokens: unknown[], offset: number): TranspileResult | undefined {
+    public transpile(offset: number, { tokens }: TranslationMarkupTranspilerContext): TranspileResult | undefined {
         const nextToken = tokens[offset];
 
         if (!(nextToken instanceof Emoticon)) {
@@ -41,8 +47,8 @@ export class EmoticonTranspiler implements TranslationMarkupTranspiler {
         }
 
         return {
-            renderer: this.translationMarkupRendererFactory.createTextRenderer(nextToken.value),
-            nextOffset: offset + 1
+            nextOffset: offset + 1,
+            renderer: this.translationMarkupRendererFactory.createTextRenderer(nextToken.value)
         };
 
     }

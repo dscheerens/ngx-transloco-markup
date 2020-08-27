@@ -1,24 +1,17 @@
-import { createRootTranspilerFunction } from '../create-translation-markup-renderer';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
 import { BoldTextTranspiler } from './bold-text-transpiler';
 import { BlockBoundary } from './block-transpiler';
 
-function createTestTranspiler(): { transpiler: BoldTextTranspiler; context: TranslationMarkupTranspilerContext } {
-    const transpiler = new BoldTextTranspiler(new TranslationMarkupRendererFactory(document));
-    const context = {
-        transpile: createRootTranspilerFunction([transpiler]),
-        translation: {}
-    };
-
-    return { transpiler, context };
+function createTestTranspiler(): BoldTextTranspiler {
+    return new BoldTextTranspiler(new TranslationMarkupRendererFactory(document));
 }
 
 describe('BoldTextTranspiler', () => {
     describe('tokenize function', () => {
         it('correctly recognizes the bold start and boundaries', () => {
-            const { transpiler } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
 
             const translation = 'a[bc][[b]de[/c][/[/b][b]';
             const expectedTokenOffsets = [6, 17, 21];
@@ -37,16 +30,17 @@ describe('BoldTextTranspiler', () => {
 
     describe('transpile function', () => {
         it('returns undefined for unknown tokens', () => {
-            const { transpiler, context } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
             const tokens = [0, 'a', '[b]', new BlockBoundary('[a]'), new BlockBoundary('[/c]'), ['/b']];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             for (const [offset] of tokens.entries()) {
-                expect(transpiler.transpile(tokens, offset, context)).toBeUndefined();
+                expect(transpiler.transpile(offset, context)).toBeUndefined();
             }
         });
 
         it('transpiles the content between the bold tags', () => {
-            const { transpiler, context } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
 
             const tokens = [
                 0,
@@ -60,10 +54,12 @@ describe('BoldTextTranspiler', () => {
                 new BlockBoundary('[/b]'),
             ];
 
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
+
             const expectedResults = [0, 5, 0, 2, 0, 0, 3, 0, 0];
 
             for (const [offset, expectedResult] of expectedResults.entries()) {
-                const result = transpiler.transpile(tokens, offset, context);
+                const result = transpiler.transpile(offset, context);
 
                 if (expectedResult === 0) {
                     expect(result).toBeUndefined();

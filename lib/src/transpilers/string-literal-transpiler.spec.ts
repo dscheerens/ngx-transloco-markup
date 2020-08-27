@@ -1,4 +1,5 @@
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
+import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
 import { StringLiteralTranspiler } from './string-literal-transpiler';
 
@@ -25,9 +26,10 @@ describe('StringLiteralTranspiler', () => {
             const transpiler = new StringLiteralTranspiler(new TranslationMarkupRendererFactory(document));
 
             const tokens = [1, null, undefined, false, true, [], {}];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             for (const [offset] of tokens.entries()) {
-                expect(transpiler.transpile(tokens, offset)).toBeUndefined();
+                expect(transpiler.transpile(offset, context)).toBeUndefined();
             }
         });
 
@@ -36,6 +38,7 @@ describe('StringLiteralTranspiler', () => {
             const transpiler = new StringLiteralTranspiler(renderFactory);
 
             const tokens = [0, 'a', 1, 'b', 'c', 'd', 2, 'e'];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
             const expectedResults = [undefined, 'a', undefined, 'bcd', 'cd', 'd', undefined, 'e'];
 
             const renderTextSpy = spyOn(renderFactory, 'createTextRenderer').and.callThrough();
@@ -44,7 +47,7 @@ describe('StringLiteralTranspiler', () => {
 
                 renderTextSpy.calls.reset();
 
-                const result = transpiler.transpile(tokens, offset);
+                const result = transpiler.transpile(offset, context);
 
                 if (expectedResult === undefined) {
                     expect(result).toBeUndefined(`expected transpile(tokens, ${offset}, context) to return undefined`);

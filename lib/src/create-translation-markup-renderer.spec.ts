@@ -1,5 +1,10 @@
 import { createTranslationMarkupRenderer } from './create-translation-markup-renderer';
-import { TokenizeResult, TranslationMarkupTranspiler, TranspileResult } from './translation-markup-transpiler.model';
+import {
+    TokenizeResult,
+    TranslationMarkupTranspiler,
+    TranslationMarkupTranspilerContext,
+    TranspileResult
+} from './translation-markup-transpiler.model';
 
 class TestTranspiler implements TranslationMarkupTranspiler {
 
@@ -17,14 +22,14 @@ class TestTranspiler implements TranslationMarkupTranspiler {
         return { token: this.token, nextOffset: offset + this.token.length };
     }
 
-    public transpile(tokens: unknown[], offset: number): TranspileResult | undefined {
+    public transpile(offset: number, { tokens }: TranslationMarkupTranspilerContext): TranspileResult | undefined {
         if (this.disableTranspile || tokens[offset] !== this.token) { // tslint:disable-line:strict-comparisons
             return undefined;
         }
 
         return {
+            nextOffset: offset + 1,
             renderer: () => document.createTextNode(this.renderValue !== undefined ? this.renderValue : this.token),
-            nextOffset: offset + 1
         };
     }
 }

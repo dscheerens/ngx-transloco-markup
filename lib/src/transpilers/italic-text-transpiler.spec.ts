@@ -1,24 +1,17 @@
-import { createRootTranspilerFunction } from '../create-translation-markup-renderer';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
 import { ItalicTextTranspiler } from './italic-text-transpiler';
 import { BlockBoundary } from './block-transpiler';
 
-function createTestTranspiler(): { transpiler: ItalicTextTranspiler; context: TranslationMarkupTranspilerContext } {
-    const transpiler = new ItalicTextTranspiler(new TranslationMarkupRendererFactory(document));
-    const context = {
-        transpile: createRootTranspilerFunction([transpiler]),
-        translation: {}
-    };
-
-    return { transpiler, context };
+function createTestTranspiler(): ItalicTextTranspiler {
+    return new ItalicTextTranspiler(new TranslationMarkupRendererFactory(document));
 }
 
 describe('ItalicTextTranspiler', () => {
     describe('tokenize function', () => {
         it('correctly recognizes the italic start and boundaries', () => {
-            const { transpiler } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
 
             const translation = 'a[bc][[i]de[/c][/[/i][i]';
             const expectedTokenOffsets = [6, 17, 21];
@@ -37,17 +30,17 @@ describe('ItalicTextTranspiler', () => {
 
     describe('transpile function', () => {
         it('returns undefined for unknown tokens', () => {
-            const { transpiler, context } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
             const tokens = [0, 'a', '[i]', new BlockBoundary('[a]'), new BlockBoundary('[/c]'), ['/b']];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             for (const [offset] of tokens.entries()) {
-                expect(transpiler.transpile(tokens, offset, context)).toBeUndefined();
+                expect(transpiler.transpile(offset, context)).toBeUndefined();
             }
         });
 
         it('transpiles the content between the italic tags', () => {
-            const { transpiler, context } = createTestTranspiler();
-
+            const transpiler = createTestTranspiler();
             const tokens = [
                 0,
                 new BlockBoundary('[i]'),
@@ -59,11 +52,12 @@ describe('ItalicTextTranspiler', () => {
                 0,
                 new BlockBoundary('[/i]'),
             ];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             const expectedResults = [0, 5, 0, 2, 0, 0, 3, 0, 0];
 
             for (const [offset, expectedResult] of expectedResults.entries()) {
-                const result = transpiler.transpile(tokens, offset, context);
+                const result = transpiler.transpile(offset, context);
 
                 if (expectedResult === 0) {
                     expect(result).toBeUndefined();

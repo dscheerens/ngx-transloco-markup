@@ -315,10 +315,9 @@ export interface TranslationMarkupTranspiler {
   ): TokenizeResult | undefined;
 
   transpile(
-    tokens: unknown[],
     offset: number,
     context: TranslationMarkupTranspilerContext
-  ): (TranspileResult | undefined);
+  ): TranspileResult | undefined;
 }
 ```
 
@@ -362,12 +361,14 @@ This is because the set of transpilers is not closed, meaning we cannot know upf
 
 Once the translation value (a string) has been converted to a sequence of tokens, the transpilation phase is executed.
 It is during this phase that the `tranpile` function of the transpilers is called.
-As input it receives the sequence of tokens, the parse offset (within the token sequence)
-and a `TranslationMarkupTranspilerContext` object.
-This object has two properties:
+As input it receives the parse offset (within the token sequence) and a `TranslationMarkupTranspilerContext` object.
+This object has two properties and two functions:
 
-* `transpile` - a function that can be used to recursively transpile the token sequence for transpilers that support nested content.
+* `tokens` - the token sequence that is to be transpiled.
 * `translation` - a dictionary object containing the translation values for the active language.
+* `transpile` - a function that can be used to recursively transpile the token sequence for transpilers that support nested content.
+* `transpileUntil` - another function used to recursive transpilation that continues parsing tokens until a certain token is encountered.
+  Unlike the `transpile` function this function can return a sequence of markup renderers instead of just one (or none at all).
 
 As mentioned before, tokens are represented with the `unknown` type.
 A transpiler therefore should recognize supported tokens using strict equality comparison (`===`), `typeof`-checks, `instanceof`-checks or _[type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards)_ functions.
@@ -473,10 +474,9 @@ First, we need to decide how the parse the token sequence.
 Given a sequence of tokens and a specific position within that sequence, the token at that position must be an instance of `ColorStart`, so that will be our first check.
 This token will also give us the CSS color value needed later to construct rendering function.
 
-Once verified that the (sub)sequence starts with a `ColorStart` token, next we need to (recursively)
-transpile the contents up until the `COLOR_END` token.
-The transpile function receives a context object as third argument, which contains a `transpile` function that can be used to transpile the contents.
-This will yield an array of `TranslationMarkupTranspiler` functions.
+Once verified that the (sub)sequence starts with a `ColorStart` token, next we need to (recursively) transpile the contents up until the `COLOR_END` token.
+You could implement that process yourself, however, the `context` object provides a `transpileUntil` function that already does exactly what we need.
+Invoking this function will yield an array of `TranslationMarkupTranspiler` functions and the next unparsed offset (which will be the `COLOR_END` token).
 A possible implementation for the `transpile` function is shown below.
 
 ```typescript
@@ -487,7 +487,6 @@ export class ColorTranspiler implements TranslationMarkupTranspiler {
   }
 
   public transpile(
-    tokens: unknown[],
     start: number,
     context: TranslationMarkupTranspilerContext
   ): TranspileResult | undefined {
@@ -497,23 +496,14 @@ export class ColorTranspiler implements TranslationMarkupTranspiler {
       return undefined;
     }
 
-    const childRenderers: TranslationMarkupRenderer[] = [];
-    let offset = start + 1;
-    while (offset < tokens.length && tokens[offset] !== COLOR_END) {
-      const transpileResult = context.transpile(tokens, offset, context);
-
-      if (transpileResult) {
-        childRenderers.push(transpileResult.renderer);
-        offset = transpileResult.nextOffset;
-      } else {
-        offset++;
-      }
-
-    }
+    const { nextOffset, renderers } = context.transpileUntil(
+      start + 1,
+      (token) => token === COLOR_END
+    );
 
     return {
-      nextOffset: offset + 1,
-      renderer: this.createRenderer(nextToken.cssColorValue, childRenderers)
+      nextOffset: Math.min(nextOffset + 1, context.tokens.length),
+      renderer: this.createRenderer(nextToken.cssColorValue, renderers)
     };
   }
 }
@@ -538,7 +528,6 @@ export class ColorTranspiler implements TranslationMarkupTranspiler {
   }
 
   public transpile(
-    tokens: unknown[],
     start: number,
     context: TranslationMarkupTranspilerContext
   ): TranspileResult | undefined {

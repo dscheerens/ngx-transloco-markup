@@ -1,4 +1,9 @@
-import { TokenizeResult, TranslationMarkupTranspiler, TranspileResult } from '../translation-markup-transpiler.model';
+import {
+    TokenizeResult,
+    TranslationMarkupTranspiler,
+    TranspileResult,
+    TranslationMarkupTranspilerContext
+} from '../translation-markup-transpiler.model';
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
 
 /**
@@ -31,7 +36,7 @@ export abstract class SubstitutionTranspiler implements TranslationMarkupTranspi
     }
 
     /** @inheritdoc */
-    public transpile(tokens: unknown[], offset: number): TranspileResult | undefined {
+    public transpile(offset: number, { tokens }: TranslationMarkupTranspilerContext): TranspileResult | undefined {
         const nextToken = tokens[offset];
 
         if (!(nextToken instanceof SubstitutionToken) || nextToken.token !== this.substitutionToken) {

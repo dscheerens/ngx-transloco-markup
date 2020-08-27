@@ -1,6 +1,5 @@
 import { TranslocoTranspiler } from '@ngneat/transloco';
 
-import { createRootTranspilerFunction } from '../create-translation-markup-renderer';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
@@ -19,7 +18,7 @@ class TestTranslocoTranspiler implements TranslocoTranspiler {
 
 function createTestTranspiler(
     interpolationExpressionMatcher?: InterpolationExpressionMatcher
-): { transpiler: StringInterpolationTranspiler; context: TranslationMarkupTranspilerContext; translocoTranspiler: TranslocoTranspiler } {
+): { transpiler: StringInterpolationTranspiler; translocoTranspiler: TranslocoTranspiler } {
 
     const translocoTranspiler = new TestTranslocoTranspiler();
 
@@ -29,12 +28,7 @@ function createTestTranspiler(
         interpolationExpressionMatcher || defaultTranslationInterpolationExpressionMatcherFactory()
     );
 
-    const context = {
-        transpile: createRootTranspilerFunction([transpiler]),
-        translation: {}
-    };
-
-    return { transpiler, context, translocoTranspiler };
+    return { transpiler, translocoTranspiler };
 }
 
 describe('StringInterpolationTranspiler', () => {
@@ -106,33 +100,35 @@ describe('StringInterpolationTranspiler', () => {
 
     describe('transpile function', () => {
         it('returns undefined for unknown tokens', () => {
-            const { transpiler, context } = createTestTranspiler();
+            const { transpiler } = createTestTranspiler();
             const tokens = ['a', 'b', '{{', true, false, 4, undefined, { token: '{{' }, '}}'];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             for (const [offset] of tokens.entries()) {
-                expect(transpiler.transpile(tokens, offset, context)).toBeUndefined();
+                expect(transpiler.transpile(offset, context)).toBeUndefined();
             }
         });
 
         it('transpiles interpolation expressions', () => {
-            const { transpiler, context } = createTestTranspiler();
+            const { transpiler } = createTestTranspiler();
             const tokens = [
                 new StringInterpolationSegment('{{ a }}'),
                 new StringInterpolationSegment('{{ bcd.efg }}'),
                 new StringInterpolationSegment('{{ xyz }}')
             ];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             for (const [offset] of tokens.entries()) {
-                const result = transpiler.transpile(tokens, offset, context);
+                const result = transpiler.transpile(offset, context);
                 expect(result).toBeDefined();
                 expect(result!.nextOffset).toBeDefined(offset + 1);
             }
         });
 
         it('uses the transloco transpiler to expand interpolation expressions', () => {
-            const { transpiler, context, translocoTranspiler } = createTestTranspiler();
-
-            const tranpileResult = transpiler.transpile([new StringInterpolationSegment('{{ a }}')], 0, context);
+            const { transpiler, translocoTranspiler } = createTestTranspiler();
+            const context = new TranslationMarkupTranspilerContext([new StringInterpolationSegment('{{ a }}')], {}, [transpiler]);
+            const tranpileResult = transpiler.transpile(0, context);
 
             const transpileSpy = spyOn(translocoTranspiler, 'transpile').and.returnValue('(expanded)');
 

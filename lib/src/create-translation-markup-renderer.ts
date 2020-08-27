@@ -3,12 +3,7 @@ import { HashMap, Translation } from '@ngneat/transloco';
 import { selectFirstWhere } from './utils/iterable';
 import { notUndefined } from './utils/predicates';
 import { TranslationMarkupRenderer } from './translation-markup-renderer.model';
-import {
-    TranslationMarkupTranspiler,
-    TranslationMarkupTranspilerFunction,
-    TranspileResult,
-    TranslationMarkupTranspilerContext
-} from './translation-markup-transpiler.model';
+import { TranslationMarkupTranspiler, TranslationMarkupTranspilerContext } from './translation-markup-transpiler.model';
 
 /**
  * Creates a translation markup rendering function for the specified translation value.
@@ -77,43 +72,7 @@ export function transpile(
     transpilers: TranslationMarkupTranspiler[],
     translation: Translation
 ): TranslationMarkupRenderer[] {
-    const transpilerContext = {
-        transpile: createRootTranspilerFunction(transpilers),
-        translation
-    };
+    const transpilerContext = new TranslationMarkupTranspilerContext(tokens, translation, transpilers);
 
-    const renderers: TranslationMarkupRenderer[] = [];
-    let offset = 0;
-
-    while (offset < tokens.length) {
-        const transpileResult = transpilerContext.transpile(tokens, offset, transpilerContext);
-
-        if (transpileResult) {
-            offset = transpileResult.nextOffset;
-            renderers.push(transpileResult.renderer);
-        } else {
-            offset++;
-        }
-
-    }
-
-    return renderers;
-}
-
-/**
- * Creates a transpiler function from the given set of transpilers. This function serves as the "root" transpiler used for recursive
- * transpilation. The resulting function iterates over the transpilers and returns the first successful transpilation result when invoked.
- *
- * @param   transpilers Set of transpilers from which the transpiler function is to be created.
- * @returns             A transpiler function that starts the transpilation process with the first transpiler that is able to parse the
- *                      token sequence at the specified offset.
- */
-export function createRootTranspilerFunction(transpilers: TranslationMarkupTranspiler[]): TranslationMarkupTranspilerFunction {
-    return function transpileFromRoot(
-        tokens: unknown[],
-        offset: number,
-        context: TranslationMarkupTranspilerContext
-    ): (TranspileResult | undefined) {
-        return selectFirstWhere(transpilers, (transpiler) => transpiler.transpile(tokens, offset, context), notUndefined);
-    };
+    return transpilerContext.transpileUntil(0, () => false).renderers;
 }

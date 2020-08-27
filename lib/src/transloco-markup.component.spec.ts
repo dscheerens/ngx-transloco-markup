@@ -15,7 +15,12 @@ import {
 } from '@ngneat/transloco';
 
 import { defaultTranslocoMarkupTranspilers } from './default-transloco-markup-transpilers';
-import { TokenizeResult, TranslationMarkupTranspiler, TranspileResult } from './translation-markup-transpiler.model';
+import {
+    TokenizeResult,
+    TranslationMarkupTranspiler,
+    TranslationMarkupTranspilerContext,
+    TranspileResult,
+} from './translation-markup-transpiler.model';
 import { TranslocoMarkupComponent } from './transloco-markup.component';
 
 const translations = {
@@ -448,7 +453,7 @@ class StringReplaceTranspiler implements TranslationMarkupTranspiler {
         return undefined;
     }
 
-    public transpile(tokens: unknown[], offset: number): TranspileResult | undefined {
+    public transpile(offset: number, { tokens }: TranslationMarkupTranspilerContext): TranspileResult | undefined {
 
         const token = tokens[offset];
 
@@ -457,8 +462,8 @@ class StringReplaceTranspiler implements TranslationMarkupTranspiler {
         }
 
         return {
-            renderer: () => document.createTextNode(token.value),
-            nextOffset: offset + 1
+            nextOffset: offset + 1,
+            renderer: () => document.createTextNode(token.value)
         };
     }
 

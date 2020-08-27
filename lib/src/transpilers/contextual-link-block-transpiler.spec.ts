@@ -1,6 +1,5 @@
 import { ResolveLinkSpecification } from '../models/resolve-link-specification.model';
 import { asArray } from '../utils/array';
-import { createRootTranspilerFunction } from '../create-translation-markup-renderer';
 import { StringLinkRenderer, ExternalLinkObjectLinkRenderer } from '../default-link-renderers';
 import { LinkRenderer } from '../link-renderer.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
@@ -14,26 +13,20 @@ function createTestTranspiler(
     endToken: string,
     linkRenderers?: LinkRenderer<unknown> | LinkRenderer<unknown>[],
     link?: ResolveLinkSpecification
-): { transpiler: ContextualLinkBlockTranspiler; context: TranslationMarkupTranspilerContext } {
-    const transpiler = new ContextualLinkBlockTranspiler(
+): ContextualLinkBlockTranspiler {
+    return new ContextualLinkBlockTranspiler(
         startToken,
         endToken,
         link || { static: 'test://link.com' },
         new TranslationMarkupRendererFactory(document),
         asArray(linkRenderers || [])
     );
-    const context = {
-        transpile: createRootTranspilerFunction([transpiler]),
-        translation: {}
-    };
-
-    return { transpiler, context };
 }
 
 describe('ContextualLinkBlockTranspiler', () => {
     describe('tokenize function', () => {
         it('recognizes contextual link blocks in translations', () => {
-            const { transpiler } = createTestTranspiler('<recipe-link>', '</recipe-link>');
+            const transpiler = createTestTranspiler('<recipe-link>', '</recipe-link>');
 
             const translation = 'Best <recipe-link>cake recipe</recipe-link> ever!';
 
@@ -61,16 +54,17 @@ describe('ContextualLinkBlockTranspiler', () => {
 
     describe('transpile function', () => {
         it('returns undefined for unknown tokens', () => {
-            const { transpiler, context } = createTestTranspiler('{link:start}', '{link:end}');
+            const transpiler = createTestTranspiler('{link:start}', '{link:end}');
             const tokens = [0, 'a', '<a>', '[link]', '{link:start}', '{link:end}', ['{link}'], true, false, null, undefined, {}];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             for (const [offset] of tokens.entries()) {
-                expect(transpiler.transpile(tokens, offset, context)).toBeUndefined();
+                expect(transpiler.transpile(offset, context)).toBeUndefined();
             }
         });
 
         it('returns a link renderer when transpiling supported token sequences', () => {
-            const { transpiler, context } = createTestTranspiler('<start>', '<end>');
+            const transpiler = createTestTranspiler('<start>', '<end>');
             const tokens = [
                 0,
                 new BlockBoundary('<start>'),
@@ -83,11 +77,12 @@ describe('ContextualLinkBlockTranspiler', () => {
                 0,
                 new BlockBoundary('<end>'),
             ];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             const expectedResults = [0, 5, 0, 2, 0, 0, 0, 3, 0, 0];
 
             for (const [offset, expectedResult] of expectedResults.entries()) {
-                const result = transpiler.transpile(tokens, offset, context);
+                const result = transpiler.transpile(offset, context);
 
                 if (expectedResult === 0) {
                     expect(result).toBeUndefined();
@@ -106,14 +101,16 @@ describe('ContextualLinkBlockTranspiler', () => {
             const renderStringLinkSpy = spyOn(stringLinkRenderer, 'render');
             const renderExternalLinkObjectLinkSpy = spyOn(externalLinkObjectLinkRenderer, 'render');
 
-            const { transpiler, context } = createTestTranspiler(
+            const transpiler = createTestTranspiler(
                 '[',
                 ']',
                 [stringLinkRenderer, externalLinkObjectLinkRenderer],
                 { parameterKey: 'testLink' }
             );
 
-            const renderLink = transpiler.transpile([new BlockBoundary('['), new BlockBoundary(']')], 0, context)!.renderer;
+            const context = new TranslationMarkupTranspilerContext([new BlockBoundary('['), new BlockBoundary(']')], {}, [transpiler]);
+
+            const renderLink = transpiler.transpile(0, context)!.renderer;
 
             expect(renderStringLinkSpy).not.toHaveBeenCalled();
             expect(renderExternalLinkObjectLinkSpy).not.toHaveBeenCalled();
@@ -144,9 +141,10 @@ describe('ContextualLinkBlockTranspiler', () => {
             const stringLinkRenderer = new StringLinkRenderer();
             const renderStringLinkSpy = spyOn(stringLinkRenderer, 'render');
 
-            const { transpiler, context } = createTestTranspiler('[', ']', [stringLinkRenderer], { static: 'test://foo' });
+            const transpiler = createTestTranspiler('[', ']', [stringLinkRenderer], { static: 'test://foo' });
+            const context = new TranslationMarkupTranspilerContext([new BlockBoundary('['), new BlockBoundary(']')], {}, [transpiler]);
 
-            const renderLink = transpiler.transpile([new BlockBoundary('['), new BlockBoundary(']')], 0, context)!.renderer;
+            const renderLink = transpiler.transpile(0, context)!.renderer;
 
             renderLink({});
             expect(renderStringLinkSpy).toHaveBeenCalled();
@@ -157,9 +155,10 @@ describe('ContextualLinkBlockTranspiler', () => {
             const stringLinkRenderer = new StringLinkRenderer();
             const renderStringLinkSpy = spyOn(stringLinkRenderer, 'render');
 
-            const { transpiler, context } = createTestTranspiler('[', ']', [stringLinkRenderer], { parameterKey: 'exampleLink' });
+            const transpiler = createTestTranspiler('[', ']', [stringLinkRenderer], { parameterKey: 'exampleLink' });
+            const context = new TranslationMarkupTranspilerContext([new BlockBoundary('['), new BlockBoundary(']')], {}, [transpiler]);
 
-            const renderLink = transpiler.transpile([new BlockBoundary('['), new BlockBoundary(']')], 0, context)!.renderer;
+            const renderLink = transpiler.transpile(0, context)!.renderer;
 
             renderLink({ exampleLink: 'test://bar' });
             expect(renderStringLinkSpy).toHaveBeenCalled();
@@ -175,14 +174,15 @@ describe('ContextualLinkBlockTranspiler', () => {
             const stringLinkRenderer = new StringLinkRenderer();
             const renderStringLinkSpy = spyOn(stringLinkRenderer, 'render');
 
-            const { transpiler, context } = createTestTranspiler(
+            const transpiler = createTestTranspiler(
                 '[',
                 ']',
                 [stringLinkRenderer],
                 { resolve: (params) => `test://${params.example}` }
             );
+            const context = new TranslationMarkupTranspilerContext([new BlockBoundary('['), new BlockBoundary(']')], {}, [transpiler]);
 
-            const renderLink = transpiler.transpile([new BlockBoundary('['), new BlockBoundary(']')], 0, context)!.renderer;
+            const renderLink = transpiler.transpile(0, context)!.renderer;
 
             renderLink({ example: 'baz' });
             expect(renderStringLinkSpy).toHaveBeenCalled();

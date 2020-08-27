@@ -1,4 +1,3 @@
-import { createRootTranspilerFunction } from '../create-translation-markup-renderer';
 import { StringLinkRenderer, ExternalLinkObjectLinkRenderer } from '../default-link-renderers';
 import { LinkRenderer } from '../link-renderer.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
@@ -8,20 +7,14 @@ import { LINK_END, LinkStart, LinkTranspiler } from './link-transpiler';
 
 function createTestTranspiler(
     linkRenderers?: LinkRenderer<unknown> | LinkRenderer<unknown>[]
-): { transpiler: LinkTranspiler; context: TranslationMarkupTranspilerContext } {
-    const transpiler = new LinkTranspiler(new TranslationMarkupRendererFactory(document), linkRenderers || null);
-    const context = {
-        transpile: createRootTranspilerFunction([transpiler]),
-        translation: {}
-    };
-
-    return { transpiler, context };
+): LinkTranspiler {
+    return new LinkTranspiler(new TranslationMarkupRendererFactory(document), linkRenderers || null);
 }
 
 describe('LinkTranspiler', () => {
     describe('tokenize function', () => {
         it('recognizes link blocks in translations', () => {
-            const { transpiler } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
 
             const translation = 'Click [link:cookieLink]here[/link] for cookies! Or [link:bakingCourseLink]learn[/link] to make your own.';
 
@@ -53,7 +46,7 @@ describe('LinkTranspiler', () => {
         });
 
         it('ignores invalid start and end tags', () => {
-            const { transpiler } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
 
             const translation = 'Don\'t [/link you hate it [link:when';
 
@@ -67,22 +60,24 @@ describe('LinkTranspiler', () => {
 
     describe('transpile function', () => {
         it('returns undefined for unknown tokens', () => {
-            const { transpiler, context } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
             const tokens = [0, 'a', '<a>', '[link:abc]', ['link:abc'], true, false, null, undefined, {}];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             for (const [offset] of tokens.entries()) {
-                expect(transpiler.transpile(tokens, offset, context)).toBeUndefined();
+                expect(transpiler.transpile(offset, context)).toBeUndefined();
             }
         });
 
         it('returns a link renderer when transpiling supported token sequences', () => {
-            const { transpiler, context } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
             const tokens = [0, new LinkStart('abc'), 0, new LinkStart('def'), LINK_END, LINK_END, 0, new LinkStart('efg'), 0, LINK_END ];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             const expectedResults = [0, 5, 0, 2, 0, 0, 0, 3, 0, 0];
 
             for (const [offset, expectedResult] of expectedResults.entries()) {
-                const result = transpiler.transpile(tokens, offset, context);
+                const result = transpiler.transpile(offset, context);
 
                 if (expectedResult === 0) {
                     expect(result).toBeUndefined();
@@ -101,9 +96,10 @@ describe('LinkTranspiler', () => {
             const renderStringLinkSpy = spyOn(stringLinkRenderer, 'render');
             const renderExternalLinkObjectLinkSpy = spyOn(externalLinkObjectLinkRenderer, 'render');
 
-            const { transpiler, context } = createTestTranspiler([stringLinkRenderer, externalLinkObjectLinkRenderer]);
+            const transpiler = createTestTranspiler([stringLinkRenderer, externalLinkObjectLinkRenderer]);
+            const context = new TranslationMarkupTranspilerContext([new LinkStart('testLink'), LINK_END], {}, [transpiler]);
 
-            const renderLink = transpiler.transpile([new LinkStart('testLink'), LINK_END], 0, context)!.renderer;
+            const renderLink = transpiler.transpile(0, context)!.renderer;
 
             expect(renderStringLinkSpy).not.toHaveBeenCalled();
             expect(renderExternalLinkObjectLinkSpy).not.toHaveBeenCalled();

@@ -36,30 +36,18 @@ export abstract class BlockTranspiler implements TranslationMarkupTranspiler {
     }
 
     /** @inheritdoc */
-    public transpile(tokens: unknown[], start: number, context: TranslationMarkupTranspilerContext): TranspileResult | undefined {
-        const nextToken = tokens[start];
+    public transpile(start: number, context: TranslationMarkupTranspilerContext): TranspileResult | undefined {
+        const nextToken = context.tokens[start];
 
         if (!this.isStartTag(nextToken)) {
             return undefined;
         }
 
-        const childRenderers: TranslationMarkupRenderer[] = [];
-        let offset = start + 1;
-        while (offset < tokens.length && !this.isEndTag(tokens[offset])) {
-            const transpileResult = context.transpile(tokens, offset, context);
-
-            if (transpileResult) {
-                childRenderers.push(transpileResult.renderer);
-                offset = transpileResult.nextOffset;
-            } else {
-                offset++;
-            }
-
-        }
+        const { nextOffset, renderers } = context.transpileUntil(start + 1, (token) => this.isEndTag(token));
 
         return {
-            nextOffset: offset + (offset < tokens.length ? 1 : 0),
-            renderer: this.createRenderer(childRenderers)
+            nextOffset: Math.min(nextOffset + 1, context.tokens.length),
+            renderer: this.createRenderer(renderers)
         };
     }
 

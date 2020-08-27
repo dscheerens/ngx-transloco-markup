@@ -100,7 +100,7 @@ export class StringInterpolationTranspiler implements TranslationMarkupTranspile
     }
 
     /** @inheritdoc */
-    public transpile(tokens: unknown[], offset: number, { translation }: TranslationMarkupTranspilerContext): TranspileResult | undefined {
+    public transpile(offset: number, { tokens, translation }: TranslationMarkupTranspilerContext): TranspileResult | undefined {
         const nextToken = tokens[offset];
 
         if (!(nextToken instanceof StringInterpolationSegment)) {

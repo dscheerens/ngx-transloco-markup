@@ -1,4 +1,3 @@
-import { createRootTranspilerFunction } from '../create-translation-markup-renderer';
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
@@ -18,20 +17,14 @@ function commentNodeRenderFactory(): TranslationMarkupRenderer {
     return () => document.createComment('');
 }
 
-function createTestTranspiler(): { transpiler: TestBlockTranspiler; context: TranslationMarkupTranspilerContext } {
-    const transpiler = new TestBlockTranspiler('<<<', '>>>', commentNodeRenderFactory);
-    const context = {
-        transpile: createRootTranspilerFunction([transpiler]),
-        translation: {}
-    };
-
-    return { transpiler, context };
+function createTestTranspiler(): TestBlockTranspiler {
+    return new TestBlockTranspiler('<<<', '>>>', commentNodeRenderFactory);
 }
 
 describe('BlockTranspiler', () => {
     describe('tokenize function', () => {
         it('recognizes block boundaries in translations', () => {
-            const { transpiler } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
 
             const testCases = [
                 { translation: 'foo <<< bar >>> baz', offset: 0, expectToken: false },
@@ -57,16 +50,17 @@ describe('BlockTranspiler', () => {
 
     describe('transpile function', () => {
         it('returns undefined for unknown tokens', () => {
-            const { transpiler, context } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
             const tokens = ['a', 'b', '<<<', true, false, 4, undefined, { token: '<<<' }, '>', '>', '>'];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             for (const [offset] of tokens.entries()) {
-                expect(transpiler.transpile(tokens, offset, context)).toBeUndefined();
+                expect(transpiler.transpile(offset, context)).toBeUndefined();
             }
         });
 
         it('transpiles the content between the block boundaries', () => {
-            const { transpiler, context } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
             const tokens = [
                 new BlockBoundary('<<<'),
                 undefined,
@@ -76,11 +70,12 @@ describe('BlockTranspiler', () => {
                 undefined,
                 new BlockBoundary('>>>'),
             ];
+            const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             const expectedResults = [7, 0, 2, 0, 0, 0];
 
             for (const [offset, expectedResult] of expectedResults.entries()) {
-                const result = transpiler.transpile(tokens, offset, context);
+                const result = transpiler.transpile(offset, context);
 
                 if (expectedResult === 0) {
                     expect(result).toBeUndefined(`expected transpile(tokens, ${offset}, context) to return undefined`);
@@ -92,27 +87,28 @@ describe('BlockTranspiler', () => {
         });
 
         it('can handle syntax errors', () => {
-            const { transpiler, context } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
 
             const testCases = [
-                { tokens: [new BlockBoundary('<<<')], expectedParseLength: 1 },
-                { tokens: [new BlockBoundary('<<<'), new BlockBoundary('<<<')], expectedParseLength: 2 },
-                { tokens: [new BlockBoundary('>>>')], expectedParseLength: 0 },
+                { tokens: [new BlockBoundary('<<<')], expectedNextOffset: 1 },
+                { tokens: [new BlockBoundary('<<<'), new BlockBoundary('<<<')], expectedNextOffset: 2 },
+                { tokens: [new BlockBoundary('>>>')], expectedNextOffset: 0 },
             ];
 
-            for (const { tokens, expectedParseLength } of testCases) {
-                const result = transpiler.transpile(tokens, 0, context);
-                if (expectedParseLength === 0) {
+            for (const { tokens, expectedNextOffset } of testCases) {
+                const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
+                const result = transpiler.transpile(0, context);
+                if (expectedNextOffset === 0) {
                     expect(result).toBeUndefined();
                 } else {
                     expect(result).toBeDefined();
-                    expect(result!.nextOffset).toBe(expectedParseLength, 'tokens.length = ' + tokens.length);
+                    expect(result!.nextOffset).toBe(expectedNextOffset, 'tokens.length = ' + tokens.length);
                 }
             }
         });
 
         it('recursively transpiles its content', () => {
-            const { transpiler, context } = createTestTranspiler();
+            const transpiler = createTestTranspiler();
 
             const start = new BlockBoundary('<<<');
             const end = new BlockBoundary('>>>');
@@ -128,14 +124,13 @@ describe('BlockTranspiler', () => {
                 },
             ];
 
-            const rootTranspilerSpy = spyOn(context, 'transpile').and.callThrough();
-
             for (const { tokens, expectedRecursiveTranspileOffsets } of testCases) {
-                rootTranspilerSpy.calls.reset();
+                const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
+                const rootTranspilerSpy = spyOn(context, 'transpile').and.callThrough();
 
-                transpiler.transpile(tokens, 0, context);
+                transpiler.transpile(0, context);
 
-                const actualRecursiveTranspileOffsets = rootTranspilerSpy.calls.all().map((call) => call.args[1]);
+                const actualRecursiveTranspileOffsets = rootTranspilerSpy.calls.all().map((call) => call.args[0]);
 
                 expect(actualRecursiveTranspileOffsets).toEqual(expectedRecursiveTranspileOffsets);
             }
