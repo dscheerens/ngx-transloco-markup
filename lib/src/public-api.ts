@@ -12,7 +12,7 @@ export {
 export { SubstitutionTranspiler } from './transpilers/substitution-transpiler';
 export { ContextualLinkTranspilerFactory } from './transpilers/contextual-link-transpiler-factory';
 export { defaultTranslocoMarkupTranspilers } from './default-transloco-markup-transpilers';
-export { inheritTranspilers } from './inherit-transpilers';
+export { inheritTranslationMarkupTranspilers } from './inherit-transpilers';
 export * from './link-renderer.model';
 export { STRING_INTERPOLATION_TRANSPILER } from './string-interpolation-transpiler.token';
 export { TranslationMarkupRendererFactory } from './translation-markup-renderer-factory';

@@ -199,16 +199,16 @@ Due to Angular's hierarchy of injectors you might run into the issue that specif
 For example if you make a transpiler available in a lazy loaded module, then this will override all transpilers from the root module.
 Often, this is not the intended effect.
 Instead you probably would like to add a transpiler to the existing set of transpilers.
-This is supported by **ngx-transloco-markup** by including `inheritTranspilers()` in the providers list of a module or component:
+This is supported by **ngx-transloco-markup** by including `inheritTranslationMarkupTranspilers()` in the providers list of a module or component:
 
 ```typescript
-import { inheritTranspilers } from 'ngx-transloco-markup';
+import { inheritTranslationMarkupTranspilers } from 'ngx-transloco-markup';
 import { CustomTranspiler } from './transpilers';
 
 @NgModule({
   providers: [
     provideTranslationMarkupTranspiler(CustomTranspiler),
-    inheritTranspilers() // <-- this will make all transpilers from the parent injector available
+    inheritTranslationMarkupTranspilers() // <-- make all transpilers from parent injector available
   ]
 })
 export class LazyLoadedModuleWithAdditionalTranspilers { }

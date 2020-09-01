@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { inheritTranspilers, provideTranslationMarkupTranspiler } from 'ngx-transloco-markup';
+import { inheritTranslationMarkupTranspilers, provideTranslationMarkupTranspiler } from 'ngx-transloco-markup';
 
 import { ColoredTextTranspiler } from './colored-text-transpiler';
 import { CUSTOM_TRANSPILERS_TRANSLATION_KEYS } from './custom-transpilers-translation-keys';
@@ -13,7 +13,7 @@ import { EmoticonTranspiler } from './emoticon-transpiler';
     providers: [
         provideTranslationMarkupTranspiler(EmoticonTranspiler),
         provideTranslationMarkupTranspiler(ColoredTextTranspiler),
-        inheritTranspilers()
+        inheritTranslationMarkupTranspilers()
     ]
 })
 export class CustomTranspilersFeatureComponent {

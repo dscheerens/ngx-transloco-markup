@@ -5,11 +5,12 @@ import { TranslationMarkupTranspiler } from './translation-markup-transpiler.mod
 import { TRANSLATION_MARKUP_TRANSPILER } from './translation-markup-transpiler.token';
 
 /**
- * Returns a provider that makes transpilers from a parent injector available in the child injector. This is needed, if you define
+ * Returns a provider that makes transpilers from a parent injector available in the child injector. This is needed if you define
  * additional translation markup transpilers that are scoped to a specific module or component. Doing so will override the transpilers from
- * the parent injector. Including the provider from the `inheritTranspilers` function will make those transpilers also available.
+ * the parent injector. Including the provider from the `inheritTranslationMarkupTranspilers` function will make those transpilers also
+ * available.
  */
-export function inheritTranspilers(): FactoryProvider {
+export function inheritTranslationMarkupTranspilers(): FactoryProvider {
     return {
         provide: TRANSLATION_MARKUP_TRANSPILER,
         useFactory: (transpilers: RecursiveArray<TranslationMarkupTranspiler>) => transpilers,

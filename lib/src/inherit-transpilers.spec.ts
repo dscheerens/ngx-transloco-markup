@@ -1,13 +1,14 @@
 import { Injector, StaticClassProvider, Type } from '@angular/core';
 
-import { inheritTranspilers } from './inherit-transpilers';
+import { inheritTranslationMarkupTranspilers } from './inherit-transpilers';
 import { TRANSLATION_MARKUP_TRANSPILER } from './translation-markup-transpiler.token';
 import { TranslationMarkupTranspiler } from './translation-markup-transpiler.model';
 import { asFlatArray } from './utils/array';
 
-describe('inheritTranspilers function', () => {
+describe('inheritTranslationMarkupTranspilers function', () => {
 
     it('provides transpilers from the parent injector', () => {
+        const inheritTranspilers = inheritTranslationMarkupTranspilers;
         const injector1 = Injector.create({ providers: [provideTranspiler(ExampleTranspiler1), provideTranspiler(ExampleTranspiler2)] });
         const injector2 = Injector.create({ parent: injector1, providers: [] });
         const injector3 = Injector.create({ parent: injector2, providers: [inheritTranspilers(), provideTranspiler(ExampleTranspiler3)] });
