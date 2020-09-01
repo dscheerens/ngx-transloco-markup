@@ -169,7 +169,7 @@ If you do not wish for a transpiler to be available everywhere, but only for a p
     selector: 'app-fancy-something'
     template: 'A very [rainbow]colorful[/rainbow] text!',
     providers: [
-      { provide: TRANSLATION_MARKUP_TRANSPILER, useClass: RainbowTextTranspiler, multi: true }
+      provideTranslationMarkupTranspiler(RainbowTextTranspiler)
     ]
   })
   export class FancyComponent { }
@@ -189,7 +189,7 @@ If you do not wish for a transpiler to be available everywhere, but only for a p
   A markup transpiler provider that is defined in this way will be available everywhere in the application, meaning this is the widest scope at which a transpiler can be defined.
 
 The **component**, **lazy-loaded module** and **root module** transpiler levels all make use of Angular's dependency injection system.
-A tranpsiler defined at one of those levels needs to be specified using the `TRANSLATION_MARKUP_TRANSPILER` injection token and it also needs to be a multi provider (`multi: true`).
+A tranpsiler defined at one of those levels needs to be specified using the `provideTranslationMarkupTranspiler` function which generates the correct provider definition for the transpiler.
 
 Note that the provided transpilers can be discarded for a particular usage of the `<transloco>` component, by setting the `mergeTranspilers` input property to `false`.
 
@@ -207,7 +207,7 @@ import { CustomTranspiler } from './transpilers';
 
 @NgModule({
   providers: [
-    { provide: TRANSLATION_MARKUP_TRANSPILER, useClass: CustomTranspiler, multi: true },
+    provideTranslationMarkupTranspiler(CustomTranspiler),
     inheritTranspilers() // <-- this will make all transpilers from the parent injector available
   ]
 })
@@ -651,14 +651,14 @@ export abstract class LinkRenderer<T> {
 Link renderers are used by the link transpilers to determine how a specific link should be applied to an
 `HTMLAnchorElement`.
 This setup allows for different types of link models that can have their own specific rendering method.
-A custom `LinkRenderer` can be registered by providing it at the right module (usually the application's root module), using the `LinkRenderer` abstract class as token:
+A custom `LinkRenderer` can be registered by providing it at the right module (usually the application's root module), using the `provideLinkRenderer` function:
 
 ```typescript
-import { LinkRenderer } from 'ngx-transloco-markup';
+import { provideLinkRenderer } from 'ngx-transloco-markup';
 
 @NgModule({
   providers: [
-    { provide: LinkRenderer, useClass: MyCustomeLinkRenderer, multi: true }
+    provideLinkRenderer(MyCustomLinkRenderer)
   ]
 })
 export class AppModule { }

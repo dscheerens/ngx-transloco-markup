@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TRANSLATION_MARKUP_TRANSPILER, inheritTranspilers } from 'ngx-transloco-markup';
+import { inheritTranspilers, provideTranslationMarkupTranspiler } from 'ngx-transloco-markup';
 
 import { ColoredTextTranspiler } from './colored-text-transpiler';
 import { CUSTOM_TRANSPILERS_TRANSLATION_KEYS } from './custom-transpilers-translation-keys';
@@ -11,8 +11,8 @@ import { EmoticonTranspiler } from './emoticon-transpiler';
     styleUrls: ['./custom-transpilers-feature.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        { provide: TRANSLATION_MARKUP_TRANSPILER, useClass: EmoticonTranspiler, multi: true },
-        { provide: TRANSLATION_MARKUP_TRANSPILER, useClass: ColoredTextTranspiler, multi: true },
+        provideTranslationMarkupTranspiler(EmoticonTranspiler),
+        provideTranslationMarkupTranspiler(ColoredTextTranspiler),
         inheritTranspilers()
     ]
 })
