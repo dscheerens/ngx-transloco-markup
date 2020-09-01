@@ -490,7 +490,7 @@ export class ColorTranspiler implements TranslationMarkupTranspiler {
     start: number,
     context: TranslationMarkupTranspilerContext
   ): TranspileResult | undefined {
-    const nextToken = tokens[start];
+    const nextToken = context.tokens[start];
 
     if (!(nextToken instanceof ColorStart)) {
       return undefined;
