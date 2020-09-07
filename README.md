@@ -216,7 +216,7 @@ export class LazyLoadedModuleWithAdditionalTranspilers { }
 
 Keep in mind that the order of transpiler providers is important.
 If some of them can parse the same syntax, then the one that is provided first will win and therefore effectively overrides the others.
-This means you usually would need to put `inheritTranspilers()` after the other transpiler providers.
+This means you usually would need to put `inheritTranslationMarkupTranspilers()` after the other transpiler providers.
 
 ## Contextual links
 
