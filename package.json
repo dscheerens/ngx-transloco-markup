@@ -1,6 +1,6 @@
 {
   "name": "ngx-transloco-markup",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A translation component to render translations with markup",
   "homepage": "https://github.com/dscheerens/ngx-transloco-markup",
   "author": "Daan Scheerens",
@@ -28,6 +28,7 @@
     "test.watch": "ng test --project=lib --watch=true --code-coverage",
     "build": "ng build --project=lib --prod",
     "build.demo": "ng build --project=demo --prod",
+    "release": "standard-version --message \"release: v%s\"",
     "publish.dist": "npm publish build/dist"
   },
   "sideEffects": false,
@@ -69,6 +70,7 @@
     "ng-packagr": "^10.0.4",
     "ngx-typesafe-forms": "^1.1.1",
     "rxjs": "^6.6.2",
+    "standard-version": "^9.0.0",
     "tsickle": "0.39.1",
     "tslib": "^2.0.1",
     "tslint": "~6.1.3",
