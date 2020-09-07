@@ -172,6 +172,14 @@ describe('bindProvider() function', () => {
         expect(altService2).not.toBeNull();
     });
 
+    it('throws an error when an invalid provider is specified', () => {
+        expect(() => bindProvider(new InjectionToken<unknown>('something'), 'bla' as any)).toThrowError();
+    });
+
+    it('throws an error when an invalid default provider is specified', () => {
+        expect(() => bindProvider(new InjectionToken<unknown>('something'), undefined, { default: 'bla' as any })).toThrowError();
+    });
+
 });
 
 const NUMBER_VALUE = new InjectionToken<number>('NUMBER_VALUE');
