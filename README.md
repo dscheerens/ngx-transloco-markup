@@ -13,6 +13,7 @@ Fortunately, thanks to the extensible architecture, you can do this quite easily
 ## Table of contents
 
 - [Installation](#installation)
+  - [Angular version compatibility matrix](#angular-version-compatibility-matrix)
 - [Getting started](#getting-started)
 - [`<transloco>` component API](#transloco-component-api)
 - [Defining markup transpiler availability](#defining-markup-transpiler-availability)
@@ -39,6 +40,15 @@ npm install --save ngx-transloco-markup
 
 If you are using the Angular CLI to build and test your application, then this all you need to do for the installation.
 For custom build setups: the library is published in the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview), so it provides several distribution bundles that are compatible with most build tools.
+
+### Angular version compatibility matrix
+
+Use the compatibility matrix below to determine which version of this module works with your project's Angular version.
+
+| Library version                    | Angular version |
+| ---------------------------------- | --------------- |
+| `ngx-transloco-markup` - **1.x.x** | >= **8.0.0**    |
+| `ngx-transloco-markup` - **2.x.x** | >= **10.0.0**   |
 
 ## Getting started
 
