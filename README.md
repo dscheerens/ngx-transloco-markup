@@ -364,7 +364,7 @@ Apart from the token, the model also specifies the next offset where the tokeniz
 Using the `BoldTextTranspiler` as example, tokenizing the string `'trans[b]loco[/b]'`, will result in a token at offsets 5 and 12 and where the `nextOffset` value is equal to 8 and 16 respectively.
 For all other offsets, the `tokenize` function will return `undefined`.
 
-One thing to note here is that tokens are typed as `unkown`.
+One thing to note here is that tokens are typed as `unknown`.
 This is because the set of transpilers is not closed, meaning we cannot know upfront what type of tokens will be generated.
 
 ### Transpilation
