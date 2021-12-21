@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/dscheerens/ngx-transloco-markup.svg?branch=master)](https://travis-ci.com/dscheerens/ngx-transloco-markup) [![NPM Version](https://img.shields.io/npm/v/ngx-transloco-markup.svg)](https://www.npmjs.com/package/ngx-transloco-markup)
+[![Build Status](https://github.com/dscheerens/ngx-transloco-markup/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/dscheerens/ngx-transloco-markup/actions/workflows/main.yml) [![NPM Version](https://img.shields.io/npm/v/ngx-transloco-markup.svg)](https://www.npmjs.com/package/ngx-transloco-markup)
 
 # ngx-transloco-markup: Markup support for Transloco
 
