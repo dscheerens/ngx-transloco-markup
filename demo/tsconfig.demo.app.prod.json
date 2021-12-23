@@ -1,5 +1,5 @@
 {
-    "extends": "./tsconfig.json",
+    "extends": "./tsconfig.demo.app.json",
     "compilerOptions": {
         "paths": {
             "ngx-transloco-markup": [

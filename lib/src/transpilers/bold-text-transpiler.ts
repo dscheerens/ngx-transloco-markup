@@ -16,7 +16,7 @@ export class BoldTextTranspiler extends BlockTranspiler {
      */
     constructor(
         /** Renderer factory which will be used for creating the HTML bold element renderer. */
-        private readonly rendererFactory: TranslationMarkupRendererFactory
+        private readonly rendererFactory: TranslationMarkupRendererFactory,
     ) {
         super('[b]', '[/b]');
     }

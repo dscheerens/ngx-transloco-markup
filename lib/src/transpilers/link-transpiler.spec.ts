@@ -6,7 +6,7 @@ import { TranslationMarkupTranspilerContext } from '../translation-markup-transp
 import { LINK_END, LinkStart, LinkTranspiler } from './link-transpiler';
 
 function createTestTranspiler(
-    linkRenderers?: LinkRenderer<unknown> | LinkRenderer<unknown>[]
+    linkRenderers?: LinkRenderer<unknown> | LinkRenderer<unknown>[],
 ): LinkTranspiler {
     return new LinkTranspiler(new TranslationMarkupRendererFactory(document), linkRenderers || null);
 }
@@ -22,7 +22,7 @@ describe('LinkTranspiler', () => {
                 { offset: 6,  lenght: 17, type: 'start', parameterKey: 'cookieLink' },
                 { offset: 27, lenght: 7,  type: 'end' },
                 { offset: 51, lenght: 23, type: 'start', parameterKey: 'bakingCourseLink' },
-                { offset: 79, lenght: 7,  type: 'end' }
+                { offset: 79, lenght: 7,  type: 'end' },
             ] as const;
 
             for (const [offset] of translation.split('').entries()) {

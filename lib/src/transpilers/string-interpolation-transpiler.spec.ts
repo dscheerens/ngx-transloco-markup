@@ -7,17 +7,17 @@ import {
     InterpolationExpressionMatcher,
     StringInterpolationSegment,
     StringInterpolationTranspiler,
-    defaultTranslationInterpolationExpressionMatcherFactory
+    defaultTranslationInterpolationExpressionMatcherFactory,
 } from './string-interpolation-transpiler';
 
 class TestTranslocoTranspiler implements TranslocoTranspiler {
-    public transpile(value: any): any {
+    public transpile(value: unknown): unknown {
         return value;
     }
 }
 
 function createTestTranspiler(
-    interpolationExpressionMatcher?: InterpolationExpressionMatcher
+    interpolationExpressionMatcher?: InterpolationExpressionMatcher,
 ): { transpiler: StringInterpolationTranspiler; translocoTranspiler: TranslocoTranspiler } {
 
     const translocoTranspiler = new TestTranslocoTranspiler();
@@ -25,7 +25,7 @@ function createTestTranspiler(
     const transpiler = new StringInterpolationTranspiler(
         new TranslationMarkupRendererFactory(document),
         translocoTranspiler,
-        interpolationExpressionMatcher || defaultTranslationInterpolationExpressionMatcherFactory()
+        interpolationExpressionMatcher || defaultTranslationInterpolationExpressionMatcherFactory(),
     );
 
     return { transpiler, translocoTranspiler };
@@ -45,7 +45,7 @@ describe('StringInterpolationTranspiler', () => {
                 { offset: 5, expectedToken: undefined },
                 { offset: 22, expectedToken: '{{ mnn }}' },
                 { offset: 23, expectedToken: undefined },
-                { offset: 32, expectedToken: undefined }
+                { offset: 32, expectedToken: undefined },
             ];
 
             for (const { offset, expectedToken } of testCases) {
@@ -80,7 +80,7 @@ describe('StringInterpolationTranspiler', () => {
                 { offset: 4, expectedToken: undefined },
                 { offset: 21, expectedToken: undefined },
                 { offset: 22, expectedToken: '$[ mnn ]' },
-                { offset: 23, expectedToken: undefined }
+                { offset: 23, expectedToken: undefined },
             ];
 
             for (const { offset, expectedToken } of testCases) {
@@ -114,7 +114,7 @@ describe('StringInterpolationTranspiler', () => {
             const tokens = [
                 new StringInterpolationSegment('{{ a }}'),
                 new StringInterpolationSegment('{{ bcd.efg }}'),
-                new StringInterpolationSegment('{{ xyz }}')
+                new StringInterpolationSegment('{{ xyz }}'),
             ];
             const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 

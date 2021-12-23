@@ -3,7 +3,7 @@ import {
     TokenizeResult,
     TranslationMarkupTranspiler,
     TranspileResult,
-    TranslationMarkupTranspilerContext
+    TranslationMarkupTranspilerContext,
 } from '../translation-markup-transpiler.model';
 
 /**
@@ -19,7 +19,7 @@ export abstract class BlockTranspiler implements TranslationMarkupTranspiler {
         private readonly blockStartToken: string,
 
         /** String that defines the end token for the block. */
-        private readonly blockEndToken: string
+        private readonly blockEndToken: string,
     ) { }
 
     /** @inheritdoc */
@@ -47,7 +47,7 @@ export abstract class BlockTranspiler implements TranslationMarkupTranspiler {
 
         return {
             nextOffset: Math.min(nextOffset + 1, context.tokens.length),
-            renderer: this.createRenderer(renderers)
+            renderer: this.createRenderer(renderers),
         };
     }
 

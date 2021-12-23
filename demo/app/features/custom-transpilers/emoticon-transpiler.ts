@@ -4,7 +4,7 @@ import {
     TranslationMarkupTranspiler,
     TranslationMarkupTranspilerContext,
     TranspileResult,
-    TokenizeResult
+    TokenizeResult,
 } from 'ngx-transloco-markup';
 
 const EMOTICON_MAP = new Map<string, string>([
@@ -23,7 +23,7 @@ const EMOTICON_MAP = new Map<string, string>([
 export class EmoticonTranspiler implements TranslationMarkupTranspiler {
 
     constructor(
-        private readonly translationMarkupRendererFactory: TranslationMarkupRendererFactory
+        private readonly translationMarkupRendererFactory: TranslationMarkupRendererFactory,
     ) {}
 
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
@@ -31,7 +31,7 @@ export class EmoticonTranspiler implements TranslationMarkupTranspiler {
             if (translation.startsWith(key, offset)) {
                 return {
                     token: new Emoticon(value),
-                    nextOffset: offset + key.length
+                    nextOffset: offset + key.length,
                 };
             }
         }
@@ -48,7 +48,7 @@ export class EmoticonTranspiler implements TranslationMarkupTranspiler {
 
         return {
             nextOffset: offset + 1,
-            renderer: this.translationMarkupRendererFactory.createTextRenderer(nextToken.value)
+            renderer: this.translationMarkupRendererFactory.createTextRenderer(nextToken.value),
         };
 
     }

@@ -16,7 +16,7 @@ export class ItalicTextTranspiler extends BlockTranspiler {
      */
     constructor(
         /** Renderer factory which will be used for creating the HTML italic element renderer. */
-        private readonly rendererFactory: TranslationMarkupRendererFactory
+        private readonly rendererFactory: TranslationMarkupRendererFactory,
     ) {
         super('[i]', '[/i]');
     }

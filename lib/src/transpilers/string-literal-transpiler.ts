@@ -5,7 +5,7 @@ import {
     TokenizeResult,
     TranslationMarkupTranspiler,
     TranspileResult,
-    TranslationMarkupTranspilerContext
+    TranslationMarkupTranspilerContext,
 } from '../translation-markup-transpiler.model';
 
 /**
@@ -20,14 +20,14 @@ export class StringLiteralTranspiler implements TranslationMarkupTranspiler {
      */
     constructor(
         /** Renderer factory used for creating the renderer that renders the literal string text in a text node. */
-        private readonly rendererFactory: TranslationMarkupRendererFactory
+        private readonly rendererFactory: TranslationMarkupRendererFactory,
     ) { }
 
     /** @inheritdoc */
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
         return {
             nextOffset: offset + 1,
-            token: translation.charAt(offset)
+            token: translation.charAt(offset),
         };
     }
 
@@ -47,7 +47,7 @@ export class StringLiteralTranspiler implements TranslationMarkupTranspiler {
 
         return {
             nextOffset: end,
-            renderer: this.rendererFactory.createTextRenderer(stringLiteral)
+            renderer: this.rendererFactory.createTextRenderer(stringLiteral),
         };
     }
 

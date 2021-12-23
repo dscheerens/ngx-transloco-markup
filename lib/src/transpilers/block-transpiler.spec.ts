@@ -7,7 +7,7 @@ class TestBlockTranspiler extends BlockTranspiler {
     constructor(
         blockStartToken: string,
         blockEndToken: string,
-        protected readonly createRenderer: (childRenderers: TranslationMarkupRenderer[]) => TranslationMarkupRenderer
+        protected readonly createRenderer: (childRenderers: TranslationMarkupRenderer[]) => TranslationMarkupRenderer,
     ) {
         super(blockStartToken, blockEndToken);
     }
@@ -32,7 +32,7 @@ describe('BlockTranspiler', () => {
                 { translation: 'foo <<< bar >>> baz', offset: 4, expectToken: true },
                 { translation: 'foo <<< bar >>> baz', offset: 5, expectToken: false },
                 { translation: 'foo <<< bar >>> baz', offset: 12, expectToken: true },
-                { translation: 'foo <<< bar >>> baz', offset: 13, expectToken: false }
+                { translation: 'foo <<< bar >>> baz', offset: 13, expectToken: false },
             ];
 
             for (const { translation, offset, expectToken } of testCases) {
@@ -120,7 +120,7 @@ describe('BlockTranspiler', () => {
                 { tokens: [start, 0, end], expectedRecursiveTranspileOffsets: [1] },
                 {
                     tokens: [start, 0, start, 0, end, start, start, 0, end, end, start, end, end],
-                    expectedRecursiveTranspileOffsets: [1, 2, 3, 5, 6, 7, 10]
+                    expectedRecursiveTranspileOffsets: [1, 2, 3, 5, 6, 7, 10],
                 },
             ];
 

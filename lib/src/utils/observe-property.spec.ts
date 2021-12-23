@@ -19,8 +19,8 @@ describe('observeProperty function', () => {
 
         try {
             expect(events.length).toBe(1);
-            expect(events[0].kind).toBe('N');
-            expect(events[0].value).toBe('a');
+            expect(events[0]?.kind).toBe('N');
+            expect(events[0]?.value).toBe('a');
         } finally {
             close();
         }
@@ -34,22 +34,22 @@ describe('observeProperty function', () => {
         try {
             expect(object.value).toBe('a');
             expect(events.length).toBe(1);
-            expect(events[0].kind).toBe('N');
-            expect(events[0].value).toBe('a');
+            expect(events[0]?.kind).toBe('N');
+            expect(events[0]?.value).toBe('a');
 
             object.value = 'b';
 
             expect(object.value).toBe('b');
             expect(events.length).toBe(2);
-            expect(events[1].kind).toBe('N');
-            expect(events[1].value).toBe('b');
+            expect(events[1]?.kind).toBe('N');
+            expect(events[1]?.value).toBe('b');
 
             object.value = 'c';
 
             expect(object.value).toBe('c');
             expect(events.length).toBe(3);
-            expect(events[2].kind).toBe('N');
-            expect(events[2].value).toBe('c');
+            expect(events[2]?.kind).toBe('N');
+            expect(events[2]?.value).toBe('c');
         } finally {
             close();
         }
@@ -63,8 +63,8 @@ describe('observeProperty function', () => {
         try {
             expect(object.value).toBe('same');
             expect(events.length).toBe(1);
-            expect(events[0].kind).toBe('N');
-            expect(events[0].value).toBe('same');
+            expect(events[0]?.kind).toBe('N');
+            expect(events[0]?.value).toBe('same');
 
             object.value = 'same';
             expect(object.value).toBe('same');
@@ -83,7 +83,7 @@ describe('observeProperty function', () => {
 
         const object = {
             get value(): string { return objectValue; },
-            set value(value: string) { objectValue = value; }
+            set value(value: string) { objectValue = value; },
         };
 
         const { events, close } = materializeStream(observeProperty(object, 'value'));
@@ -91,24 +91,24 @@ describe('observeProperty function', () => {
         try {
             expect(object.value).toBe('X');
             expect(events.length).toBe(1);
-            expect(events[0].kind).toBe('N');
-            expect(events[0].value).toBe('X');
+            expect(events[0]?.kind).toBe('N');
+            expect(events[0]?.value).toBe('X');
 
             object.value = 'Y';
 
             expect(object.value).toBe('Y');
             expect(objectValue).toBe('Y');
             expect(events.length).toBe(2);
-            expect(events[1].kind).toBe('N');
-            expect(events[1].value).toBe('Y');
+            expect(events[1]?.kind).toBe('N');
+            expect(events[1]?.value).toBe('Y');
 
             object.value = 'Z';
 
             expect(object.value).toBe('Z');
             expect(objectValue).toBe('Z');
             expect(events.length).toBe(3);
-            expect(events[2].kind).toBe('N');
-            expect(events[2].value).toBe('Z');
+            expect(events[2]?.kind).toBe('N');
+            expect(events[2]?.value).toBe('Z');
         } finally {
             close();
         }
@@ -135,19 +135,19 @@ describe('observeProperty function', () => {
         try {
             expect(object.value).toBe(1);
             expect(events1.length).toBe(1);
-            expect(events1[0].kind).toBe('N');
-            expect(events1[0].value).toBe(1);
+            expect(events1[0]?.kind).toBe('N');
+            expect(events1[0]?.value).toBe(1);
             expect(object.otherValue).toBe('a');
             expect(events2.length).toBe(1);
-            expect(events2[0].kind).toBe('N');
-            expect(events2[0].value).toBe('a');
+            expect(events2[0]?.kind).toBe('N');
+            expect(events2[0]?.value).toBe('a');
 
             object.value = 42;
 
             expect(object.value).toBe(42);
             expect(events1.length).toBe(2);
-            expect(events1[1].kind).toBe('N');
-            expect(events1[1].value).toBe(42);
+            expect(events1[1]?.kind).toBe('N');
+            expect(events1[1]?.value).toBe(42);
             expect(object.otherValue).toBe('a');
             expect(events2.length).toBe(1);
 
@@ -155,8 +155,8 @@ describe('observeProperty function', () => {
             expect(object.value).toBe(42);
             expect(events1.length).toBe(2);
             expect(events2.length).toBe(2);
-            expect(events2[1].kind).toBe('N');
-            expect(events2[1].value).toBe('xyz');
+            expect(events2[1]?.kind).toBe('N');
+            expect(events2[1]?.value).toBe('xyz');
         } finally {
             close1();
             close2();
@@ -182,15 +182,15 @@ describe('observeProperty function', () => {
         try {
             expect(object.value).toBeUndefined();
             expect(events.length).toBe(1);
-            expect(events[0].kind).toBe('N');
-            expect(events[0].value).toBe(undefined);
+            expect(events[0]?.kind).toBe('N');
+            expect(events[0]?.value).toBe(undefined);
 
             object.value = 'pie!';
 
             expect(object.value).toBe('pie!');
             expect(events.length).toBe(2);
-            expect(events[1].kind).toBe('N');
-            expect(events[1].value).toBe('pie!');
+            expect(events[1]?.kind).toBe('N');
+            expect(events[1]?.value).toBe('pie!');
         } finally {
             close();
         }

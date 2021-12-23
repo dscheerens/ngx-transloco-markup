@@ -6,20 +6,19 @@ import { TranslocoService } from '@ngneat/transloco';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
     public availableLanguages!: string[];
     public activeLanguage$!: Observable<string>;
 
     constructor(
-        private readonly translocoService: TranslocoService
+        private readonly translocoService: TranslocoService,
     ) { }
 
     public ngOnInit(): void {
         this.availableLanguages = this.translocoService.getAvailableLangs() as string[];
         this.activeLanguage$ = this.translocoService.langChanges$;
-        (window as any).translocoService = this.translocoService;
     }
 
     public selectLanguage(language: string): void {

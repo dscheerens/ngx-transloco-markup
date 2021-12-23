@@ -15,6 +15,6 @@ export function inheritTranslationMarkupTranspilers(): FactoryProvider {
         provide: TRANSLATION_MARKUP_TRANSPILER,
         useFactory: (transpilers: RecursiveArray<TranslationMarkupTranspiler>) => transpilers,
         deps: [[SkipSelf, TRANSLATION_MARKUP_TRANSPILER]],
-        multi: true
+        multi: true,
     };
 }

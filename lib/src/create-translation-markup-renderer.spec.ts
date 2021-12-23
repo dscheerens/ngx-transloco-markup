@@ -3,7 +3,7 @@ import {
     TokenizeResult,
     TranslationMarkupTranspiler,
     TranslationMarkupTranspilerContext,
-    TranspileResult
+    TranspileResult,
 } from './translation-markup-transpiler.model';
 
 class TestTranspiler implements TranslationMarkupTranspiler {
@@ -11,7 +11,7 @@ class TestTranspiler implements TranslationMarkupTranspiler {
     constructor(
         private readonly token: string,
         private readonly disableTranspile: boolean = false,
-        private readonly renderValue?: string
+        private readonly renderValue?: string,
     ) { }
 
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
@@ -69,9 +69,9 @@ describe('createTranslationMarkupRenderer function', () => {
             [
                 new TestTranspiler('*', false, '[a]'),
                 new TestTranspiler('*', false, '[b]'),
-                new TestTranspiler('-', false, '[c]')
+                new TestTranspiler('-', false, '[c]'),
             ],
-            {}
+            {},
         );
 
         const renderTarget = document.createElement('div');

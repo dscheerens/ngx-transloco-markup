@@ -17,13 +17,13 @@ import { BasicFeatureComponent } from './basic-feature.component';
         MatFormFieldModule,
         MatInputModule,
         TranslocoModule,
-        TranslocoMarkupModule
+        TranslocoMarkupModule,
     ],
     declarations: [
-        BasicFeatureComponent
+        BasicFeatureComponent,
     ],
     exports: [
-        BasicFeatureComponent
-    ]
+        BasicFeatureComponent,
+    ],
 })
 export class BasicFeatureModule { }

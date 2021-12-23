@@ -19,7 +19,7 @@ import { AppComponent } from './app.component';
 @Injectable({ providedIn: 'root' })
 export class TranslocoHttpLoader implements TranslocoLoader {
     constructor(
-        private readonly httpClient: HttpClient
+        private readonly httpClient: HttpClient,
     ) { }
 
     public getTranslation(language: string): Observable<Translation> {
@@ -38,7 +38,7 @@ export class TranslocoHttpLoader implements TranslocoLoader {
         NavigationBarModule,
         BasicFeatureModule,
         CustomTranspilersFeatureModule,
-        TranslocoModule
+        TranslocoModule,
     ],
     providers: [
         {
@@ -48,20 +48,20 @@ export class TranslocoHttpLoader implements TranslocoLoader {
                 defaultLang: 'en',
                 reRenderOnLangChange: true,
                 prodMode: environment.production,
-            })
+            }),
         },
         {
             provide: TRANSLOCO_LOADER,
-            useClass: TranslocoHttpLoader
+            useClass: TranslocoHttpLoader,
         },
-        defaultTranslocoMarkupTranspilers()
+        defaultTranslocoMarkupTranspilers(),
     ],
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     bootstrap: [
-        AppComponent
-    ]
+        AppComponent,
+    ],
 })
 export class AppModule {
 }

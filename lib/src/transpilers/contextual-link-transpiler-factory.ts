@@ -8,7 +8,7 @@ import { TranslationMarkupRendererFactory } from '../translation-markup-renderer
 import { ContextualLinkBlockTranspiler } from './contextual-link-block-transpiler';
 import {
     ContextualLinkSubstitutionTranspiler,
-    ContextualLinkSubstitutionTranspilerOptions
+    ContextualLinkSubstitutionTranspilerOptions,
 } from './contextual-link-substitution-transpiler';
 
 /**
@@ -29,7 +29,7 @@ export class ContextualLinkTranspilerFactory {
         private readonly rendererFactory: TranslationMarkupRendererFactory,
 
         /** Set of link renderers that are used to apply the link model from the translation parameter to the anchor element. */
-        @Inject(LinkRenderer) @Optional() linkRenderers: LinkRenderer<unknown> | LinkRenderer<unknown>[] | null
+        @Inject(LinkRenderer) @Optional() linkRenderers: LinkRenderer<unknown> | LinkRenderer<unknown>[] | null,
     ) {
         this.linkRenderers = !linkRenderers ? [] : asArray(linkRenderers);
     }
@@ -54,14 +54,14 @@ export class ContextualLinkTranspilerFactory {
     public createBlockTranspiler(
         startToken: string,
         endToken: string,
-        resolveLinkSpecification: ResolveLinkSpecification
+        resolveLinkSpecification: ResolveLinkSpecification,
     ): ContextualLinkBlockTranspiler;
 
     // Unified implementation of the `createBlockTranspiler` function signatures above.
     public createBlockTranspiler(
         parameterKeyOrStartToken: string,
         endToken?: string,
-        resolveLinkSpecification?: ResolveLinkSpecification
+        resolveLinkSpecification?: ResolveLinkSpecification,
     ): ContextualLinkBlockTranspiler {
         if (endToken === undefined || resolveLinkSpecification === undefined) {
             const parameterKey = parameterKeyOrStartToken;
@@ -93,18 +93,18 @@ export class ContextualLinkTranspilerFactory {
      */
     public createSubstitutionTranspiler(
         token: string,
-        options: ContextualLinkSubstitutionTranspilerOptions // tslint:disable-line:unified-signatures parameter-formatting
+        options: ContextualLinkSubstitutionTranspilerOptions, // tslint:disable-line:unified-signatures parameter-formatting
     ): ContextualLinkSubstitutionTranspiler;
 
     // Unified implementation of the `createSubstitutionTranspiler` function signatures above.
     public createSubstitutionTranspiler(
         parameterKeyOrToken: string,
-        options?: ContextualLinkSubstitutionTranspilerOptions
+        options?: ContextualLinkSubstitutionTranspilerOptions,
     ): ContextualLinkSubstitutionTranspiler {
         if (options === undefined) {
             return this.createSubstitutionTranspiler(`[${parameterKeyOrToken}]`, {
                 label: { resolve: (params) => params[parameterKeyOrToken].label },
-                link: { resolve: (params) => params[parameterKeyOrToken].link }
+                link: { resolve: (params) => params[parameterKeyOrToken].link },
             });
         }
 
