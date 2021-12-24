@@ -11,13 +11,13 @@ import { CustomTranspilersFeatureComponent } from './custom-transpilers-feature.
         CommonModule,
         MatCardModule,
         TranslocoModule,
-        TranslocoMarkupModule
+        TranslocoMarkupModule,
     ],
     declarations: [
-        CustomTranspilersFeatureComponent
+        CustomTranspilersFeatureComponent,
     ],
     exports: [
-        CustomTranspilersFeatureComponent
-    ]
+        CustomTranspilersFeatureComponent,
+    ],
 })
 export class CustomTranspilersFeatureModule { }

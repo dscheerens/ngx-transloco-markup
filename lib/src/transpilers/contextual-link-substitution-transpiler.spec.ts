@@ -5,7 +5,7 @@ import { TranslationMarkupTranspilerContext } from '../translation-markup-transp
 
 import {
     ContextualLinkSubstitutionTranspiler,
-    ContextualLinkSubstitutionTranspilerOptions
+    ContextualLinkSubstitutionTranspilerOptions,
 } from './contextual-link-substitution-transpiler';
 import { SubstitutionToken } from './substitution-transpiler';
 
@@ -15,16 +15,16 @@ function createTestTranspiler(
         label: ContextualLinkSubstitutionTranspilerOptions['label'];
         link: ContextualLinkSubstitutionTranspilerOptions['link'];
         linkRenderers: LinkRenderer<unknown>[];
-    }> = {}
+    }> = {},
 ): ContextualLinkSubstitutionTranspiler {
     return new ContextualLinkSubstitutionTranspiler(
         options.token || '[*]',
         {
             label: options.label || { static: '???' },
-            link: options.link || { static: 'test://example/' }
+            link: options.link || { static: 'test://example/' },
         },
         new TranslationMarkupRendererFactory(document),
-        options.linkRenderers || []
+        options.linkRenderers || [],
     );
 }
 
@@ -35,7 +35,7 @@ describe('ContextualLinkSubstitutionTranspiler', () => {
             const testCases = [
                 { token: '[x]', translation: 'x [X][x][x[]] x [x]', expectedTokenOffsets: [5, 16] },
                 { token: '$xyz', translation: 'xyz$xy z$xzy$xyz$xyz', expectedTokenOffsets: [12, 16] },
-                { token: '*', translation: '*!abc** ', expectedTokenOffsets: [0, 5, 6] }
+                { token: '*', translation: '*!abc** ', expectedTokenOffsets: [0, 5, 6] },
             ];
 
             for (const { token, translation, expectedTokenOffsets } of testCases) {
@@ -79,7 +79,7 @@ describe('ContextualLinkSubstitutionTranspiler', () => {
                 new SubstitutionToken('[*]'),
                 new SubstitutionToken('[?]'),
                 new SubstitutionToken('[]'),
-                new SubstitutionToken('[*]')
+                new SubstitutionToken('[*]'),
             ];
             const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
@@ -110,7 +110,7 @@ describe('ContextualLinkSubstitutionTranspiler', () => {
                 { link: {}, expectedLinkRenderer: undefined },
                 { link: [[{}]], expectedLinkRenderer: undefined },
                 { link: 'test://my-link', expectedLinkRenderer: renderStringLinkSpy },
-                { link: { url: 'test://another-link' }, expectedLinkRenderer: renderExternalLinkObjectLinkSpy }
+                { link: { url: 'test://another-link' }, expectedLinkRenderer: renderExternalLinkObjectLinkSpy },
             ];
 
             const renderLinkSpies = [renderStringLinkSpy, renderExternalLinkObjectLinkSpy];
@@ -118,7 +118,7 @@ describe('ContextualLinkSubstitutionTranspiler', () => {
             for (const testCase of testCases) {
                 const transpiler = createTestTranspiler({
                     link: { static: testCase.link },
-                    linkRenderers: [stringLinkRenderer, externalLinkObjectLinkRenderer]
+                    linkRenderers: [stringLinkRenderer, externalLinkObjectLinkRenderer],
                 });
                 const context = new TranslationMarkupTranspilerContext([new SubstitutionToken('[*]')], {}, [transpiler]);
 
@@ -207,7 +207,7 @@ describe('ContextualLinkSubstitutionTranspiler', () => {
 
             const transpiler = createTestTranspiler({
                 link: { resolve: (params) => `test://${params.example}` },
-                linkRenderers: [stringLinkRenderer]
+                linkRenderers: [stringLinkRenderer],
             });
             const context = new TranslationMarkupTranspilerContext([new SubstitutionToken('[*]')], {}, [transpiler]);
 

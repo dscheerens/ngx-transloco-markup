@@ -7,7 +7,7 @@ import {
     OnDestroy,
     OnInit,
     Optional,
-    ViewEncapsulation
+    ViewEncapsulation,
 } from '@angular/core';
 import {
     TRANSLOCO_LANG,
@@ -45,7 +45,7 @@ import { notUndefined } from './utils/predicates';
     template: '',
     styles: [':host { display: inline; }'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
 })
 export class TranslocoMarkupComponent implements OnInit, OnDestroy {
 
@@ -97,7 +97,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
         @Inject(STRING_INTERPOLATION_TRANSPILER) private readonly stringInterpolationTranspiler: TranslationMarkupTranspiler,
 
         /** Transpiler used for rendering all unprocessed tokens in the translation values as literal text. */
-        private readonly stringLiteralTranspiler: StringLiteralTranspiler
+        private readonly stringLiteralTranspiler: StringLiteralTranspiler,
     ) { }
 
     /**
@@ -112,7 +112,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
         const inlineScope$ = observeProperty(this as TranslocoMarkupComponent, 'inlineScope');
         const inlineTranspilers$ = observeProperty(this as TranslocoMarkupComponent, 'inlineTranspilers');
         const mergeTranspilers$ = observeProperty(this as TranslocoMarkupComponent, 'mergeTranspilers').pipe(
-            map((mergeTranspilers) => mergeTranspilers !== false)
+            map((mergeTranspilers) => mergeTranspilers !== false),
         );
 
         // Create the language$ stream that defines which in what language the translation text should be displayed.
@@ -120,7 +120,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
 
         const activeLanguage$ = this.translocoService.config.reRenderOnLangChange ? langChanges$ : langChanges$.pipe(
             first(),
-            shareReplay({ bufferSize: 1, refCount: true })
+            shareReplay({ bufferSize: 1, refCount: true }),
         );
 
         const language$ = resolveLanguage(inlineLanguage$, of(this.providedLanguage || undefined), activeLanguage$);
@@ -129,7 +129,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
         const scopes$ = inlineScope$.pipe(
             map((inlineScope) => inlineScope || this.providedScope),
             distinctUntilChanged(),
-            map((scope) => Array.isArray(scope) ? scope : [!!scope ? scope : undefined])
+            map((scope) => Array.isArray(scope) ? scope : [!!scope ? scope : undefined]),
         );
 
         // Using the language$ and scope$ stream obtain the translation$ stream that emits the translation dictionary to use.
@@ -142,9 +142,9 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
 
                     return this.translocoService._loadDependencies(path, inlineLoader);
                 })).pipe(
-                    map(() => this.translocoService.getTranslation(language))
-                )
-            )
+                    map(() => this.translocoService.getTranslation(language)),
+                ),
+            ),
         );
 
         // Define the translationValue$ stream that emits the (unparsed) translation text that is to be displayed.
@@ -160,7 +160,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
                     useFallbackTranslation && firstFallbackLanguage ? [this.translocoService.getTranslation(firstFallbackLanguage)] : [];
 
                 return this.getTranslationValue(key, [translation, ...fallbackTranslation]);
-            })
+            }),
         );
 
         // Create the transpilers$ stream based on the inline providers, the provided providers and the merge transpilers setting.
@@ -169,18 +169,18 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
                 ...(inlineTranspilers ? asArray(inlineTranspilers) : []),
                 ...(this.providedTranspilers && (!inlineTranspilers || mergeTranspilers) ? asFlatArray(this.providedTranspilers) : []),
                 this.stringInterpolationTranspiler,
-                this.stringLiteralTranspiler
-            ])
+                this.stringLiteralTranspiler,
+            ]),
         );
 
         // Finally we can create the render$ stream that emits the rendering function based on the translation text and the tranpilers.
         const render$ = combineLatest([translationValue$, transpilers$]).pipe(
-            map(([{ translation, value }, transpilers]) => createTranslationMarkupRenderer(value, transpilers, translation))
+            map(([{ translation, value }, transpilers]) => createTranslationMarkupRenderer(value, transpilers, translation)),
         );
 
         // By combining the render$ and translationParameters$ stream the component can render the translation whenever something changes.
         this.subscriptions.add(combineLatest([render$, translationParameters$]).subscribe(
-            ([render, translationParameters]) => render(this.hostElement.nativeElement, translationParameters || {})
+            ([render, translationParameters]) => render(this.hostElement.nativeElement, translationParameters || {}),
         ));
     }
 
@@ -217,19 +217,19 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
 
                 return { value: String(value), translation };
             },
-            notUndefined
+            notUndefined,
         );
 
         // Return the result or invoke the missing handler if no translation value was found in the specified translations.
-        return result || {
+        return result ?? {
             value: this.missingHandler.handle(
                 key,
                 {
                     activeLang: this.translocoService.getActiveLang(),
-                    ...this.translocoService.config
-                }
+                    ...this.translocoService.config,
+                },
             ),
-            translation: translations[0]
+            translation: translations[0] ?? {},
         };
     }
 }
@@ -254,10 +254,10 @@ function resolveLanguage(...languageSpecifiers: Observable<string | undefined>[]
 
             return concat(
                 of(language),
-                isStatic ? EMPTY : downstreamLanguage$.pipe(skip(1))
+                isStatic ? EMPTY : downstreamLanguage$.pipe(skip(1)),
             );
         })),
-        of('')
+        of(''),
     ).pipe(distinctUntilChanged());
 }
 

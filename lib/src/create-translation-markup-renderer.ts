@@ -16,7 +16,7 @@ import { TranslationMarkupTranspiler, TranslationMarkupTranspilerContext } from 
 export function createTranslationMarkupRenderer(
     translationValue: string,
     transpilers: TranslationMarkupTranspiler[],
-    translation: Translation
+    translation: Translation,
 ): (target: Element, translationParameters: HashMap) => void {
     const tokens = tokenize(translationValue, transpilers);
     const renderers = transpile(tokens, transpilers, translation);
@@ -70,7 +70,7 @@ export function tokenize(translationValue: string, transpilers: TranslationMarku
 export function transpile(
     tokens: unknown[],
     transpilers: TranslationMarkupTranspiler[],
-    translation: Translation
+    translation: Translation,
 ): TranslationMarkupRenderer[] {
     const transpilerContext = new TranslationMarkupTranspilerContext(tokens, translation, transpilers);
 

@@ -30,7 +30,7 @@ export class ContextualLinkBlockTranspiler extends BlockTranspiler {
         private readonly rendererFactory: TranslationMarkupRendererFactory,
 
         /** Set of link renderers that are used to apply the link model from the translation parameter to the anchor element. */
-        private readonly linkRenderers: LinkRenderer<unknown>[]
+        private readonly linkRenderers: LinkRenderer<unknown>[],
     ) {
         super(linkStartToken, linkEndToken);
     }

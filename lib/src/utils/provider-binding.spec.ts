@@ -8,13 +8,13 @@ describe('bindProvider() function', () => {
     it('can bind unbound type providers', () => {
         TestBed.configureTestingModule({
             imports: [
-                ServiceModule.withConfig(TestServiceImpl)
-            ]
+                ServiceModule.withConfig(TestServiceImpl),
+            ],
         });
 
         const injector: Injector = TestBed.inject(Injector);
 
-        const service = injector.get<TestService>(TestService as any);
+        const service = injector.get(TestService);
 
         expect(service.transform('bar')).toBe('[BAR]');
         expect(injector.get(TestServiceImpl) === service).toBe(true);
@@ -26,8 +26,8 @@ describe('bindProvider() function', () => {
                 ValueModule.withConfig({
                     numberValue: { useValue: 5 },
                     stringValue: { useValue: 'foo' },
-                })
-            ]
+                }),
+            ],
         });
 
         const injector: Injector = TestBed.inject(Injector);
@@ -42,13 +42,13 @@ describe('bindProvider() function', () => {
     it('can bind unbound class providers', () => {
         TestBed.configureTestingModule({
             imports: [
-                ServiceModule.withConfig({ useClass: TestServiceImpl })
-            ]
+                ServiceModule.withConfig({ useClass: TestServiceImpl }),
+            ],
         });
 
         const injector: Injector = TestBed.inject(Injector);
 
-        const service = injector.get<TestService>(TestService as any);
+        const service = injector.get(TestService);
 
         expect(service.transform('bar')).toBe('[BAR]');
     });
@@ -60,18 +60,18 @@ describe('bindProvider() function', () => {
                 ValueModule.withConfig({
                     numberValue: { useExisting: ALT_NUMBER_VALUE },
                     stringValue: { useExisting: ALT_STRING_VALUE },
-                })
+                }),
             ],
             providers: [
                 TestServiceImpl,
                 { provide: ALT_NUMBER_VALUE, useValue: 123 },
-                { provide: ALT_STRING_VALUE, useValue: 'test test' }
-            ]
+                { provide: ALT_STRING_VALUE, useValue: 'test test' },
+            ],
         });
 
         const injector: Injector = TestBed.inject(Injector);
 
-        const service = injector.get<TestService>(TestService as any);
+        const service = injector.get(TestService);
         const numberValue = injector.get(NUMBER_VALUE);
         const stringValue = injector.get(STRING_VALUE);
 
@@ -83,7 +83,7 @@ describe('bindProvider() function', () => {
     it('can bind unbound factory providers', () => {
         function testServiceFactory(prefix: string): TestService {
             return {
-                transform(input: string): string { return `${prefix} ${input}`; }
+                transform(input: string): string { return `${prefix} ${input}`; },
             };
         }
 
@@ -93,15 +93,15 @@ describe('bindProvider() function', () => {
                 ValueModule.withConfig({
                     numberValue: { useFactory: () => 999 },
                     stringValue: { useFactory: () => 'Hi' },
-                })
-            ]
+                }),
+            ],
         });
 
         const injector: Injector = TestBed.inject(Injector);
 
         const numberValue = injector.get(NUMBER_VALUE);
         const stringValue = injector.get(STRING_VALUE);
-        const service = injector.get<TestService>(TestService as any);
+        const service = injector.get(TestService);
 
         expect(numberValue).toBe(999);
         expect(stringValue).toBe('Hi');
@@ -114,7 +114,7 @@ describe('bindProvider() function', () => {
                 MultiValueModule.withConfig({ useValue: 42 }),
                 MultiValueModule.withConfig({ useValue: 1337 }),
                 MultiValueModule.withConfig({ useValue: 5 }),
-            ]
+            ],
         });
 
         const injector: Injector = TestBed.inject(Injector);
@@ -130,8 +130,8 @@ describe('bindProvider() function', () => {
     it('supports optional providers', () => {
         TestBed.configureTestingModule({
             imports: [
-                OptionalConfigModule.withConfig({})
-            ]
+                OptionalConfigModule.withConfig({}),
+            ],
         });
 
         const injector: Injector = TestBed.inject(Injector);
@@ -144,15 +144,15 @@ describe('bindProvider() function', () => {
     it('supports default providers', () => {
         TestBed.configureTestingModule({
             imports: [
-                OptionalConfigModule.withConfig({})
-            ]
+                OptionalConfigModule.withConfig({}),
+            ],
         });
 
         const injector: Injector = TestBed.inject(Injector);
 
         const stringValue = injector.get(STRING_VALUE, null!);
-        const service1 = injector.get<TestService>(TestService as any, null!);
-        const service2 = injector.get<TestService2>(TestService2 as any, null!);
+        const service1 = injector.get(TestService, null!);
+        const service2 = injector.get(TestService2, null!);
         const serviceImpl = injector.get(TestServiceImpl);
         const altService1 = injector.get(ALT_TEST_SERVICE_1, null!);
         const altService2 = injector.get(ALT_TEST_SERVICE_2, null!);
@@ -170,14 +170,6 @@ describe('bindProvider() function', () => {
         expect(service2 === serviceImpl).toBe(true);
         expect(altService1).not.toBeNull();
         expect(altService2).not.toBeNull();
-    });
-
-    it('throws an error when an invalid provider is specified', () => {
-        expect(() => bindProvider(new InjectionToken<unknown>('something'), 'bla' as any)).toThrowError();
-    });
-
-    it('throws an error when an invalid default provider is specified', () => {
-        expect(() => bindProvider(new InjectionToken<unknown>('something'), undefined, { default: 'bla' as any })).toThrowError();
     });
 
 });
@@ -199,8 +191,8 @@ class ValueModule {
             ngModule: ValueModule,
             providers: [
                 bindProvider(NUMBER_VALUE, options.numberValue),
-                bindProvider(STRING_VALUE, options.stringValue)
-            ]
+                bindProvider(STRING_VALUE, options.stringValue),
+            ],
         };
     }
 }
@@ -224,8 +216,8 @@ class ServiceModule {
         return {
             ngModule: ServiceModule,
             providers: [
-                bindProvider(TestService, service)
-            ]
+                bindProvider(TestService, service),
+            ],
         };
     }
 }
@@ -236,7 +228,7 @@ const ALT_TEST_SERVICE_2 = new InjectionToken<TestService>('ALT_TEST_SERVICE_2')
 @NgModule()
 class OptionalConfigModule {
     public static withConfig(
-        options: Partial<ValueModuleOptions> & { service?: UnboundProvider<TestService> }
+        options: Partial<ValueModuleOptions> & { service?: UnboundProvider<TestService> },
     ): ModuleWithProviders<OptionalConfigModule> {
         return {
             ngModule: OptionalConfigModule,
@@ -246,8 +238,8 @@ class OptionalConfigModule {
                 bindProvider(TestService,        options.service,     { default: { useClass: TestServiceImpl } }),
                 bindProvider(TestService2,       options.service,     { default: TestServiceImpl }),
                 bindProvider(ALT_TEST_SERVICE_1, options.service,     { default: { useExisting: TestService } }),
-                bindProvider(ALT_TEST_SERVICE_2, options.service,     { default: { useFactory: () => new TestServiceImpl() } })
-            ]
+                bindProvider(ALT_TEST_SERVICE_2, options.service,     { default: { useFactory: () => new TestServiceImpl() } }),
+            ],
         };
     }
 }
@@ -258,8 +250,8 @@ class MultiValueModule {
         return {
             ngModule: ValueModule,
             providers: [
-                bindProvider(NUMBER_VALUE, numberValue, { multi: true })
-            ]
+                bindProvider(NUMBER_VALUE, numberValue, { multi: true }),
+            ],
         };
     }
 }

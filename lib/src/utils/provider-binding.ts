@@ -1,14 +1,6 @@
-import { InjectionToken, Provider, Type } from '@angular/core';
+import { Provider, Type } from '@angular/core';
 
-/**
- * Type for classes that can be used as tokens for injection. We might be inclined to use Angular's `Type<T>` interface for this, however,
- * that interface cannot be used for abstract classes, which are also valid tokens. The `InjectableType<T>` supports both abstract and
- * concrete classes and thus is a more accurate definition of a class type which can be used for injection.
- */
-export type InjectableType<T> = Function & { prototype: T }; // tslint:disable-line:ban-types
-
-/** Type representing valid typesafe token types for provider binding. */
-export type Token<T> = InjectableType<T> | InjectionToken<T>;
+import { Token } from './token.model';
 
 /** Definition (without token binding) for providers that will create a singleton instance of the specified class for injection. */
 export type UnboundTypeProvider<T> = Type<T>;
@@ -37,13 +29,13 @@ export interface UnboundFactoryProvider<T> {
      * A function to invoke to create a value when this provider is injected for a specific token. The function is invoked with resolved
      * values of tokens in the `deps` field.
      */
-    useFactory(...deps: any[]): T;
+    useFactory(...deps: any[]): T; // tslint:disable-line:no-any
 
     /**
      * A list of tokens which need to be resolved by the injector. The list of values is then used as arguments to the `useFactory`
      * function.
      */
-    deps?: any[]; // tslint:disable-line:member-ordering
+    deps?: any[]; // tslint:disable-line:member-ordering no-any
 }
 
 /**
@@ -76,7 +68,7 @@ export interface BindProviderOptions<U> {
 export function bindProvider<T, U extends T>(
     token: Token<T>,
     unboundProvider: UnboundProvider<U> | undefined,
-    options: BindProviderOptions<U> = {}
+    options: BindProviderOptions<U> = {},
 ): Provider {
     return (
         unboundProvider ? (
@@ -86,35 +78,35 @@ export function bindProvider<T, U extends T>(
                     {
                         provide: token,
                         useExisting: unboundProvider as UnboundTypeProvider<U>,
-                        multi: options.multi
-                    }
+                        multi: options.multi,
+                    },
                 ] :
             (unboundProvider as UnboundValueProvider<U>).useValue ?
                 {
                     provide: token,
                     useValue: (unboundProvider as UnboundValueProvider<U>).useValue,
-                    multi: options.multi
+                    multi: options.multi,
                 } :
             (unboundProvider as UnboundClassProvider<U>).useClass ?
                 {
                     provide: token,
                     useClass: (unboundProvider as UnboundClassProvider<U>).useClass,
-                    multi: options.multi
+                    multi: options.multi,
                 } :
             (unboundProvider as UnboundExistingProvider<U>).useExisting ?
                 {
                     provide: token,
                     useExisting: (unboundProvider as UnboundExistingProvider<U>).useExisting,
-                    multi: options.multi
+                    multi: options.multi,
                 } :
             (unboundProvider as { useFactory?: unknown }).useFactory ?
                 {
                     provide: token,
                     useFactory: (unboundProvider as UnboundFactoryProvider<U>).useFactory, // tslint:disable-line:no-unbound-method
                     deps: (unboundProvider as UnboundFactoryProvider<U>).deps,
-                    multi: options.multi
+                    multi: options.multi,
                 } :
-            bindProviderError(`Invalid unbound provider was specified for "${token}"`)
+            []
         ) :
         options.default ? (
             (options.default as { apply?: unknown }).apply  ?
@@ -123,42 +115,36 @@ export function bindProvider<T, U extends T>(
                     {
                         provide: token,
                         useExisting: options.default as UnboundTypeProvider<U>,
-                        multi: options.multi
-                    }
+                        multi: options.multi,
+                    },
                 ] :
             (options.default as UnboundValueProvider<U>).useValue ?
                 {
                     provide: token,
                     useValue: (options.default as UnboundValueProvider<U>).useValue,
-                    multi: options.multi
+                    multi: options.multi,
                 } :
             (options.default as UnboundClassProvider<U>).useClass ?
                 {
                     provide: token,
                     useClass: (options.default as UnboundClassProvider<U>).useClass,
-                    multi: options.multi
+                    multi: options.multi,
                 } :
             (options.default as UnboundExistingProvider<U>).useExisting ?
                 {
                     provide: token,
                     useExisting: (options.default as UnboundExistingProvider<U>).useExisting,
-                    multi: options.multi
+                    multi: options.multi,
                 } :
             (options.default as { useFactory?: unknown }).useFactory ?
                 {
                     provide: token,
                     useFactory: (options.default as UnboundFactoryProvider<U>).useFactory, // tslint:disable-line:no-unbound-method
                     deps: (options.default as UnboundFactoryProvider<U>).deps,
-                    multi: options.multi
+                    multi: options.multi,
                 } :
-            bindProviderError(`Invalid default unbound provider was specified for "${token}"`)
+            []
         ) :
         []
     );
-}
-
-class BindProviderError extends Error { }
-
-function bindProviderError(message: string): never {
-    throw new BindProviderError(message);
 }

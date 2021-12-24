@@ -6,14 +6,14 @@ import {
     TranslationMarkupRendererFactory,
     TranslationMarkupTranspiler,
     TranslationMarkupTranspilerContext,
-    TranspileResult
+    TranspileResult,
 } from 'ngx-transloco-markup';
 
 @Injectable()
 export class ColoredTextTranspiler implements TranslationMarkupTranspiler {
 
     constructor(
-        private readonly rendererFactory: TranslationMarkupRendererFactory
+        private readonly rendererFactory: TranslationMarkupRendererFactory,
     ) { }
 
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
@@ -25,7 +25,7 @@ export class ColoredTextTranspiler implements TranslationMarkupTranspiler {
 
     public transpile(
         start: number,
-        context: TranslationMarkupTranspilerContext
+        context: TranslationMarkupTranspilerContext,
     ): TranspileResult | undefined {
         const nextToken = context.tokens[start];
 
@@ -37,13 +37,13 @@ export class ColoredTextTranspiler implements TranslationMarkupTranspiler {
 
         return {
             nextOffset: Math.min(nextOffset + 1, context.tokens.length),
-            renderer: this.createRenderer(nextToken.cssColorValue, renderers)
+            renderer: this.createRenderer(nextToken.cssColorValue, renderers),
         };
     }
 
     private createRenderer(
         cssColorValue: string,
-        childRenderers: TranslationMarkupRenderer[]
+        childRenderers: TranslationMarkupRenderer[],
     ): TranslationMarkupRenderer {
         const spanRenderer = this.rendererFactory.createElementRenderer('span', childRenderers);
 
@@ -76,7 +76,7 @@ function recognizeColorStartToken(translation: string, offset: number): Tokenize
 
     return {
         nextOffset: end + 1,
-        token: new ColorStart(cssColorValue)
+        token: new ColorStart(cssColorValue),
     };
 }
 
@@ -89,13 +89,13 @@ function recognizeColorEndToken(translation: string, offset: number): TokenizeRe
 
     return {
         nextOffset: offset + COLOR_END_TOKEN.length,
-        token: COLOR_END
+        token: COLOR_END,
     };
 }
 
 class ColorStart {
     constructor(
-        public readonly cssColorValue: string
+        public readonly cssColorValue: string,
     ) { }
 }
 

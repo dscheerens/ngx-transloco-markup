@@ -22,7 +22,7 @@ describe('SubstitutionTranspiler', () => {
             const testCases = [
                 { token: '[x]', translation: 'x [X][x][x[]] x [x]', expectedTokenOffsets: [5, 16] },
                 { token: '$xyz', translation: 'xyz$xy z$xzy$xyz$xyz', expectedTokenOffsets: [12, 16] },
-                { token: '*', translation: '*!abc** ', expectedTokenOffsets: [0, 5, 6] }
+                { token: '*', translation: '*!abc** ', expectedTokenOffsets: [0, 5, 6] },
             ];
 
             for (const { token, translation, expectedTokenOffsets } of testCases) {
@@ -75,7 +75,7 @@ describe('SubstitutionTranspiler', () => {
                 new SubstitutionToken('{x}'),
                 new SubstitutionToken('{y}'),
                 new SubstitutionToken('{}'),
-                new SubstitutionToken('{x}')
+                new SubstitutionToken('{x}'),
             ];
             const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 

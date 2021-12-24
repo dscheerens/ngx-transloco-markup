@@ -10,9 +10,9 @@
             "prefix": "lib",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "builder": "@angular-devkit/build-angular:ng-packagr",
                     "options": {
-                        "tsConfig": "lib/tsconfig.lib.json",
+                        "tsConfig": "lib/tsconfig.lib.base.json",
                         "project": "ng-package.json"
                     },
                     "configurations": {
@@ -27,21 +27,8 @@
                     "options": {
                         "sourceMap": true,
                         "main": "lib/test.ts",
-                        "tsConfig": "lib/tsconfig.spec.json",
+                        "tsConfig": "lib/tsconfig.lib.spec.json",
                         "karmaConfig": "lib/karma.conf.js"
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "format": "stylish",
-                        "tsConfig": [
-                            "lib/tsconfig.lib.json",
-                            "lib/tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
                     }
                 }
             }
@@ -83,59 +70,31 @@
                                     "with": "demo/environments/environment.prod.ts"
                                 }
                             ],
-                            "tsConfig": "demo/tsconfig.prod.json",
-                            "optimization": true,
-                            "outputHashing": "all",
-                            "sourceMap": false,
-                            "extractCss": true,
-                            "namedChunks": false,
-                            "aot": true,
-                            "extractLicenses": true,
-                            "vendorChunk": false,
-                            "buildOptimizer": true
+                            "tsConfig": "demo/tsconfig.demo.app.prod.json",
+                            "outputHashing": "all"
+                        },
+                        "development": {
+                            "tsConfig": "demo/tsconfig.demo.app.json",
+                            "buildOptimizer": false,
+                            "optimization": false,
+                            "vendorChunk": true,
+                            "extractLicenses": false,
+                            "sourceMap": true,
+                            "namedChunks": true
                         }
                     }
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
-                    "options": {
-                        "browserTarget": "demo:build"
-                    },
                     "configurations": {
                         "production": {
                             "browserTarget": "demo:build:production"
+                        },
+                        "development": {
+                            "browserTarget": "demo:build:development"
                         }
-                    }
-                },
-                "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
-                    "options": {
-                        "main": "demo/test.ts",
-                        "polyfills": "demo/polyfills.ts",
-                        "tsConfig": "demo/tsconfig.spec.json",
-                        "karmaConfig": "demo/karma.conf.js",
-                        "styles": [
-                            "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-                            "demo/styles/global.scss"
-                        ],
-                        "scripts": [],
-                        "assets": [
-                            "demo/favicon.ico",
-                            "demo/assets"
-                        ]
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": [
-                            "demo/tsconfig.json",
-                            "demo/tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
-                    }
+                    },
+                    "defaultConfiguration": "development"
                 }
             }
         }

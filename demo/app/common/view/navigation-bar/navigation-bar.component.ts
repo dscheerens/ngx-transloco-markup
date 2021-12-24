@@ -9,14 +9,14 @@ interface LanguageOption {
 
 const LANGUAGE_OPTIONS: LanguageOption[] = [
     { languageId: 'en', icon: 'gb.svg' },
-    { languageId: 'nl', icon: 'nl.svg' }
+    { languageId: 'nl', icon: 'nl.svg' },
 ];
 
 @Component({
     selector: 'app-navigation-bar',
     templateUrl: './navigation-bar.component.html',
     styleUrls: ['./navigation-bar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationBarComponent implements OnInit {
 
@@ -25,7 +25,7 @@ export class NavigationBarComponent implements OnInit {
     public readonly languageOptions = LANGUAGE_OPTIONS;
 
     constructor(
-        private readonly translocoService: TranslocoService
+        private readonly translocoService: TranslocoService,
     ) { }
 
     public ngOnInit(): void {

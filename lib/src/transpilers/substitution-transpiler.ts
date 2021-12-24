@@ -2,7 +2,7 @@ import {
     TokenizeResult,
     TranslationMarkupTranspiler,
     TranspileResult,
-    TranslationMarkupTranspilerContext
+    TranslationMarkupTranspilerContext,
 } from '../translation-markup-transpiler.model';
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
 
@@ -20,7 +20,7 @@ export abstract class SubstitutionTranspiler implements TranslationMarkupTranspi
      */
     constructor(
         /** String representing the token that will be substituted with the output of the resulting renderer. */
-        private readonly substitutionToken: string
+        private readonly substitutionToken: string,
     ) { }
 
     /** @inheritdoc */
@@ -28,7 +28,7 @@ export abstract class SubstitutionTranspiler implements TranslationMarkupTranspi
         if (translation.startsWith(this.substitutionToken, offset)) {
             return {
                 nextOffset: offset + this.substitutionToken.length,
-                token: new SubstitutionToken(this.substitutionToken)
+                token: new SubstitutionToken(this.substitutionToken),
             };
         }
 
@@ -45,7 +45,7 @@ export abstract class SubstitutionTranspiler implements TranslationMarkupTranspi
 
         return {
             nextOffset: offset + 1,
-            renderer: this.renderer
+            renderer: this.renderer,
         };
     }
 

@@ -11,7 +11,7 @@ import {
     TranslocoMissingHandler,
     TranslocoService,
     TranslocoTestingModule,
-    translocoConfig
+    translocoConfig,
 } from '@ngneat/transloco';
 
 import { defaultTranslocoMarkupTranspilers } from './default-transloco-markup-transpilers';
@@ -27,19 +27,19 @@ const translations = {
     en: {
         TITLE: 'Welcome to [b]Transloco [i]Markup[/i][/b]',
         EMPTY: '',
-        CALL_TO_ACTION: 'Click [link:presents]here[/link] for some [b]awesome presents[/b] provided by [i]{{ name }}[/i]'
+        CALL_TO_ACTION: 'Click [link:presents]here[/link] for some [b]awesome presents[/b] provided by [i]{{ name }}[/i]',
     },
     nl: {
         TITLE: 'Welkom bij [b]Transloco [i]Markup[/i][/b]',
         EMPTY: '',
-        CALL_TO_ACTION: 'Klik [link:presents]hier[/link] voor [b]geweldige cadeautjes[/b] geleverd door [i]{{ name }}[/i]'
+        CALL_TO_ACTION: 'Klik [link:presents]hier[/link] voor [b]geweldige cadeautjes[/b] geleverd door [i]{{ name }}[/i]',
     },
     l33t: {
         TITLE: 'W31c0m3 70 [b]7r4n5l0c0 [i]M4rkup[/i][/b]',
         EMPTY: '',
         CALL_TO_ACTION: 'cl1ck [link:presents]h3r3[/link] f0r 50m3 [b]4w350m3 pr353n75[/b] pr0v1d3d by [i]{{ name }}[/i]',
         SECRET: 'b335 m4k3 h0n3y',
-    }
+    },
 };
 
 function createTestTranslocoConfig(overrides: Partial<TranslocoConfig> = {}): TranslocoConfig {
@@ -48,7 +48,7 @@ function createTestTranslocoConfig(overrides: Partial<TranslocoConfig> = {}): Tr
         defaultLang: Object.keys(translations)[0],
         prodMode: true,
         missingHandler: { logMissingKey: false },
-        ...overrides
+        ...overrides,
     });
 }
 
@@ -57,19 +57,22 @@ describe('Transloco markup component', () => {
     const createComponent = createComponentFactory({
         component: TranslocoMarkupComponent,
         imports: [
-            TranslocoTestingModule.withLangs(translations, createTestTranslocoConfig())
+            TranslocoTestingModule.forRoot({
+                translocoConfig: createTestTranslocoConfig(),
+                langs: translations,
+            }),
         ],
         providers: [
             defaultTranslocoMarkupTranspilers(),
-            { provide: TRANSLOCO_SCOPE, useValue: null }
-        ]
+            { provide: TRANSLOCO_SCOPE, useValue: null },
+        ],
     });
 
     it('can render translations with markup', () => {
         const { component, element } = createComponent({
             props: {
-                translationKey: 'TITLE'
-            }
+                translationKey: 'TITLE',
+            },
         });
 
         expect(component).toBeDefined();
@@ -90,7 +93,7 @@ describe('Transloco markup component', () => {
         const { element } = createComponent({
             props: {
                 translationKey: 'TITLE',
-                inlineLanguage: 'nl'
+                inlineLanguage: 'nl',
             },
         });
 
@@ -132,10 +135,10 @@ describe('Transloco markup component', () => {
                 {
                     provide: TRANSLOCO_CONFIG,
                     useValue: createTestTranslocoConfig({
-                        reRenderOnLangChange: true
-                    })
-                }
-            ]
+                        reRenderOnLangChange: true,
+                    }),
+                },
+            ],
         });
 
         const translocoService = inject(TranslocoService);
@@ -150,8 +153,8 @@ describe('Transloco markup component', () => {
     it('will not rerender when the language is changed via the `TranslocoService` and the reRenderOnLangChange option is disabled', () => {
         const { element, inject } = createComponent({
             props: {
-                translationKey: 'TITLE'
-            }
+                translationKey: 'TITLE',
+            },
         });
 
         const translocoService = inject(TranslocoService);
@@ -167,16 +170,16 @@ describe('Transloco markup component', () => {
         const { element, inject } = createComponent({
             props: {
                 translationKey: 'TITLE',
-                inlineLanguage: 'l33t|static'
+                inlineLanguage: 'l33t|static',
             },
             providers: [
                 {
                     provide: TRANSLOCO_CONFIG,
                     useValue: createTestTranslocoConfig({
-                        reRenderOnLangChange: true
-                    })
-                }
-            ]
+                        reRenderOnLangChange: true,
+                    }),
+                },
+            ],
         });
 
         const translocoService = inject(TranslocoService);
@@ -194,9 +197,9 @@ describe('Transloco markup component', () => {
                 translationKey: 'CALL_TO_ACTION',
                 translationParameters: {
                     presents: 'https://tooth-fairy.webshops.com/',
-                    name: 'the Tooth Fairy'
-                }
-            }
+                    name: 'the Tooth Fairy',
+                },
+            },
         });
 
         expect(element.textContent).toBe('Click here for some awesome presents provided by the Tooth Fairy');
@@ -209,7 +212,7 @@ describe('Transloco markup component', () => {
 
         component.translationParameters = {
             presents: { url: 'https://easter-eggies.com/', target: '_self' },
-            name: 'de Paashaas'
+            name: 'de Paashaas',
         };
 
         expect(element.textContent).toBe('Click here for some awesome presents provided by de Paashaas');
@@ -234,8 +237,8 @@ describe('Transloco markup component', () => {
     it('uses the `TranslocoMissingHandler` to resolve translation texts for translations not available in the active language', () => {
         const { element, inject, component } = createComponent({
             props: {
-                translationKey: 'TITLE'
-            }
+                translationKey: 'TITLE',
+            },
         });
 
         const missingHandler = inject<TranslocoMissingHandler>(TRANSLOCO_MISSING_HANDLER);
@@ -262,16 +265,16 @@ describe('Transloco markup component', () => {
     it('renders an empty texts for empty translation texts and the `allowEmptyValues` option is enabled in the Transloco config', () => {
         const { element, inject, component } = createComponent({
             props: {
-                translationKey: 'TITLE'
+                translationKey: 'TITLE',
             },
             providers: [
                 {
                     provide: TRANSLOCO_CONFIG,
                     useValue: createTestTranslocoConfig({
-                        missingHandler: { allowEmpty: true }
-                    })
-                }
-            ]
+                        missingHandler: { allowEmpty: true },
+                    }),
+                },
+            ],
         });
 
         const missingHandler = inject<TranslocoMissingHandler>(TRANSLOCO_MISSING_HANDLER);
@@ -288,17 +291,17 @@ describe('Transloco markup component', () => {
     it('uses the configured fallback language for translations not available in the active language', () => {
         const { element } = createComponent({
             props: {
-                translationKey: 'SECRET'
+                translationKey: 'SECRET',
             },
             providers: [
                 {
                     provide: TRANSLOCO_CONFIG,
                     useValue: createTestTranslocoConfig({
                         missingHandler: { logMissingKey: false, useFallbackTranslation: true },
-                        fallbackLang: ['l33t', 'nl']
-                    })
-                }
-            ]
+                        fallbackLang: ['l33t', 'nl'],
+                    }),
+                },
+            ],
         });
 
         expect(element.textContent).toBe('b335 m4k3 h0n3y');
@@ -313,8 +316,8 @@ describe('Transloco markup component', () => {
         const { element } = createComponent({
             props: {
                 translationKey: 'TITLE',
-                inlineTranspilers: convertBoldTagsToMarkdown
-            }
+                inlineTranspilers: convertBoldTagsToMarkdown,
+            },
         });
 
         expect(element.textContent).toBe('Welcome to **Transloco Markup**');
@@ -332,8 +335,8 @@ describe('Transloco markup component', () => {
             props: {
                 translationKey: 'TITLE',
                 inlineTranspilers: convertBoldTagsToMarkdown,
-                mergeTranspilers: false
-            }
+                mergeTranspilers: false,
+            },
         });
 
         expect(element.textContent).toBe('Welcome to **Transloco [i]Markup[/i]**');
@@ -344,7 +347,7 @@ describe('Transloco markup component', () => {
     it('supports provided scopes', fakeAsync(() => {
         const { element, component } = createComponent({
             props: {
-                translationKey: 'alt.TITLE'
+                translationKey: 'alt.TITLE',
             },
             providers: [
                 {
@@ -353,15 +356,15 @@ describe('Transloco markup component', () => {
                         scope: 'alt',
                         loader: {
                             'alt/en': () => Promise.resolve({
-                                TITLE: 'You are welcomed to [i]Transloco [b]Markup[/b][/i]'
+                                TITLE: 'You are welcomed to [i]Transloco [b]Markup[/b][/i]',
                             }),
                             'alt/nl': () => Promise.resolve({
-                                SECRET: '[b]P[/b]sssst!'
-                            })
-                        }
-                    }]
-                }
-            ]
+                                SECRET: '[b]P[/b]sssst!',
+                            }),
+                        },
+                    }],
+                },
+            ],
         });
 
         flushMicrotasks();
@@ -387,9 +390,9 @@ describe('Transloco markup component', () => {
         const { element, inject, fixture, component } = createComponent({
             props: {
                 translationKey: 'alt.SECRET',
-                inlineScope: 'alt'
+                inlineScope: 'alt',
             },
-            detectChanges: false
+            detectChanges: false,
         });
 
         const testingLoader: TestingLoader = inject<TestingLoader>(TRANSLOCO_LOADER);
@@ -401,13 +404,13 @@ describe('Transloco markup component', () => {
 
                 if (path === 'alt/en') {
                     return of({
-                        SECRET: 'You can find [b]treasure[/b] hidden inside this code!'
+                        SECRET: 'You can find [b]treasure[/b] hidden inside this code!',
                     });
                 }
 
                 if (path === 'clue/en') {
                     return of({
-                        SECRET: 'Dig [i]deeper[/i]!'
+                        SECRET: 'Dig [i]deeper[/i]!',
                     });
                 }
 
@@ -437,7 +440,7 @@ class StringReplaceTranspiler implements TranslationMarkupTranspiler {
     };
 
     constructor(
-        private readonly replacements: Map<string, string>
+        private readonly replacements: Map<string, string>,
     ) { }
 
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
@@ -445,7 +448,7 @@ class StringReplaceTranspiler implements TranslationMarkupTranspiler {
             if (translation.startsWith(key, offset)) {
                 return {
                     token: new this.Replacement(value),
-                    nextOffset: offset + key.length
+                    nextOffset: offset + key.length,
                 };
             }
         }
@@ -463,7 +466,7 @@ class StringReplaceTranspiler implements TranslationMarkupTranspiler {
 
         return {
             nextOffset: offset + 1,
-            renderer: () => document.createTextNode(token.value)
+            renderer: () => document.createTextNode(token.value),
         };
     }
 

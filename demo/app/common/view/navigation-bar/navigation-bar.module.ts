@@ -7,13 +7,13 @@ import { NavigationBarComponent } from './navigation-bar.component';
 @NgModule({
     imports: [
         CommonModule,
-        MatButtonModule
+        MatButtonModule,
     ],
     declarations: [
-        NavigationBarComponent
+        NavigationBarComponent,
     ],
     exports: [
-        NavigationBarComponent
-    ]
+        NavigationBarComponent,
+    ],
 })
 export class NavigationBarModule { }

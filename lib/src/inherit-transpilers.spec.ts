@@ -30,7 +30,7 @@ function provideTranspiler<T extends TranslationMarkupTranspiler>(transpilerClas
         provide: TRANSLATION_MARKUP_TRANSPILER,
         useClass: transpilerClass,
         deps: [],
-        multi: true
+        multi: true,
     };
 
 }

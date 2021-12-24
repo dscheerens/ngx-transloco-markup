@@ -9,7 +9,7 @@ import {
     TokenizeResult,
     TranslationMarkupTranspiler,
     TranspileResult,
-    TranslationMarkupTranspilerContext
+    TranslationMarkupTranspilerContext,
 } from '../translation-markup-transpiler.model';
 
 /**
@@ -32,7 +32,7 @@ export class LinkTranspiler implements TranslationMarkupTranspiler {
         private readonly rendererFactory: TranslationMarkupRendererFactory,
 
         /** Set of link renderers that are used to apply the link model from the translation parameter to the anchor element. */
-        @Inject(LinkRenderer) @Optional() linkRenderers: LinkRenderer<unknown> | LinkRenderer<unknown>[] | null
+        @Inject(LinkRenderer) @Optional() linkRenderers: LinkRenderer<unknown> | LinkRenderer<unknown>[] | null,
     ) {
         this.linkRenderers = !linkRenderers ? [] : asArray(linkRenderers);
     }
@@ -43,7 +43,7 @@ export class LinkTranspiler implements TranslationMarkupTranspiler {
         if (translation.startsWith(LINK_END_TOKEN, offset)) {
             return {
                 nextOffset: offset + LINK_END_TOKEN.length,
-                token: LINK_END
+                token: LINK_END,
             };
         }
 
@@ -61,7 +61,7 @@ export class LinkTranspiler implements TranslationMarkupTranspiler {
 
         return {
             nextOffset: end + 1,
-            token: new LinkStart(parameterKey)
+            token: new LinkStart(parameterKey),
         };
     }
 
@@ -77,7 +77,7 @@ export class LinkTranspiler implements TranslationMarkupTranspiler {
 
         return {
             nextOffset: Math.min(nextOffset + 1, context.tokens.length),
-            renderer: this.createRenderer(nextToken.parameterKey, renderers)
+            renderer: this.createRenderer(nextToken.parameterKey, renderers),
         };
     }
 
@@ -131,6 +131,6 @@ export class LinkStart {
      */
     constructor(
         /** Key of the parameter which stores the link model. */
-        public readonly parameterKey: string
+        public readonly parameterKey: string,
     ) { }
 }

@@ -83,7 +83,7 @@ export class TranslationMarkupTranspilerContext {
         public readonly translation: Translation,
 
         /** Transpilers which are to be used to parse and convert the token sequence. */
-        private readonly transpilers: TranslationMarkupTranspiler[]
+        private readonly transpilers: TranslationMarkupTranspiler[],
     ) { }
 
     /**
@@ -98,7 +98,7 @@ export class TranslationMarkupTranspilerContext {
         return selectFirstWhere(
             this.transpilers,
             (transpiler) => transpiler.transpile(offset, this),
-            (result) => result !== undefined && result.nextOffset !== offset
+            (result) => result !== undefined && result.nextOffset !== offset,
         );
     }
 
@@ -115,7 +115,7 @@ export class TranslationMarkupTranspilerContext {
      */
     public transpileUntil(
         startOffset: number,
-        stopTranspiling: (token: unknown, offset: number) => boolean
+        stopTranspiling: (token: unknown, offset: number) => boolean,
     ): SequentialTranspilationResult {
         let offset = startOffset;
 
@@ -135,7 +135,7 @@ export class TranslationMarkupTranspilerContext {
 
         return {
             renderers,
-            nextOffset: offset
+            nextOffset: offset,
         };
     }
 

@@ -19,6 +19,6 @@ export function defaultTranslocoMarkupTranspilers(): Provider[] {
         provideTranslationMarkupTranspiler(ItalicTextTranspiler),
         provideTranslationMarkupTranspiler(LinkTranspiler),
         provideLinkRenderer(StringLinkRenderer),
-        provideLinkRenderer(ExternalLinkObjectLinkRenderer)
+        provideLinkRenderer(ExternalLinkObjectLinkRenderer),
     ];
 }

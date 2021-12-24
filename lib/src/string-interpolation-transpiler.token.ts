@@ -8,6 +8,6 @@ export const STRING_INTERPOLATION_TRANSPILER = new InjectionToken<TranslationMar
     'STRING_INTERPOLATION_TRANSPILER',
     {
         providedIn: 'root',
-        factory: () => inject(StringInterpolationTranspiler)
-    }
+        factory: () => inject(StringInterpolationTranspiler),
+    },
 );

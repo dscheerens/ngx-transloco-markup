@@ -7,7 +7,7 @@ export { ItalicTextTranspiler } from './transpilers/italic-text-transpiler';
 export { LinkTranspiler } from './transpilers/link-transpiler';
 export {
     TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER,
-    InterpolationExpressionMatcher
+    InterpolationExpressionMatcher,
 } from './transpilers/string-interpolation-transpiler';
 export { SubstitutionTranspiler } from './transpilers/substitution-transpiler';
 export { ContextualLinkTranspilerFactory } from './transpilers/contextual-link-transpiler-factory';

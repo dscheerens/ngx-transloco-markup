@@ -1,0 +1,14 @@
+{
+    "extends": "./tsconfig.demo.base.json",
+    "compilerOptions": {
+        "outDir": "../out-tsc/demo-app",
+        "types": []
+    },
+    "files": [
+        "./main.ts",
+        "./polyfills.ts"
+    ],
+    "include": [
+        "./**/*.d.ts",
+    ]
+}

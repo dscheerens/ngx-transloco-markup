@@ -9,6 +9,6 @@ import { HashMap } from '@ngneat/transloco';
  *   `{ resolve: (params) => 'https://petstore.com/' + params.petType }`
  */
 export type ResolveLinkSpecification =
-    { static: unknown } |
-    { parameterKey: string } |
-    { resolve(translationParams: HashMap): unknown };
+    | { static: unknown }
+    | { parameterKey: string }
+    | { resolve(translationParams: HashMap): unknown };

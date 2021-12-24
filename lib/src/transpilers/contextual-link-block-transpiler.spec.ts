@@ -12,14 +12,14 @@ function createTestTranspiler(
     startToken: string,
     endToken: string,
     linkRenderers?: LinkRenderer<unknown> | LinkRenderer<unknown>[],
-    link?: ResolveLinkSpecification
+    link?: ResolveLinkSpecification,
 ): ContextualLinkBlockTranspiler {
     return new ContextualLinkBlockTranspiler(
         startToken,
         endToken,
         link || { static: 'test://link.com' },
         new TranslationMarkupRendererFactory(document),
-        asArray(linkRenderers || [])
+        asArray(linkRenderers || []),
     );
 }
 
@@ -105,7 +105,7 @@ describe('ContextualLinkBlockTranspiler', () => {
                 '[',
                 ']',
                 [stringLinkRenderer, externalLinkObjectLinkRenderer],
-                { parameterKey: 'testLink' }
+                { parameterKey: 'testLink' },
             );
 
             const context = new TranslationMarkupTranspilerContext([new BlockBoundary('['), new BlockBoundary(']')], {}, [transpiler]);
@@ -178,7 +178,7 @@ describe('ContextualLinkBlockTranspiler', () => {
                 '[',
                 ']',
                 [stringLinkRenderer],
-                { resolve: (params) => `test://${params.example}` }
+                { resolve: (params) => `test://${params.example}` },
             );
             const context = new TranslationMarkupTranspilerContext([new BlockBoundary('['), new BlockBoundary(']')], {}, [transpiler]);
 

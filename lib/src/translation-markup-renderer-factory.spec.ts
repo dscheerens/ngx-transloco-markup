@@ -4,7 +4,7 @@ describe('TranslationMarkupRendererFactory class', () => {
 
     describe('createTextRenderer function', () => {
 
-        it('can be used the create a translation markup renderer for static text', () => {
+        it('can be used to create a translation markup renderer for static text', () => {
             const rendererFactory = new TranslationMarkupRendererFactory(document);
 
             expect(rendererFactory.createTextRenderer('')({}).textContent).toBe('');
@@ -14,7 +14,7 @@ describe('TranslationMarkupRendererFactory class', () => {
             expect(rendererFactory.createTextRenderer('Nom nom nom! x3')({}).textContent).toBe('Nom nom nom! x3');
         });
 
-        it('can be used the create a translation markup renderer for dynamically resolved text', () => {
+        it('can be used to create a translation markup renderer for dynamically resolved text', () => {
             const rendererFactory = new TranslationMarkupRendererFactory(document);
 
             expect(rendererFactory.createTextRenderer(() => '')({}).textContent).toBe('');
@@ -22,11 +22,11 @@ describe('TranslationMarkupRendererFactory class', () => {
             expect(rendererFactory.createTextRenderer(() => '123abcXYZ')({}).textContent).toBe('123abcXYZ');
 
             expect(rendererFactory.createTextRenderer(
-                ({ something }) => `Apple ${something}`)({ something: '& Banana' }).textContent
+                ({ something }) => `Apple ${something}`)({ something: '& Banana' }).textContent,
             ).toBe('Apple & Banana');
 
             expect(rendererFactory.createTextRenderer(
-                ({ a, b, c }) => `${a} ${b} ${c}`)({ a: 'Eat', b: 'some', c: 'fruit!'}).textContent
+                ({ a, b, c }) => `${a} ${b} ${c}`)({ a: 'Eat', b: 'some', c: 'fruit!'}).textContent,
             ).toBe('Eat some fruit!');
         });
 
@@ -54,7 +54,7 @@ describe('TranslationMarkupRendererFactory class', () => {
             const render = rendererFactory.createElementRenderer('b', [
                 rendererFactory.createTextRenderer('Here\'s '),
                 rendererFactory.createElementRenderer('i', [
-                    rendererFactory.createTextRenderer(({ name }) => name)
+                    rendererFactory.createTextRenderer(({ name }) => name),
                 ]),
                 rendererFactory.createTextRenderer('!'),
             ]);

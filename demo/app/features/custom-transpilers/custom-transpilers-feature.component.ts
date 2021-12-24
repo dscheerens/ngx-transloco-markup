@@ -13,8 +13,8 @@ import { EmoticonTranspiler } from './emoticon-transpiler';
     providers: [
         provideTranslationMarkupTranspiler(EmoticonTranspiler),
         provideTranslationMarkupTranspiler(ColoredTextTranspiler),
-        inheritTranslationMarkupTranspilers()
-    ]
+        inheritTranslationMarkupTranspilers(),
+    ],
 })
 export class CustomTranspilersFeatureComponent {
 

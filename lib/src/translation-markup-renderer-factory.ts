@@ -19,7 +19,7 @@ export class TranslationMarkupRendererFactory {
      * @param document Document instance used by the renderers to create the actual DOM nodes.
      */
     constructor(
-        @Inject(DOCUMENT) document: any
+        @Inject(DOCUMENT) document: any, // tslint:disable-line:no-any
     ) {
         this.document = document;
     }
@@ -50,7 +50,7 @@ export class TranslationMarkupRendererFactory {
      */
     public createElementRenderer<K extends keyof HTMLElementTagNameMap>(
         elementTag: K,
-        childRenderers?: TranslationMarkupRenderer[]
+        childRenderers?: TranslationMarkupRenderer[],
     ): TranslationMarkupRenderer<HTMLElementTagNameMap[K]>;
     public createElementRenderer(elementTag: string, childRenderers?: TranslationMarkupRenderer[]): TranslationMarkupRenderer<HTMLElement>;
     public createElementRenderer(elementTag: string, childRenderers?: TranslationMarkupRenderer[]): TranslationMarkupRenderer<HTMLElement> {
