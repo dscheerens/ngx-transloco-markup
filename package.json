@@ -34,7 +34,7 @@
   "peerDependencies": {
     "@angular/common": ">=13.0.0",
     "@angular/core": ">=13.0.0",
-    "@ngneat/transloco": "^3.0.0",
+    "@ngneat/transloco": "^3 || ^4",
     "rxjs": "^6 || ^7"
   },
   "devDependencies": {
@@ -53,7 +53,7 @@
     "@angular/router": "^13.2.4",
     "@dscheerens/tslint-presets": "^9.0.0",
     "@ngneat/spectator": "^10.0.0",
-    "@ngneat/transloco": "^3.1.4",
+    "@ngneat/transloco": "^4.0.0",
     "@types/jasmine": "~3.10.2",
     "@types/jasminewd2": "~2.0.10",
     "codelyzer": "^6.0.2",
