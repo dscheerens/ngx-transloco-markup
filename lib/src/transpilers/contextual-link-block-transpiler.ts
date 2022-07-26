@@ -1,7 +1,7 @@
 import { HashMap } from '@ngneat/transloco';
 
-import { ResolveLinkSpecification } from '../models/resolve-link-specification.model';
 import { LinkRenderer } from '../link-renderer.model';
+import { ResolveLinkSpecification } from '../models/resolve-link-specification.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
 
@@ -12,7 +12,6 @@ import { BlockTranspiler } from './block-transpiler';
  * context specific link block transpilers.
  */
 export class ContextualLinkBlockTranspiler extends BlockTranspiler {
-
     /**
      * Creates a new `NamedLinkBlockTranspiler` for the specified start and end token.
      */
@@ -39,6 +38,7 @@ export class ContextualLinkBlockTranspiler extends BlockTranspiler {
     public createRenderer(childRenderers: TranslationMarkupRenderer[]): TranslationMarkupRenderer {
         const anchorRenderer = this.rendererFactory.createElementRenderer('a', childRenderers);
 
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         const findLinkRenderer = (link: unknown) => this.linkRenderers.find((linkRenderer) => linkRenderer.supports(link));
 
         const resolveLinkSpecification = this.resolveLinkSpecification;
@@ -61,5 +61,4 @@ export class ContextualLinkBlockTranspiler extends BlockTranspiler {
             return anchorElement;
         };
     }
-
 }

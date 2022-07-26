@@ -1,6 +1,4 @@
-import { Provider, Type } from '@angular/core';
-
-import { Token } from './token.model';
+import { Inject, Optional, Provider, ProviderToken, SkipSelf, Type } from '@angular/core';
 
 /** Definition (without token binding) for providers that will create a singleton instance of the specified class for injection. */
 export type UnboundTypeProvider<T> = Type<T>;
@@ -20,7 +18,7 @@ export interface UnboundClassProvider<T> {
 /** Definition (without token binding) for providers that reference another token to use for injection. */
 export interface UnboundExistingProvider<T> {
     /** Existing token to return (equivalent to `injector.get(useExisting)`). */
-    useExisting: Token<T>;
+    useExisting: ProviderToken<T>;
 }
 
 /** Definition (without token binding) for providers that use a factory function to create injection values. */
@@ -29,24 +27,86 @@ export interface UnboundFactoryProvider<T> {
      * A function to invoke to create a value when this provider is injected for a specific token. The function is invoked with resolved
      * values of tokens in the `deps` field.
      */
-    useFactory(...deps: any[]): T; // tslint:disable-line:no-any
+    useFactory: (...deps: any[]) => T; // eslint-disable-line @typescript-eslint/no-explicit-any, @typescript-eslint/method-signature-style
 
     /**
      * A list of tokens which need to be resolved by the injector. The list of values is then used as arguments to the `useFactory`
      * function.
      */
-    deps?: any[]; // tslint:disable-line:member-ordering no-any
+    deps?: unknown[];
 }
+
+/**
+ * Definition (without token binding) for providers that use the value directly for injection.
+ *
+ * This is the same as wrapping the value in an object with a `useValue` property that contains the value that is to be injected.
+ */
+ export type UnboundDirectValueProvider<T> = T;
 
 /**
  * Typesafe representation for provider definitions which are not bound to a specific token (i.e. a definition wihtout `provide` property).
  */
 export type UnboundProvider<T> =
-    UnboundTypeProvider<T> |
-    UnboundValueProvider<T> |
-    UnboundClassProvider<T> |
-    UnboundExistingProvider<T> |
-    UnboundFactoryProvider<T>;
+    | UnboundTypeProvider<T>
+    | UnboundValueProvider<T>
+    | UnboundClassProvider<T>
+    | UnboundExistingProvider<T>
+    | UnboundFactoryProvider<T>
+    | UnboundDirectValueProvider<T>
+    ;
+
+/** Converts the parameters of a function into a tuple of tokens that resolve to the type of the parameters. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type InjectionDependencies<T extends (...args: any) => any> = T extends (...args: infer P) => any
+    ? { [K in keyof P]: ProviderToken<P[K]> | [...(Optional | SkipSelf)[], ProviderToken<P[K]> | Inject] }
+    : never;
+
+/**
+ * Creates an `UnboundValueProvider` for the specified value.
+ *
+ * @param value The value to inject.
+ */
+export function useValue<T>(value: T): UnboundValueProvider<T> {
+    return { useValue: value };
+}
+
+/**
+ * Creates an `UnboundClassProvider` for the specified class.
+ *
+ * @param providerClass Class to instantiate when being injected for a specific token.
+ */
+export function useClass<T>(providerClass: Type<T>): UnboundClassProvider<T> {
+    return { useClass: providerClass };
+}
+
+/**
+ * Creates an `UnboundExistingProvider` for the specified `ProviderToken`.
+ *
+ * @param providerToken Existing token to return (equivalent to `injector.get(useExisting)`).
+ */
+export function useExisting<T>(providerToken: ProviderToken<T>): UnboundExistingProvider<T> {
+    return { useExisting: providerToken };
+}
+
+/**
+ * Creates an `UnboundFactoryProvider` based on the return type of the specified factory function.
+ *
+ * The usage of the `useFactory` function is preferred over manually creating an `UnboundFactoryProvider` object literal, because this
+ * function will enforce type safe constraints on the dependencies (parameters of the factory function).
+ *
+ * @param factoryFunction A function to invoke to create a value for this `token`. The function is invoked with resolved values of the
+ *                        specified dependencies (`ProviderToken`s)
+ * @param dependencies    List of `token`s to be resolved by the injector. These values are then used as arguments for the factory function.
+ */
+export function useFactory<F extends (...args: any) => any>( // eslint-disable-line @typescript-eslint/no-explicit-any
+    factoryFunction: F,
+    ...dependencies: InjectionDependencies<F>
+): UnboundFactoryProvider<ReturnType<F>> {
+    return {
+        useFactory: factoryFunction,
+        deps: dependencies,
+    };
+}
 
 /** Extra binding options for the `bindProvider` function. */
 export interface BindProviderOptions<U> {
@@ -65,85 +125,94 @@ export interface BindProviderOptions<U> {
  * @param unboundProvider Definition of a provider which should be bound to the specified token.
  * @param options         Optional extra binding options.
  */
+// eslint-disable-next-line complexity
 export function bindProvider<T, U extends T>(
-    token: Token<T>,
+    token: ProviderToken<T>,
     unboundProvider: UnboundProvider<U> | undefined,
     options: BindProviderOptions<U> = {},
 ): Provider {
     return (
         unboundProvider ? (
-            (unboundProvider as { apply?: unknown }).apply ?
+            (typeof unboundProvider === 'function') ?
                 [
                     unboundProvider,
                     {
                         provide: token,
-                        useExisting: unboundProvider as UnboundTypeProvider<U>,
+                        useExisting: unboundProvider,
                         multi: options.multi,
                     },
                 ] :
-            (unboundProvider as UnboundValueProvider<U>).useValue ?
+            (typeof unboundProvider === 'object' && 'useValue' in unboundProvider) ?
                 {
                     provide: token,
-                    useValue: (unboundProvider as UnboundValueProvider<U>).useValue,
+                    useValue: unboundProvider.useValue,
                     multi: options.multi,
                 } :
-            (unboundProvider as UnboundClassProvider<U>).useClass ?
+            (typeof unboundProvider === 'object' && 'useClass' in unboundProvider) ?
                 {
                     provide: token,
-                    useClass: (unboundProvider as UnboundClassProvider<U>).useClass,
+                    useClass: unboundProvider.useClass,
                     multi: options.multi,
                 } :
-            (unboundProvider as UnboundExistingProvider<U>).useExisting ?
+            (typeof unboundProvider === 'object' && 'useExisting' in unboundProvider) ?
                 {
                     provide: token,
-                    useExisting: (unboundProvider as UnboundExistingProvider<U>).useExisting,
+                    useExisting: unboundProvider.useExisting,
                     multi: options.multi,
                 } :
-            (unboundProvider as { useFactory?: unknown }).useFactory ?
+            (typeof unboundProvider === 'object' && 'useFactory' in unboundProvider) ?
                 {
                     provide: token,
-                    useFactory: (unboundProvider as UnboundFactoryProvider<U>).useFactory, // tslint:disable-line:no-unbound-method
-                    deps: (unboundProvider as UnboundFactoryProvider<U>).deps,
+                    useFactory: unboundProvider.useFactory,
+                    deps: unboundProvider.deps,
                     multi: options.multi,
                 } :
-            []
+                {
+                    provide: token,
+                    useFactory: () => unboundProvider as T,
+                    multi: options.multi,
+                }
         ) :
         options.default ? (
-            (options.default as { apply?: unknown }).apply  ?
+            (typeof options.default === 'function') ?
                 [
                     options.default,
                     {
                         provide: token,
-                        useExisting: options.default as UnboundTypeProvider<U>,
+                        useExisting: options.default,
                         multi: options.multi,
                     },
                 ] :
-            (options.default as UnboundValueProvider<U>).useValue ?
+            (typeof options.default === 'object' && 'useValue' in options.default) ?
                 {
                     provide: token,
-                    useValue: (options.default as UnboundValueProvider<U>).useValue,
+                    useValue: options.default.useValue,
                     multi: options.multi,
                 } :
-            (options.default as UnboundClassProvider<U>).useClass ?
+            (typeof options.default === 'object' && 'useClass' in options.default) ?
                 {
                     provide: token,
-                    useClass: (options.default as UnboundClassProvider<U>).useClass,
+                    useClass: options.default.useClass,
                     multi: options.multi,
                 } :
-            (options.default as UnboundExistingProvider<U>).useExisting ?
+            (typeof options.default === 'object' && 'useExisting' in options.default) ?
                 {
                     provide: token,
-                    useExisting: (options.default as UnboundExistingProvider<U>).useExisting,
+                    useExisting: options.default.useExisting,
                     multi: options.multi,
                 } :
-            (options.default as { useFactory?: unknown }).useFactory ?
+            (typeof options.default === 'object' && 'useFactory' in options.default) ?
                 {
                     provide: token,
-                    useFactory: (options.default as UnboundFactoryProvider<U>).useFactory, // tslint:disable-line:no-unbound-method
-                    deps: (options.default as UnboundFactoryProvider<U>).deps,
+                    useFactory: options.default.useFactory,
+                    deps: options.default.deps,
                     multi: options.multi,
                 } :
-            []
+                {
+                    provide: token,
+                    useFactory: () => options.default as T,
+                    multi: options.multi,
+                }
         ) :
         []
     );

@@ -17,7 +17,5 @@ import { EmoticonTranspiler } from './emoticon-transpiler';
     ],
 })
 export class CustomTranspilersFeatureComponent {
-
     public readonly TRANSLATIONS = CUSTOM_TRANSPILERS_TRANSLATION_KEYS;
-
 }

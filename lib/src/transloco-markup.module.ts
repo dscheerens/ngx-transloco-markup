@@ -9,4 +9,4 @@ import { TranslocoMarkupComponent } from './transloco-markup.component';
     declarations: [TranslocoMarkupComponent],
     exports: [TranslocoMarkupComponent],
 })
-export class TranslocoMarkupModule { }
+export class TranslocoMarkupModule {}

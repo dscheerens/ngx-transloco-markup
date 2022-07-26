@@ -20,4 +20,4 @@ import { CustomTranspilersFeatureComponent } from './custom-transpilers-feature.
         CustomTranspilersFeatureComponent,
     ],
 })
-export class CustomTranspilersFeatureModule { }
+export class CustomTranspilersFeatureModule {}

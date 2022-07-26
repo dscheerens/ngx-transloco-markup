@@ -1,4 +1,4 @@
-import { StringLinkRenderer, ExternalLinkObjectLinkRenderer } from '../default-link-renderers';
+import { ExternalLinkObjectLinkRenderer, StringLinkRenderer } from '../default-link-renderers';
 import { LinkRenderer } from '../link-renderer.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
@@ -8,7 +8,7 @@ import { LINK_END, LinkStart, LinkTranspiler } from './link-transpiler';
 function createTestTranspiler(
     linkRenderers?: LinkRenderer<unknown> | LinkRenderer<unknown>[],
 ): LinkTranspiler {
-    return new LinkTranspiler(new TranslationMarkupRendererFactory(document), linkRenderers || null);
+    return new LinkTranspiler(new TranslationMarkupRendererFactory(document), linkRenderers ?? null);
 }
 
 describe('LinkTranspiler', () => {
@@ -19,10 +19,10 @@ describe('LinkTranspiler', () => {
             const translation = 'Click [link:cookieLink]here[/link] for cookies! Or [link:bakingCourseLink]learn[/link] to make your own.';
 
             const expectedTokens = [
-                { offset: 6,  lenght: 17, type: 'start', parameterKey: 'cookieLink' },
-                { offset: 27, lenght: 7,  type: 'end' },
+                { offset: 6, lenght: 17, type: 'start', parameterKey: 'cookieLink' },
+                { offset: 27, lenght: 7, type: 'end' },
                 { offset: 51, lenght: 23, type: 'start', parameterKey: 'bakingCourseLink' },
-                { offset: 79, lenght: 7,  type: 'end' },
+                { offset: 79, lenght: 7, type: 'end' },
             ] as const;
 
             for (const [offset] of translation.split('').entries()) {
@@ -71,7 +71,7 @@ describe('LinkTranspiler', () => {
 
         it('returns a link renderer when transpiling supported token sequences', () => {
             const transpiler = createTestTranspiler();
-            const tokens = [0, new LinkStart('abc'), 0, new LinkStart('def'), LINK_END, LINK_END, 0, new LinkStart('efg'), 0, LINK_END ];
+            const tokens = [0, new LinkStart('abc'), 0, new LinkStart('def'), LINK_END, LINK_END, 0, new LinkStart('efg'), 0, LINK_END];
             const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             const expectedResults = [0, 5, 0, 2, 0, 0, 0, 3, 0, 0];

@@ -1,4 +1,5 @@
 export * from './models/external-link.model';
+
 export { BlockTranspiler } from './transpilers/block-transpiler';
 export { BoldTextTranspiler } from './transpilers/bold-text-transpiler';
 export { ContextualLinkBlockTranspiler } from './transpilers/contextual-link-block-transpiler';
@@ -11,6 +12,7 @@ export {
 } from './transpilers/string-interpolation-transpiler';
 export { SubstitutionTranspiler } from './transpilers/substitution-transpiler';
 export { ContextualLinkTranspilerFactory } from './transpilers/contextual-link-transpiler-factory';
+
 export { defaultTranslocoMarkupTranspilers } from './default-transloco-markup-transpilers';
 export { inheritTranslationMarkupTranspilers } from './inherit-transpilers';
 export * from './link-renderer.model';

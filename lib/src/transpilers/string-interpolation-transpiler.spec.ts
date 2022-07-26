@@ -4,10 +4,8 @@ import { TranslationMarkupRendererFactory } from '../translation-markup-renderer
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
 import {
-    InterpolationExpressionMatcher,
-    StringInterpolationSegment,
-    StringInterpolationTranspiler,
-    defaultTranslationInterpolationExpressionMatcherFactory,
+  InterpolationExpressionMatcher, StringInterpolationSegment, StringInterpolationTranspiler,
+  defaultTranslationInterpolationExpressionMatcherFactory,
 } from './string-interpolation-transpiler';
 
 class TestTranslocoTranspiler implements TranslocoTranspiler {
@@ -19,13 +17,12 @@ class TestTranslocoTranspiler implements TranslocoTranspiler {
 function createTestTranspiler(
     interpolationExpressionMatcher?: InterpolationExpressionMatcher,
 ): { transpiler: StringInterpolationTranspiler; translocoTranspiler: TranslocoTranspiler } {
-
     const translocoTranspiler = new TestTranslocoTranspiler();
 
     const transpiler = new StringInterpolationTranspiler(
         new TranslationMarkupRendererFactory(document),
         translocoTranspiler,
-        interpolationExpressionMatcher || defaultTranslationInterpolationExpressionMatcherFactory(),
+        interpolationExpressionMatcher ?? defaultTranslationInterpolationExpressionMatcherFactory(),
     );
 
     return { transpiler, translocoTranspiler };
@@ -71,7 +68,7 @@ describe('StringInterpolationTranspiler', () => {
                 const expressionEnd = value.indexOf(']', offset);
 
                 return expressionEnd >= 2 ? expressionEnd + 1 - offset : undefined;
-            }});
+            } });
 
             const translation = 'abc {{ def.ghi }} jkl $[ mnn ]';
 

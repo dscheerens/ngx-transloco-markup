@@ -1,7 +1,7 @@
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
-import { BlockTranspiler, BlockBoundary } from './block-transpiler';
+import { BlockBoundary, BlockTranspiler } from './block-transpiler';
 
 class TestBlockTranspiler extends BlockTranspiler {
     constructor(
@@ -102,7 +102,7 @@ describe('BlockTranspiler', () => {
                     expect(result).toBeUndefined();
                 } else {
                     expect(result).toBeDefined();
-                    expect(result!.nextOffset).toBe(expectedNextOffset, 'tokens.length = ' + tokens.length);
+                    expect(result!.nextOffset).toBe(expectedNextOffset, `tokens.length = ${tokens.length}`);
                 }
             }
         });

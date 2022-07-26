@@ -3,6 +3,8 @@ import { materialize } from 'rxjs/operators';
 
 import { observeProperty } from './observe-property';
 
+/* eslint-disable @typescript-eslint/unbound-method */
+
 export function materializeStream<T>(stream: Observable<T>): { events: Notification<T>[]; close(): void } {
     const events: Notification<T>[] = [];
 

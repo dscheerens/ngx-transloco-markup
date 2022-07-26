@@ -1,26 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { NgModule, Injectable } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Injectable, NgModule } from '@angular/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Observable } from 'rxjs';
-import { TRANSLOCO_CONFIG, TRANSLOCO_LOADER, Translation, TranslocoLoader, translocoConfig, TranslocoModule } from '@ngneat/transloco';
+import { RouterModule } from '@angular/router';
+import { TRANSLOCO_CONFIG, TRANSLOCO_LOADER, Translation, TranslocoLoader, TranslocoModule, translocoConfig } from '@ngneat/transloco';
 import { defaultTranslocoMarkupTranspilers } from 'ngx-transloco-markup';
+import { Observable } from 'rxjs';
 
-import { environment } from '../environments/environment';
+import { ENVIRONMENT } from '../environments/environment';
 
+import { AppComponent } from './app.component';
 import { NavigationBarModule } from './common/view/navigation-bar';
 import { BasicFeatureModule } from './features/basic';
 import { CustomTranspilersFeatureModule } from './features/custom-transpilers';
-import { AppComponent } from './app.component';
 
 @Injectable({ providedIn: 'root' })
 export class TranslocoHttpLoader implements TranslocoLoader {
     constructor(
         private readonly httpClient: HttpClient,
-    ) { }
+    ) {}
 
     public getTranslation(language: string): Observable<Translation> {
         return this.httpClient.get<Translation>(`/assets/translations/${language}.json`);
@@ -47,7 +47,7 @@ export class TranslocoHttpLoader implements TranslocoLoader {
                 availableLangs: ['en', 'nl'],
                 defaultLang: 'en',
                 reRenderOnLangChange: true,
-                prodMode: environment.production,
+                prodMode: ENVIRONMENT.production,
             }),
         },
         {
@@ -63,5 +63,4 @@ export class TranslocoHttpLoader implements TranslocoLoader {
         AppComponent,
     ],
 })
-export class AppModule {
-}
+export class AppModule {}

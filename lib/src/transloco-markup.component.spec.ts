@@ -1,29 +1,20 @@
 import { fakeAsync, flushMicrotasks } from '@angular/core/testing';
-import { of } from 'rxjs';
 import { createComponentFactory } from '@ngneat/spectator';
 import {
-    TRANSLOCO_CONFIG,
-    TRANSLOCO_LOADER,
-    TRANSLOCO_MISSING_HANDLER,
-    TRANSLOCO_SCOPE,
-    TestingLoader,
-    TranslocoConfig,
-    TranslocoMissingHandler,
-    TranslocoService,
-    TranslocoTestingModule,
-    translocoConfig,
+  TRANSLOCO_CONFIG, TRANSLOCO_LOADER, TRANSLOCO_MISSING_HANDLER, TRANSLOCO_SCOPE, TestingLoader, TranslocoConfig, TranslocoMissingHandler,
+  TranslocoService, TranslocoTestingModule, translocoConfig,
 } from '@ngneat/transloco';
+import { of } from 'rxjs';
 
 import { defaultTranslocoMarkupTranspilers } from './default-transloco-markup-transpilers';
 import {
-    TokenizeResult,
-    TranslationMarkupTranspiler,
-    TranslationMarkupTranspilerContext,
-    TranspileResult,
+  TokenizeResult, TranslationMarkupTranspiler, TranslationMarkupTranspilerContext, TranspileResult,
 } from './translation-markup-transpiler.model';
 import { TranslocoMarkupComponent } from './transloco-markup.component';
 
-const translations = {
+/* eslint-disable @typescript-eslint/unbound-method */
+
+const TRANSLATIONS = {
     en: {
         TITLE: 'Welcome to [b]Transloco [i]Markup[/i][/b]',
         EMPTY: '',
@@ -44,8 +35,8 @@ const translations = {
 
 function createTestTranslocoConfig(overrides: Partial<TranslocoConfig> = {}): TranslocoConfig {
     return translocoConfig({
-        availableLangs: Object.keys(translations),
-        defaultLang: Object.keys(translations)[0],
+        availableLangs: Object.keys(TRANSLATIONS),
+        defaultLang: Object.keys(TRANSLATIONS)[0],
         prodMode: true,
         missingHandler: { logMissingKey: false },
         ...overrides,
@@ -59,7 +50,7 @@ describe('Transloco markup component', () => {
         imports: [
             TranslocoTestingModule.forRoot({
                 translocoConfig: createTestTranslocoConfig(),
-                langs: translations,
+                langs: TRANSLATIONS,
             }),
         ],
         providers: [
@@ -250,6 +241,7 @@ describe('Transloco markup component', () => {
 
         expect(handleMissingTranslationSpy).toHaveBeenCalled();
         expect(handleMissingTranslationSpy.calls.first().args[0]).toBe('UNKNOWN');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         expect(handleMissingTranslationSpy.calls.first().args[1].activeLang).toBe('en');
         expect(element.textContent).toBe('UNKNOWN');
 
@@ -258,6 +250,7 @@ describe('Transloco markup component', () => {
 
         expect(handleMissingTranslationSpy).toHaveBeenCalled();
         expect(handleMissingTranslationSpy.calls.first().args[0]).toBe('EMPTY');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         expect(handleMissingTranslationSpy.calls.first().args[1].activeLang).toBe('en');
         expect(element.textContent).toBe('EMPTY');
     });
@@ -399,7 +392,7 @@ describe('Transloco markup component', () => {
 
         spyOn(testingLoader, 'getTranslation').and.callFake((path: string) => {
                 if (path === 'en') {
-                    return of(translations.en);
+                    return of(TRANSLATIONS.en);
                 }
 
                 if (path === 'alt/en') {
@@ -434,14 +427,13 @@ describe('Transloco markup component', () => {
 });
 
 class StringReplaceTranspiler implements TranslationMarkupTranspiler {
-
     private readonly Replacement = class Replacement {
-        constructor(public readonly value: string) { }
+        constructor(public readonly value: string) {}
     };
 
     constructor(
         private readonly replacements: Map<string, string>,
-    ) { }
+    ) {}
 
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
         for (const [key, value] of this.replacements) {
@@ -469,5 +461,4 @@ class StringReplaceTranspiler implements TranslationMarkupTranspiler {
             renderer: () => document.createTextNode(token.value),
         };
     }
-
 }

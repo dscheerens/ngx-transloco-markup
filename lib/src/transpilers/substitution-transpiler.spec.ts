@@ -1,14 +1,12 @@
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
-import { SubstitutionTranspiler, SubstitutionToken } from './substitution-transpiler';
+import { SubstitutionToken, SubstitutionTranspiler } from './substitution-transpiler';
 
 class TestSubstitutionTranspiler extends SubstitutionTranspiler {
-
     protected createRenderer(): TranslationMarkupRenderer {
         return () => document.createComment('');
     }
-
 }
 
 function createTestTranspiler(token: string): TestSubstitutionTranspiler {
@@ -16,7 +14,6 @@ function createTestTranspiler(token: string): TestSubstitutionTranspiler {
 }
 
 describe('SubstitutionTranspiler', () => {
-
     describe('tokenize function', () => {
         it('recognizes substitution tokens', () => {
             const testCases = [
@@ -99,7 +96,7 @@ describe('SubstitutionTranspiler', () => {
             const translation = 'abc?e??h';
             const tokens = Array.from(translation)
                 .map((char) => transpiler.tokenize(char, 0))
-                .map((result) => result && result.token);
+                .map((result) => result?.token);
             const context = new TranslationMarkupTranspilerContext(tokens, {}, [transpiler]);
 
             const expectedResults = [0, 0, 0, 1, 0, 1, 1, 0];
@@ -117,5 +114,4 @@ describe('SubstitutionTranspiler', () => {
             }
         });
     });
-
 });

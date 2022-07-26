@@ -1,18 +1,14 @@
 import { createTranslationMarkupRenderer } from './create-translation-markup-renderer';
 import {
-    TokenizeResult,
-    TranslationMarkupTranspiler,
-    TranslationMarkupTranspilerContext,
-    TranspileResult,
+  TokenizeResult, TranslationMarkupTranspiler, TranslationMarkupTranspilerContext, TranspileResult,
 } from './translation-markup-transpiler.model';
 
 class TestTranspiler implements TranslationMarkupTranspiler {
-
     constructor(
         private readonly token: string,
         private readonly disableTranspile: boolean = false,
         private readonly renderValue?: string,
-    ) { }
+    ) {}
 
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
         if (!translation.startsWith(this.token, offset)) {
@@ -23,7 +19,7 @@ class TestTranspiler implements TranslationMarkupTranspiler {
     }
 
     public transpile(offset: number, { tokens }: TranslationMarkupTranspilerContext): TranspileResult | undefined {
-        if (this.disableTranspile || tokens[offset] !== this.token) { // tslint:disable-line:strict-comparisons
+        if (this.disableTranspile || tokens[offset] !== this.token) {
             return undefined;
         }
 

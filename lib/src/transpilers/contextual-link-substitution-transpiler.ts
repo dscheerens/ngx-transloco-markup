@@ -1,7 +1,7 @@
 import { HashMap } from '@ngneat/transloco';
 
-import { ResolveLinkSpecification } from '../models/resolve-link-specification.model';
 import { LinkRenderer } from '../link-renderer.model';
+import { ResolveLinkSpecification } from '../models/resolve-link-specification.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
 
@@ -11,7 +11,6 @@ import { SubstitutionTranspiler } from './substitution-transpiler';
  * Configuration options for the `ContextualLinkSubstitutionTranspiler`.
  */
 export interface ContextualLinkSubstitutionTranspilerOptions {
-
     /**
      * Property that defines how to resolve the label text of the link that is to be rendered. The label can be resolved in three different
      * ways:
@@ -32,7 +31,6 @@ export interface ContextualLinkSubstitutionTranspilerOptions {
      *   `{ resolve: (params) => 'https://petstore.com/' + params.petType }`
      */
     link: ResolveLinkSpecification;
-
 }
 
 /**
@@ -40,7 +38,6 @@ export interface ContextualLinkSubstitutionTranspilerOptions {
  * valid within a specific context (i.e. a limited set of translation entries).
  */
 export class ContextualLinkSubstitutionTranspiler extends SubstitutionTranspiler {
-
     /**
      * Creates a new `ContextualLinkSubstitutionTranspiler` for the specified token and which uses the provided options.
      */
@@ -71,7 +68,7 @@ export class ContextualLinkSubstitutionTranspiler extends SubstitutionTranspiler
             }
 
             if ('resolve' in label) {
-                return label.resolve; // tslint:disable-line:no-unbound-method
+                return label.resolve; // eslint-disable-line @typescript-eslint/unbound-method
             }
 
             return (translationParams: HashMap) => String(translationParams[label.parameterKey] || '');
@@ -81,6 +78,7 @@ export class ContextualLinkSubstitutionTranspiler extends SubstitutionTranspiler
 
         const options = this.options;
 
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         const findLinkRenderer = (link: unknown) => this.linkRenderers.find((linkRenderer) => linkRenderer.supports(link));
 
         return function renderSubstitutionLink(translationParameters: HashMap): HTMLAnchorElement {

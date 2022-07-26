@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { TranslocoService } from '@ngneat/transloco';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-root',
@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
 
     constructor(
         private readonly translocoService: TranslocoService,
-    ) { }
+    ) {}
 
     public ngOnInit(): void {
         this.availableLanguages = this.translocoService.getAvailableLangs() as string[];

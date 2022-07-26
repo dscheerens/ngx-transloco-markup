@@ -14,9 +14,9 @@ describe('StringLiteralTranspiler', () => {
             for (const [offset, expectedToken] of translation.split('').entries()) {
                 const result = transpiler.tokenize(translation, offset);
 
-                expect(result).toBeDefined(`expected tokenize('${translation}', ${offset}) to return a token`);
-                expect(result!.token).toBe(expectedToken, `expected tokenize('${translation}', ${offset}).token to be '${expectedToken}'`);
-                expect(result!.nextOffset).toBe(offset + 1, `expected tokenize('${translation}', ${offset}).nextOffset to be '${offset + 1}'`);
+                expect(result).withContext(`expected tokenize('${translation}', ${offset}) to return a token`).toBeDefined();
+                expect(result!.token).withContext(`expected tokenize('${translation}', ${offset}).token to be '${expectedToken}'`).toBe(expectedToken);
+                expect(result!.nextOffset).withContext(`expected tokenize('${translation}', ${offset}).nextOffset to be '${offset + 1}'`).toBe(offset + 1);
             }
         });
     });
@@ -50,10 +50,10 @@ describe('StringLiteralTranspiler', () => {
                 const result = transpiler.transpile(offset, context);
 
                 if (expectedResult === undefined) {
-                    expect(result).toBeUndefined(`expected transpile(tokens, ${offset}, context) to return undefined`);
+                    expect(result).withContext(`expected transpile(tokens, ${offset}, context) to return undefined`).toBeUndefined();
                     expect(renderTextSpy).not.toHaveBeenCalled();
                 } else {
-                    expect(result).toBeDefined(`expected transpile(tokens, ${offset}, context) to return a parse result`);
+                    expect(result).withContext(`expected transpile(tokens, ${offset}, context) to return a parse result`).toBeDefined();
                     expect(result!.nextOffset).toBe(offset + expectedResult.length);
                     expect(renderTextSpy).toHaveBeenCalledWith(expectedResult);
                 }

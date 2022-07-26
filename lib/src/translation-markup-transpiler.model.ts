@@ -71,7 +71,6 @@ export interface SequentialTranspilationResult {
  * Context used during the transpilation process.
  */
 export class TranslationMarkupTranspilerContext {
-
     /**
      * Creates a new transpiler context for the specified token sequence and transpilers.
      */
@@ -84,7 +83,7 @@ export class TranslationMarkupTranspilerContext {
 
         /** Transpilers which are to be used to parse and convert the token sequence. */
         private readonly transpilers: TranslationMarkupTranspiler[],
-    ) { }
+    ) {}
 
     /**
      * Attempts to transpile the token sequence at the specified offset. This is done by finding the first transpiler from the set of
@@ -138,5 +137,4 @@ export class TranslationMarkupTranspilerContext {
             nextOffset: offset,
         };
     }
-
 }

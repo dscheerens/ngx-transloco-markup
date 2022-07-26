@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
+import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
 
 import { BlockTranspiler } from './block-transpiler';
 
@@ -10,7 +10,6 @@ import { BlockTranspiler } from './block-transpiler';
  */
 @Injectable()
 export class BoldTextTranspiler extends BlockTranspiler {
-
     /**
      * Creates a `BoldTextTranspiler` instance that uses the specified renderer factory.
      */
@@ -25,5 +24,4 @@ export class BoldTextTranspiler extends BlockTranspiler {
     protected createRenderer(childRenderers: TranslationMarkupRenderer[]): TranslationMarkupRenderer {
         return this.rendererFactory.createElementRenderer('b', childRenderers);
     }
-
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { isExternalLinkObject, ExternalLink } from './models/external-link.model';
 import { LinkRenderer } from './link-renderer.model';
+import { ExternalLink, isExternalLinkObject } from './models/external-link.model';
 
 /**
  * Link renderer for string values, where the value is interpreted as the URL to an external resource. The renderer will set the browser
@@ -9,7 +9,6 @@ import { LinkRenderer } from './link-renderer.model';
  */
 @Injectable()
 export class StringLinkRenderer extends LinkRenderer<string> {
-
     /** @inheritdoc */
     public supports(link: unknown): link is string {
         return typeof link === 'string';
@@ -27,7 +26,6 @@ export class StringLinkRenderer extends LinkRenderer<string> {
  */
 @Injectable()
 export class ExternalLinkObjectLinkRenderer extends LinkRenderer<ExternalLink> {
-
     /** @inheritdoc */
     public supports(link: unknown): link is ExternalLink {
         return isExternalLinkObject(link);

@@ -7,7 +7,6 @@ import { UnboundProvider, bindProvider } from './utils/provider-binding';
  * token for injection of the link renderers.
  */
 export abstract class LinkRenderer<T> {
-
     /**
      * Checks whether the link renderer supports the specified link.
      *

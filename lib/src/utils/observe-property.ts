@@ -18,14 +18,14 @@ export function observeProperty<T, K extends keyof T>(target: T, key: K): Observ
     const propertyDescriptor = getPropertyDescriptor(target, key);
 
     const originalGetAccessor: GetAccessorWithValueStream | undefined =
-        propertyDescriptor && propertyDescriptor.get; // tslint:disable-line:no-unbound-method
+        propertyDescriptor?.get; // eslint-disable-line @typescript-eslint/unbound-method
 
     // If the specified property is already observed return the value stream that was previously created for this property.
-    if (originalGetAccessor && originalGetAccessor.__value$) {
+    if (originalGetAccessor?.__value$) {
         return originalGetAccessor.__value$;
     }
 
-    const originalSetAccessor = propertyDescriptor && propertyDescriptor.set; // tslint:disable-line:no-unbound-method
+    const originalSetAccessor = propertyDescriptor?.set; // eslint-disable-line @typescript-eslint/unbound-method
 
     const subject = new BehaviorSubject<T[K]>(target[key]);
     const value$ = subject.asObservable();

@@ -1,8 +1,8 @@
 import { Injector, StaticClassProvider, Type } from '@angular/core';
 
 import { inheritTranslationMarkupTranspilers } from './inherit-transpilers';
-import { TRANSLATION_MARKUP_TRANSPILER } from './translation-markup-transpiler.token';
 import { TranslationMarkupTranspiler } from './translation-markup-transpiler.model';
+import { TRANSLATION_MARKUP_TRANSPILER } from './translation-markup-transpiler.token';
 import { asFlatArray } from './utils/array';
 
 describe('inheritTranslationMarkupTranspilers function', () => {
@@ -37,15 +37,15 @@ function provideTranspiler<T extends TranslationMarkupTranspiler>(transpilerClas
 
 class NullTranspiler implements TranslationMarkupTranspiler {
     public tokenize(): undefined {
-        return;
+        return undefined;
     }
 
     public transpile(): undefined {
-        return;
+        return undefined;
     }
 }
 
-class ExampleTranspiler1 extends NullTranspiler { }
-class ExampleTranspiler2 extends NullTranspiler { }
-class ExampleTranspiler3 extends NullTranspiler { }
-class ExampleTranspiler4 extends NullTranspiler { }
+class ExampleTranspiler1 extends NullTranspiler {}
+class ExampleTranspiler2 extends NullTranspiler {}
+class ExampleTranspiler3 extends NullTranspiler {}
+class ExampleTranspiler4 extends NullTranspiler {}

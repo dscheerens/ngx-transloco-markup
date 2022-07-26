@@ -26,4 +26,4 @@ import { BasicFeatureComponent } from './basic-feature.component';
         BasicFeatureComponent,
     ],
 })
-export class BasicFeatureModule { }
+export class BasicFeatureModule {}

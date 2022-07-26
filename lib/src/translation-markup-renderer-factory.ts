@@ -9,7 +9,6 @@ import { TranslationMarkupRenderer } from './translation-markup-renderer.model';
  */
 @Injectable({ providedIn: 'root' })
 export class TranslationMarkupRendererFactory {
-
     /** Document instance used by the renderers to create the actual DOM nodes. */
     private readonly document: Document;
 
@@ -19,9 +18,9 @@ export class TranslationMarkupRendererFactory {
      * @param document Document instance used by the renderers to create the actual DOM nodes.
      */
     constructor(
-        @Inject(DOCUMENT) document: any, // tslint:disable-line:no-any
+        @Inject(DOCUMENT) document: any, // eslint-disable-line @typescript-eslint/no-explicit-any
     ) {
-        this.document = document;
+        this.document = document; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
     }
 
     /**
@@ -59,12 +58,11 @@ export class TranslationMarkupRendererFactory {
         return function renderElement(translationParameters: HashMap): HTMLElement {
             const element = document.createElement(elementTag);
 
-            for (const renderChild of childRenderers || []) {
+            for (const renderChild of childRenderers ?? []) {
                 element.appendChild(renderChild(translationParameters));
             }
 
             return element;
         };
     }
-
 }

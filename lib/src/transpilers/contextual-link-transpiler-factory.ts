@@ -1,14 +1,13 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 
-import { ResolveLinkSpecification } from '../models/resolve-link-specification.model';
-import { asArray } from '../utils/array';
 import { LinkRenderer } from '../link-renderer.model';
+import { ResolveLinkSpecification } from '../models/resolve-link-specification.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
+import { asArray } from '../utils/array';
 
 import { ContextualLinkBlockTranspiler } from './contextual-link-block-transpiler';
 import {
-    ContextualLinkSubstitutionTranspiler,
-    ContextualLinkSubstitutionTranspilerOptions,
+  ContextualLinkSubstitutionTranspiler, ContextualLinkSubstitutionTranspilerOptions,
 } from './contextual-link-substitution-transpiler';
 
 /**
@@ -16,7 +15,6 @@ import {
  */
 @Injectable({ providedIn: 'root' })
 export class ContextualLinkTranspilerFactory {
-
     /** Set of link renderers that are used to apply the link model from the translation parameter to the anchor element. */
     private readonly linkRenderers: LinkRenderer<unknown>[];
 
@@ -93,7 +91,7 @@ export class ContextualLinkTranspilerFactory {
      */
     public createSubstitutionTranspiler(
         token: string,
-        options: ContextualLinkSubstitutionTranspilerOptions, // tslint:disable-line:unified-signatures parameter-formatting
+        options: ContextualLinkSubstitutionTranspilerOptions,
     ): ContextualLinkSubstitutionTranspiler;
 
     // Unified implementation of the `createSubstitutionTranspiler` function signatures above.
@@ -103,12 +101,13 @@ export class ContextualLinkTranspilerFactory {
     ): ContextualLinkSubstitutionTranspiler {
         if (options === undefined) {
             return this.createSubstitutionTranspiler(`[${parameterKeyOrToken}]`, {
+                /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
                 label: { resolve: (params) => params[parameterKeyOrToken].label },
                 link: { resolve: (params) => params[parameterKeyOrToken].link },
+                /* eslint-enable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
             });
         }
 
         return new ContextualLinkSubstitutionTranspiler(parameterKeyOrToken, options, this.rendererFactory, this.linkRenderers);
     }
-
 }

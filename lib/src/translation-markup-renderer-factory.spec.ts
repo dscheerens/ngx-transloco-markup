@@ -26,7 +26,7 @@ describe('TranslationMarkupRendererFactory class', () => {
             ).toBe('Apple & Banana');
 
             expect(rendererFactory.createTextRenderer(
-                ({ a, b, c }) => `${a} ${b} ${c}`)({ a: 'Eat', b: 'some', c: 'fruit!'}).textContent,
+                ({ a, b, c }) => `${a} ${b} ${c}`)({ a: 'Eat', b: 'some', c: 'fruit!' }).textContent,
             ).toBe('Eat some fruit!');
         });
 
@@ -54,7 +54,7 @@ describe('TranslationMarkupRendererFactory class', () => {
             const render = rendererFactory.createElementRenderer('b', [
                 rendererFactory.createTextRenderer('Here\'s '),
                 rendererFactory.createElementRenderer('i', [
-                    rendererFactory.createTextRenderer(({ name }) => name),
+                    rendererFactory.createTextRenderer(({ name }) => String(name)),
                 ]),
                 rendererFactory.createTextRenderer('!'),
             ]);

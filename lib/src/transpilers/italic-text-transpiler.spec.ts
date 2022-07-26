@@ -1,8 +1,8 @@
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
-import { ItalicTextTranspiler } from './italic-text-transpiler';
 import { BlockBoundary } from './block-transpiler';
+import { ItalicTextTranspiler } from './italic-text-transpiler';
 
 function createTestTranspiler(): ItalicTextTranspiler {
     return new ItalicTextTranspiler(new TranslationMarkupRendererFactory(document));

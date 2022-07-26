@@ -1,16 +1,12 @@
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
 import {
-    TokenizeResult,
-    TranslationMarkupTranspiler,
-    TranspileResult,
-    TranslationMarkupTranspilerContext,
+  TokenizeResult, TranslationMarkupTranspiler, TranslationMarkupTranspilerContext, TranspileResult,
 } from '../translation-markup-transpiler.model';
 
 /**
  * Base class for transpilers that can transpile contents of a block that is bounded by specific start and end tokens.
  */
 export abstract class BlockTranspiler implements TranslationMarkupTranspiler {
-
     /**
      * Creates a new `BlockTranspiler` for the specified boundary tokens.
      */
@@ -20,7 +16,7 @@ export abstract class BlockTranspiler implements TranslationMarkupTranspiler {
 
         /** String that defines the end token for the block. */
         private readonly blockEndToken: string,
-    ) { }
+    ) {}
 
     /** @inheritdoc */
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
@@ -32,7 +28,7 @@ export abstract class BlockTranspiler implements TranslationMarkupTranspiler {
             );
         }
 
-        return recognize(this.blockStartToken) || recognize(this.blockEndToken);
+        return recognize(this.blockStartToken) ?? recognize(this.blockEndToken);
     }
 
     /** @inheritdoc */
@@ -85,5 +81,5 @@ export abstract class BlockTranspiler implements TranslationMarkupTranspiler {
  * Class used for representing the boundary tokens of a block.
  */
 export class BlockBoundary {
-    constructor(public readonly token: string) { }
+    constructor(public readonly token: string) {}
 }

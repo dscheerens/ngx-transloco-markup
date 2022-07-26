@@ -1,11 +1,10 @@
-import { StringLinkRenderer, ExternalLinkObjectLinkRenderer } from '../default-link-renderers';
+import { ExternalLinkObjectLinkRenderer, StringLinkRenderer } from '../default-link-renderers';
 import { LinkRenderer } from '../link-renderer.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
 import {
-    ContextualLinkSubstitutionTranspiler,
-    ContextualLinkSubstitutionTranspilerOptions,
+  ContextualLinkSubstitutionTranspiler, ContextualLinkSubstitutionTranspilerOptions,
 } from './contextual-link-substitution-transpiler';
 import { SubstitutionToken } from './substitution-transpiler';
 
@@ -18,13 +17,13 @@ function createTestTranspiler(
     }> = {},
 ): ContextualLinkSubstitutionTranspiler {
     return new ContextualLinkSubstitutionTranspiler(
-        options.token || '[*]',
+        options.token ?? '[*]',
         {
-            label: options.label || { static: '???' },
-            link: options.link || { static: 'test://example/' },
+            label: options.label ?? { static: '???' },
+            link: options.link ?? { static: 'test://example/' },
         },
         new TranslationMarkupRendererFactory(document),
-        options.linkRenderers || [],
+        options.linkRenderers ?? [],
     );
 }
 
@@ -156,7 +155,7 @@ describe('ContextualLinkSubstitutionTranspiler', () => {
             const renderLink = transpiler.transpile(0, context)!.renderer;
 
             expect(renderLink({ exampleLinkLabel: 'bar' }).textContent).toBe('bar');
-            expect(renderLink({ }).textContent).toBe('');
+            expect(renderLink({}).textContent).toBe('');
         });
 
         it('supports dynamically resolved labels', () => {
@@ -197,7 +196,7 @@ describe('ContextualLinkSubstitutionTranspiler', () => {
 
             renderStringLinkSpy.calls.reset();
 
-            renderLink({ });
+            renderLink({});
             expect(renderStringLinkSpy).not.toHaveBeenCalled();
         });
 

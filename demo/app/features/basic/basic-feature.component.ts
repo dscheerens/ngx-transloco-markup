@@ -10,11 +10,9 @@ import { BASIC_FEATURE_TRANSLATION_KEYS } from './basic-feature-translation-keys
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BasicFeatureComponent {
-
     public readonly formControls = {
         name: new FormControl('Timmy'),
     };
 
     public readonly TRANSLATIONS = BASIC_FEATURE_TRANSLATION_KEYS;
-
 }

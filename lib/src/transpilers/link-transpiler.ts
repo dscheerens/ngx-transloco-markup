@@ -1,16 +1,13 @@
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { HashMap } from '@ngneat/transloco';
 
-import { asArray } from '../utils/array';
 import { LinkRenderer } from '../link-renderer.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupRenderer } from '../translation-markup-renderer.model';
 import {
-    TokenizeResult,
-    TranslationMarkupTranspiler,
-    TranspileResult,
-    TranslationMarkupTranspilerContext,
+  TokenizeResult, TranslationMarkupTranspiler, TranslationMarkupTranspilerContext, TranspileResult,
 } from '../translation-markup-transpiler.model';
+import { asArray } from '../utils/array';
 
 /**
  * A transpiler that can be used to parse links in a translation value and convert those to a renderer that generates an HTML anchor
@@ -19,7 +16,6 @@ import {
  */
 @Injectable()
 export class LinkTranspiler implements TranslationMarkupTranspiler {
-
     /** Set of link renderers that are used to apply the link model from the translation parameter to the anchor element. */
     private readonly linkRenderers: LinkRenderer<unknown>[];
 
@@ -91,6 +87,7 @@ export class LinkTranspiler implements TranslationMarkupTranspiler {
     protected createRenderer(parameterKey: string, childRenderers: TranslationMarkupRenderer[]): TranslationMarkupRenderer {
         const anchorRenderer = this.rendererFactory.createElementRenderer('a', childRenderers);
 
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         const findLinkRenderer = (link: unknown) => this.linkRenderers.find((linkRenderer) => linkRenderer.supports(link));
 
         function renderLink(translationParameters: HashMap): HTMLAnchorElement {
@@ -109,7 +106,6 @@ export class LinkTranspiler implements TranslationMarkupTranspiler {
 
         return renderLink;
     }
-
 }
 
 /** Prefix of a link start token. */
@@ -119,18 +115,17 @@ const LINK_START_TOKEN = '[link:';
 const LINK_END_TOKEN = '[/link]';
 
 /** Token that represents the closing tag of a link. */
-export const LINK_END = new (class LinkEnd {})();
+export const LINK_END = new (class LinkEnd {})(); // eslint-disable-line @typescript-eslint/no-extraneous-class
 
 /**
  * Class used for modeling the link start tokens.
  */
 export class LinkStart {
-
     /**
      * Creates a new `LinkStart` that references the specified parameter.
      */
     constructor(
         /** Key of the parameter which stores the link model. */
         public readonly parameterKey: string,
-    ) { }
+    ) {}
 }

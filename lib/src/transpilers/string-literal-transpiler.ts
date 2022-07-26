@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import {
-    TokenizeResult,
-    TranslationMarkupTranspiler,
-    TranspileResult,
-    TranslationMarkupTranspilerContext,
+  TokenizeResult, TranslationMarkupTranspiler, TranslationMarkupTranspilerContext, TranspileResult,
 } from '../translation-markup-transpiler.model';
 
 /**
@@ -14,14 +11,13 @@ import {
  */
 @Injectable({ providedIn: 'root' })
 export class StringLiteralTranspiler implements TranslationMarkupTranspiler {
-
     /**
      * Creates a new `StringLiteralTranspiler` that uses the specified renderer factory.
      */
     constructor(
         /** Renderer factory used for creating the renderer that renders the literal string text in a text node. */
         private readonly rendererFactory: TranslationMarkupRendererFactory,
-    ) { }
+    ) {}
 
     /** @inheritdoc */
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
@@ -50,5 +46,4 @@ export class StringLiteralTranspiler implements TranslationMarkupTranspiler {
             renderer: this.rendererFactory.createTextRenderer(stringLiteral),
         };
     }
-
 }

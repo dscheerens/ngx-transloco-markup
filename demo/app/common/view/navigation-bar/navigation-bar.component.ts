@@ -19,14 +19,13 @@ const LANGUAGE_OPTIONS: LanguageOption[] = [
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationBarComponent implements OnInit {
-
     public activeLanguage$!: Observable<string>;
 
     public readonly languageOptions = LANGUAGE_OPTIONS;
 
     constructor(
         private readonly translocoService: TranslocoService,
-    ) { }
+    ) {}
 
     public ngOnInit(): void {
         this.activeLanguage$ = this.translocoService.langChanges$;
@@ -35,5 +34,4 @@ export class NavigationBarComponent implements OnInit {
     public setActiveLanguage(language: string): void {
         this.translocoService.setActiveLang(language);
     }
-
 }

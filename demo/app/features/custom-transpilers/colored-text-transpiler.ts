@@ -1,24 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HashMap } from '@ngneat/transloco';
 import {
-    TokenizeResult,
-    TranslationMarkupRenderer,
-    TranslationMarkupRendererFactory,
-    TranslationMarkupTranspiler,
-    TranslationMarkupTranspilerContext,
-    TranspileResult,
+  TokenizeResult, TranslationMarkupRenderer, TranslationMarkupRendererFactory, TranslationMarkupTranspiler,
+  TranslationMarkupTranspilerContext, TranspileResult,
 } from 'ngx-transloco-markup';
 
 @Injectable()
 export class ColoredTextTranspiler implements TranslationMarkupTranspiler {
-
     constructor(
         private readonly rendererFactory: TranslationMarkupRendererFactory,
-    ) { }
+    ) {}
 
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
         return (
-            recognizeColorStartToken(translation, offset) ||
+            recognizeColorStartToken(translation, offset) ??
             recognizeColorEndToken(translation, offset)
         );
     }
@@ -96,7 +91,7 @@ function recognizeColorEndToken(translation: string, offset: number): TokenizeRe
 class ColorStart {
     constructor(
         public readonly cssColorValue: string,
-    ) { }
+    ) {}
 }
 
-const COLOR_END = new (class ColorEnd { })();
+const COLOR_END = new (class ColorEnd {})(); // eslint-disable-line @typescript-eslint/no-extraneous-class

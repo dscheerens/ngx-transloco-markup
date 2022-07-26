@@ -1,8 +1,8 @@
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
 
-import { BoldTextTranspiler } from './bold-text-transpiler';
 import { BlockBoundary } from './block-transpiler';
+import { BoldTextTranspiler } from './bold-text-transpiler';
 
 function createTestTranspiler(): BoldTextTranspiler {
     return new BoldTextTranspiler(new TranslationMarkupRendererFactory(document));

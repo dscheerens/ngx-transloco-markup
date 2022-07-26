@@ -1,4 +1,3 @@
-
 const TRANSLATION_KEY_PLACEHOLDER = Symbol('TRANSLATION_KEY_PLACEHOLDER');
 type TranslationKeyPlaceholder = typeof TRANSLATION_KEY_PLACEHOLDER;
 

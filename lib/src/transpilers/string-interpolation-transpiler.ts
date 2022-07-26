@@ -3,10 +3,7 @@ import { TRANSLOCO_TRANSPILER, TranslocoTranspiler } from '@ngneat/transloco';
 
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import {
-    TokenizeResult,
-    TranslationMarkupTranspiler,
-    TranspileResult,
-    TranslationMarkupTranspilerContext,
+  TokenizeResult, TranslationMarkupTranspiler, TranslationMarkupTranspilerContext, TranspileResult,
 } from '../translation-markup-transpiler.model';
 
 /**
@@ -70,7 +67,6 @@ export const TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER = new InjectionToken<I
  */
 @Injectable({ providedIn: 'root' })
 export class StringInterpolationTranspiler implements TranslationMarkupTranspiler {
-
     /**
      * Creates a new `StringInterpolationTranspiler` that uses the specified renderer factory, Transloco transpiler and expression matcher.
      */
@@ -83,7 +79,7 @@ export class StringInterpolationTranspiler implements TranslationMarkupTranspile
 
         /** Matcher that can find interpolation expressions in a translation value which are supported by the Transloco transpiler. */
         @Inject(TRANSLATION_INTERPOLATION_EXPRESSION_MATCHER) private readonly expressionMatcher: InterpolationExpressionMatcher,
-    ) { }
+    ) {}
 
     /** @inheritdoc */
     public tokenize(translation: string, offset: number): TokenizeResult | undefined {
@@ -112,21 +108,22 @@ export class StringInterpolationTranspiler implements TranslationMarkupTranspile
         return {
             nextOffset: offset + 1,
             renderer: this.rendererFactory.createTextRenderer(
-                (translationParameters) => this.translocoTranspiler.transpile(interpolationExpression, translationParameters, translation),
+                (translationParameters) => String(this.translocoTranspiler.transpile(
+                    interpolationExpression,
+                    translationParameters,
+                    translation,
+                )),
             ),
         };
     }
-
 }
 
 /**
  * Token class for interpolation expressions.
  */
 export class StringInterpolationSegment {
-
     /**
      *  Creates a new `StringInterpolationSegment` for the specified expression.
      */
-    constructor(public readonly interpolationExpression: string) { }
-
+    constructor(public readonly interpolationExpression: string) {}
 }

@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-    TranslationMarkupRendererFactory,
-    TranslationMarkupTranspiler,
-    TranslationMarkupTranspilerContext,
-    TranspileResult,
-    TokenizeResult,
+  TokenizeResult, TranslationMarkupRendererFactory, TranslationMarkupTranspiler, TranslationMarkupTranspilerContext, TranspileResult,
 } from 'ngx-transloco-markup';
 
 const EMOTICON_MAP = new Map<string, string>([
@@ -21,7 +17,6 @@ const EMOTICON_MAP = new Map<string, string>([
 
 @Injectable()
 export class EmoticonTranspiler implements TranslationMarkupTranspiler {
-
     constructor(
         private readonly translationMarkupRendererFactory: TranslationMarkupRendererFactory,
     ) {}
@@ -55,5 +50,5 @@ export class EmoticonTranspiler implements TranslationMarkupTranspiler {
 }
 
 class Emoticon {
-    constructor(public readonly value: string) { }
+    constructor(public readonly value: string) {}
 }

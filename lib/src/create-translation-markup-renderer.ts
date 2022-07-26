@@ -1,9 +1,9 @@
 import { HashMap, Translation } from '@ngneat/transloco';
 
-import { selectFirstWhere } from './utils/iterable';
-import { notUndefined } from './utils/predicates';
 import { TranslationMarkupRenderer } from './translation-markup-renderer.model';
 import { TranslationMarkupTranspiler, TranslationMarkupTranspilerContext } from './translation-markup-transpiler.model';
+import { selectFirstWhere } from './utils/iterable';
+import { notUndefined } from './utils/predicates';
 
 /**
  * Creates a translation markup rendering function for the specified translation value.

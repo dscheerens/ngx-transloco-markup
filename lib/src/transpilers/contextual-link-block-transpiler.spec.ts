@@ -1,9 +1,9 @@
-import { ResolveLinkSpecification } from '../models/resolve-link-specification.model';
-import { asArray } from '../utils/array';
-import { StringLinkRenderer, ExternalLinkObjectLinkRenderer } from '../default-link-renderers';
+import { ExternalLinkObjectLinkRenderer, StringLinkRenderer } from '../default-link-renderers';
 import { LinkRenderer } from '../link-renderer.model';
+import { ResolveLinkSpecification } from '../models/resolve-link-specification.model';
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
+import { asArray } from '../utils/array';
 
 import { BlockBoundary } from './block-transpiler';
 import { ContextualLinkBlockTranspiler } from './contextual-link-block-transpiler';
@@ -17,9 +17,9 @@ function createTestTranspiler(
     return new ContextualLinkBlockTranspiler(
         startToken,
         endToken,
-        link || { static: 'test://link.com' },
+        link ?? { static: 'test://link.com' },
         new TranslationMarkupRendererFactory(document),
-        asArray(linkRenderers || []),
+        asArray(linkRenderers ?? []),
     );
 }
 
@@ -31,7 +31,7 @@ describe('ContextualLinkBlockTranspiler', () => {
             const translation = 'Best <recipe-link>cake recipe</recipe-link> ever!';
 
             const expectedTokens = [
-                { offset: 5,  lenght: 13, value: '<recipe-link>' },
+                { offset: 5, lenght: 13, value: '<recipe-link>' },
                 { offset: 29, lenght: 14, value: '</recipe-link>' },
             ] as const;
 
@@ -166,7 +166,7 @@ describe('ContextualLinkBlockTranspiler', () => {
 
             renderStringLinkSpy.calls.reset();
 
-            renderLink({ });
+            renderLink({});
             expect(renderStringLinkSpy).not.toHaveBeenCalled();
         });
 

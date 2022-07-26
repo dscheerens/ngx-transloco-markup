@@ -2,7 +2,7 @@ import { asArray, asFlatArray } from './array';
 
 describe('asArray function', () => {
     it('converts a non-array value to an array containing that value', () => {
-        const values = [true, false, null, undefined, -1, 0, 1, 'abc', {}, { a: [], b: 123, c: 'def' } ];
+        const values = [true, false, null, undefined, -1, 0, 1, 'abc', {}, { a: [], b: 123, c: 'def' }];
 
         for (const value of values) {
             const array = asArray(value);
@@ -23,7 +23,7 @@ describe('asArray function', () => {
 
 describe('asFlatArray function', () => {
     it('converts a scalar (non-array) value to an array containing that value', () => {
-        const values = [true, false, null, undefined, -1, 0, 1, 'abc', {}, { a: [], b: 123, c: 'def' } ];
+        const values = [true, false, null, undefined, -1, 0, 1, 'abc', {}, { a: [], b: 123, c: 'def' }];
 
         for (const value of values) {
             const array = asFlatArray(value);

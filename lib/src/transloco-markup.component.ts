@@ -1,41 +1,24 @@
 import {
-    ChangeDetectionStrategy,
-    Component,
-    ElementRef,
-    Inject,
-    Input,
-    OnDestroy,
-    OnInit,
-    Optional,
-    ViewEncapsulation,
+  ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Optional, ViewEncapsulation,
 } from '@angular/core';
 import {
-    TRANSLOCO_LANG,
-    TRANSLOCO_MISSING_HANDLER,
-    TRANSLOCO_SCOPE,
-    HashMap,
-    MaybeArray,
-    Translation,
-    TranslocoMissingHandler,
-    TranslocoScope,
-    TranslocoService,
-    InlineLoader,
-    getPipeValue,
+  HashMap, InlineLoader, MaybeArray, TRANSLOCO_LANG, TRANSLOCO_MISSING_HANDLER, TRANSLOCO_SCOPE, Translation, TranslocoMissingHandler,
+  TranslocoScope, TranslocoService, getPipeValue,
 } from '@ngneat/transloco';
-import { Subscription, combineLatest, Observable, of, concat, EMPTY } from 'rxjs';
-import { distinctUntilChanged, map, switchMap, first, skip, shareReplay } from 'rxjs/operators';
+import { EMPTY, Observable, Subscription, combineLatest, concat, of } from 'rxjs';
+import { distinctUntilChanged, first, map, shareReplay, skip, switchMap } from 'rxjs/operators';
 
-import { StringLiteralTranspiler } from './transpilers/string-literal-transpiler';
-import { RecursiveArray, asArray, asFlatArray } from './utils/array';
-import { observeProperty } from './utils/observe-property';
 import { createTranslationMarkupRenderer } from './create-translation-markup-renderer';
 import { STRING_INTERPOLATION_TRANSPILER } from './string-interpolation-transpiler.token';
 import { TranslationMarkupTranspiler } from './translation-markup-transpiler.model';
 import { TRANSLATION_MARKUP_TRANSPILER } from './translation-markup-transpiler.token';
+import { StringLiteralTranspiler } from './transpilers/string-literal-transpiler';
+import { RecursiveArray, asArray, asFlatArray } from './utils/array';
 import { selectFirstWhere } from './utils/iterable';
+import { observeProperty } from './utils/observe-property';
 import { notUndefined } from './utils/predicates';
 
-// tslint:disable:component-selector use-component-view-encapsulation no-input-rename
+/* eslint-disable @angular-eslint/no-input-rename, @angular-eslint/component-selector, @angular-eslint/use-component-view-encapsulation */
 
 /**
  * Component that supports rendering of translations including HTML markup.
@@ -48,7 +31,6 @@ import { notUndefined } from './utils/predicates';
     encapsulation: ViewEncapsulation.None,
 })
 export class TranslocoMarkupComponent implements OnInit, OnDestroy {
-
     /** Key of the translation text that needs to be displayed. If no value is specified, the component will render an empty element. */
     @Input('key') public translationKey?: string;
 
@@ -90,7 +72,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
         @Optional() @Inject(TRANSLOCO_LANG) private readonly providedLanguage: string | null,
 
         /** Markup transpilers provided via the module/component injectors. */
-        @Optional() @Inject(TRANSLATION_MARKUP_TRANSPILER) // tslint:disable-line:prefer-inline-decorator
+        @Optional() @Inject(TRANSLATION_MARKUP_TRANSPILER)
         private readonly providedTranspilers: RecursiveArray<TranslationMarkupTranspiler> | null,
 
         /** Transpiler that is used for expanding string interpolation expressions. */
@@ -98,7 +80,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
 
         /** Transpiler used for rendering all unprocessed tokens in the translation values as literal text. */
         private readonly stringLiteralTranspiler: StringLiteralTranspiler,
-    ) { }
+    ) {}
 
     /**
      * Initializes the component. When this method is called it starts listening for input property changes on the component and language
@@ -123,11 +105,11 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
             shareReplay({ bufferSize: 1, refCount: true }),
         );
 
-        const language$ = resolveLanguage(inlineLanguage$, of(this.providedLanguage || undefined), activeLanguage$);
+        const language$ = resolveLanguage(inlineLanguage$, of(this.providedLanguage ?? undefined), activeLanguage$);
 
         // Create the scope$ stream that emits an array of scopes to be used for resolving the translation text.
         const scopes$ = inlineScope$.pipe(
-            map((inlineScope) => inlineScope || this.providedScope),
+            map((inlineScope) => !!inlineScope ? inlineScope : this.providedScope),
             distinctUntilChanged(),
             map((scope) => Array.isArray(scope) ? scope : [!!scope ? scope : undefined]),
         );
@@ -154,8 +136,8 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
                     return { value: '', translation };
                 }
 
-                const useFallbackTranslation = this.translocoService.config.missingHandler!.useFallbackTranslation || false;
-                const firstFallbackLanguage = asArray(this.translocoService.config.fallbackLang || [])[0];
+                const useFallbackTranslation = this.translocoService.config.missingHandler!.useFallbackTranslation ?? false;
+                const firstFallbackLanguage = asArray(this.translocoService.config.fallbackLang ?? [])[0];
                 const fallbackTranslation =
                     useFallbackTranslation && firstFallbackLanguage ? [this.translocoService.getTranslation(firstFallbackLanguage)] : [];
 
@@ -180,7 +162,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
 
         // By combining the render$ and translationParameters$ stream the component can render the translation whenever something changes.
         this.subscriptions.add(combineLatest([render$, translationParameters$]).subscribe(
-            ([render, translationParameters]) => render(this.hostElement.nativeElement, translationParameters || {}),
+            ([render, translationParameters]) => render(this.hostElement.nativeElement, translationParameters ?? {}),
         ));
     }
 
@@ -209,7 +191,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
         const result = selectFirstWhere(
             translations,
             (translation) => {
-                const value = translation[key];
+                const value: unknown = translation[key];
 
                 if (value === undefined || value === '' && !allowEmptyValues) {
                     return undefined;
@@ -222,13 +204,13 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
 
         // Return the result or invoke the missing handler if no translation value was found in the specified translations.
         return result ?? {
-            value: this.missingHandler.handle(
+            value: String(this.missingHandler.handle(
                 key,
                 {
                     activeLang: this.translocoService.getActiveLang(),
                     ...this.translocoService.config,
                 },
-            ),
+            )),
             translation: translations[0] ?? {},
         };
     }
