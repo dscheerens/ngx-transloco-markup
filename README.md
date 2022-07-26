@@ -45,11 +45,12 @@ For custom build setups: the library is published in the [Angular Package Format
 
 Use the compatibility matrix below to determine which version of this module works with your project's Angular version.
 
-| Library version                    | Angular version | Transloco version |
-| ---------------------------------- | --------------- | ----------------- |
-| `ngx-transloco-markup` - **1.x.x** | >= **8.0.0**    | **2.x.x**         |
-| `ngx-transloco-markup` - **2.x.x** | >= **10.0.0**   | **2.x.x**         |
-| `ngx-transloco-markup` - **3.x.x** | >= **13.0.0**   | **3.x.x**         |
+| Library version                    | Angular version | Transloco version     |
+| ---------------------------------- | --------------- | --------------------- |
+| `ngx-transloco-markup` - **1.x.x** | >= **8.0.0**    | **2.x.x**             |
+| `ngx-transloco-markup` - **2.x.x** | >= **10.0.0**   | **2.x.x**             |
+| `ngx-transloco-markup` - **3.0.x** | >= **13.0.0**   | **3.x.x**             |
+| `ngx-transloco-markup` - **3.1.x** | >= **13.0.0**   | **3.x.x** + **4.x.x** |
 
 ## Getting started
 
