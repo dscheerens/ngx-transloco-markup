@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/dscheerens/ngx-transloco-markup/compare/v3.1.0...v4.0.0) (2022-07-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* this library now requires Angular 14 (or higher), older versions are no longer supported
+
+### Features
+
+* support direct imports of the `TranslocoMarkupComponent` in standalone components ([9348144](https://github.com/dscheerens/ngx-transloco-markup/commit/93481443822cf48bd93784d15e00ad0fc076d2fd))
+
 ## [3.1.0](https://github.com/dscheerens/ngx-transloco-markup/compare/v3.0.0...v3.1.0) (2022-05-17)
 
 
