@@ -13,8 +13,8 @@ import { ENVIRONMENT } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { NavigationBarModule } from './common/view/navigation-bar';
-import { BasicFeatureModule } from './features/basic';
-import { CustomTranspilersFeatureModule } from './features/custom-transpilers';
+import { BasicFeatureComponent } from './features/basic';
+import { CustomTranspilersFeatureComponent } from './features/custom-transpilers';
 
 @Injectable({ providedIn: 'root' })
 export class TranslocoHttpLoader implements TranslocoLoader {
@@ -36,8 +36,8 @@ export class TranslocoHttpLoader implements TranslocoLoader {
         BrowserAnimationsModule,
         MatButtonToggleModule,
         NavigationBarModule,
-        BasicFeatureModule,
-        CustomTranspilersFeatureModule,
+        BasicFeatureComponent,
+        CustomTranspilersFeatureComponent,
         TranslocoModule,
     ],
     providers: [

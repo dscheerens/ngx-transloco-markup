@@ -1,1 +1,1 @@
-export { CustomTranspilersFeatureModule } from './custom-transpilers-feature.module';
+export { CustomTranspilersFeatureComponent } from './custom-transpilers-feature.component';

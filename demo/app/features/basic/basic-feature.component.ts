@@ -1,5 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormControl } from 'ngx-typesafe-forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoMarkupComponent } from 'ngx-transloco-markup';
 
 import { BASIC_FEATURE_TRANSLATION_KEYS } from './basic-feature-translation-keys';
 
@@ -8,6 +13,15 @@ import { BASIC_FEATURE_TRANSLATION_KEYS } from './basic-feature-translation-keys
     templateUrl: './basic-feature.component.html',
     styleUrls: ['./basic-feature.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        ReactiveFormsModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        TranslocoModule,
+        TranslocoMarkupComponent,
+    ],
 })
 export class BasicFeatureComponent {
     public readonly formControls = {

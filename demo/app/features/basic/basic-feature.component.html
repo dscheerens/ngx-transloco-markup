@@ -8,6 +8,6 @@
             <input matInput [formControl]="formControls.name">
         </mat-form-field>
 
-        <transloco [key]="TRANSLATIONS.GREETING" [params]="{ name: formControls.name.value$ | async }"></transloco>
+        <transloco [key]="TRANSLATIONS.GREETING" [params]="{ name: formControls.name.value }"></transloco>
     </mat-card-content>
 </mat-card>

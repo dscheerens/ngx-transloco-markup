@@ -6,7 +6,7 @@ import { TranslocoMarkupComponent } from './transloco-markup.component';
  * Module which exports the `<transloco>` markup component.
  */
 @NgModule({
-    declarations: [TranslocoMarkupComponent],
+    imports: [TranslocoMarkupComponent],
     exports: [TranslocoMarkupComponent],
 })
 export class TranslocoMarkupModule {}

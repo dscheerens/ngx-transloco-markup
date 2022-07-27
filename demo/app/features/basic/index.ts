@@ -1,1 +1,1 @@
-export { BasicFeatureModule } from './basic-feature.module';
+export { BasicFeatureComponent } from './basic-feature.component';

@@ -29,6 +29,7 @@ import { notUndefined } from './utils/predicates';
     styles: [':host { display: inline; }'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
+    standalone: true,
 })
 export class TranslocoMarkupComponent implements OnInit, OnDestroy {
     /** Key of the translation text that needs to be displayed. If no value is specified, the component will render an empty element. */

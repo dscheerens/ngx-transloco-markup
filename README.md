@@ -51,6 +51,7 @@ Use the compatibility matrix below to determine which version of this module wor
 | `ngx-transloco-markup` - **2.x.x** | >= **10.0.0**   | **2.x.x**             |
 | `ngx-transloco-markup` - **3.0.x** | >= **13.0.0**   | **3.x.x**             |
 | `ngx-transloco-markup` - **3.1.x** | >= **13.0.0**   | **3.x.x** + **4.x.x** |
+| `ngx-transloco-markup` - **4.x.x** | >= **14.0.0**   | **4.x.x**             |
 
 ## Getting started
 
@@ -98,7 +99,23 @@ import { TranslocoMarkupModule } from 'ngx-transloco-markup';
 export class ExampleModule { }
 ```
 
-Once the `TranslocoMarkupModule` has been imported, you will be able to use the `<transloco>` component in your templates.
+Alternatively you can import the `TranslocoMarkupComponent` directly in standalone components:
+
+```typescript
+import { Component } from '@angular/core';
+import { TranslocoMarkupComponent } from 'ngx-transloco-markup';
+
+@Component({
+  // ...
+  standalone: true,
+  imports: [
+    TranslocoMarkupComponent, // <-- Add this line to the imports array
+  ],
+})
+export class MyComponent { }
+```
+
+Once the `TranslocoMarkupModule` or `TranslocoMarkupComponent` has been imported, you will be able to use the `<transloco>` component in your templates.
 As an example, suppose your (English) translation file contains the following entry:
 
 ```json
