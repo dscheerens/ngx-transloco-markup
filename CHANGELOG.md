@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/dscheerens/ngx-transloco-markup/compare/v4.0.0...v5.0.0) (2023-08-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* peer dependencies have been updated to require at least Angular 16.0.0 and Transloco 5.0.0
+
+### Features
+
+* support Transloco v5 ([f5679ea](https://github.com/dscheerens/ngx-transloco-markup/commit/f5679eaa5669033c347dc59a6e66bfacffdfb283))
+
 ## [4.0.0](https://github.com/dscheerens/ngx-transloco-markup/compare/v3.1.0...v4.0.0) (2022-07-27)
 
 
