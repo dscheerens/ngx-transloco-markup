@@ -1,6 +1,13 @@
-@import '~@angular/material/theming';
+@import '@angular/material/theming';
 
 $app-primary: mat-palette($mat-indigo);
 $app-accent: mat-palette($mat-amber);
 $app-warn: mat-palette($mat-red);
-$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+$app-theme: mat-light-theme((
+    color: (
+        primary: $app-primary,
+        accent: $app-accent,
+        warn: $app-warn
+    ),
+    density: 0,
+));

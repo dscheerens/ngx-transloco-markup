@@ -71,5 +71,5 @@ function getPropertyDescriptor(target: unknown, key: PropertyKey): PropertyDescr
 
     const descriptor = Object.getOwnPropertyDescriptor(target, key);
 
-    return descriptor !== undefined ? descriptor : getPropertyDescriptor(Object.getPrototypeOf(target), key);
+    return descriptor ?? getPropertyDescriptor(Object.getPrototypeOf(target), key);
 }

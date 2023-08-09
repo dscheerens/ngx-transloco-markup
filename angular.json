@@ -57,7 +57,7 @@
                         "index": "demo/index.html",
                         "main": "demo/main.ts",
                         "polyfills": "demo/polyfills.ts",
-                        "tsConfig": "demo/tsconfig.json",
+                        "tsConfig": "demo/tsconfig.demo.app.json",
                         "assets": [
                             "demo/favicon.ico",
                             "demo/assets"
@@ -118,6 +118,5 @@
                 }
             }
         }
-    },
-    "defaultProject": "lib"
+    }
 }

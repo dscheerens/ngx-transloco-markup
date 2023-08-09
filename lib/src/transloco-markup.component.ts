@@ -2,18 +2,17 @@ import {
   ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Optional, ViewEncapsulation,
 } from '@angular/core';
 import {
-  HashMap, InlineLoader, MaybeArray, TRANSLOCO_LANG, TRANSLOCO_MISSING_HANDLER, TRANSLOCO_SCOPE, Translation, TranslocoMissingHandler,
+  HashMap, InlineLoader, TRANSLOCO_LANG, TRANSLOCO_MISSING_HANDLER, TRANSLOCO_SCOPE, Translation, TranslocoMissingHandler,
   TranslocoScope, TranslocoService, getPipeValue,
 } from '@ngneat/transloco';
-import { EMPTY, Observable, Subscription, combineLatest, concat, of } from 'rxjs';
-import { distinctUntilChanged, first, map, shareReplay, skip, switchMap } from 'rxjs/operators';
+import { EMPTY, Observable, Subscription, combineLatest, concat, distinctUntilChanged, first, map, of, shareReplay, skip, switchMap } from 'rxjs';
 
 import { createTranslationMarkupRenderer } from './create-translation-markup-renderer';
 import { STRING_INTERPOLATION_TRANSPILER } from './string-interpolation-transpiler.token';
 import { TranslationMarkupTranspiler } from './translation-markup-transpiler.model';
 import { TRANSLATION_MARKUP_TRANSPILER } from './translation-markup-transpiler.token';
 import { StringLiteralTranspiler } from './transpilers/string-literal-transpiler';
-import { RecursiveArray, asArray, asFlatArray } from './utils/array';
+import { RecursiveArray, ScalarOrArray, asArray, asFlatArray } from './utils/array';
 import { selectFirstWhere } from './utils/iterable';
 import { observeProperty } from './utils/observe-property';
 import { notUndefined } from './utils/predicates';
@@ -45,7 +44,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
     @Input('scope') public inlineScope?: string;
 
     /** Transpilers used to parse and render translation texts with markup. Merged with the provided transpilers. */
-    @Input('transpilers') public inlineTranspilers?: MaybeArray<TranslationMarkupTranspiler>;
+    @Input('transpilers') public inlineTranspilers?: ScalarOrArray<TranslationMarkupTranspiler>;
 
     /** Whether the inline transpilers should be merged with the provided ones. If set to `false` only the inline transpilers are used. */
     @Input() public mergeTranspilers?: boolean;
@@ -67,7 +66,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
         @Inject(TRANSLOCO_MISSING_HANDLER) private readonly missingHandler: TranslocoMissingHandler,
 
         /** Translation scope that is provided via the module/component injectors. */
-        @Optional() @Inject(TRANSLOCO_SCOPE) private readonly providedScope: MaybeArray<TranslocoScope> | null,
+        @Optional() @Inject(TRANSLOCO_SCOPE) private readonly providedScope: ScalarOrArray<TranslocoScope> | null,
 
         /** Language that is provided via the module/component injectors. */
         @Optional() @Inject(TRANSLOCO_LANG) private readonly providedLanguage: string | null,
@@ -110,9 +109,9 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
 
         // Create the scope$ stream that emits an array of scopes to be used for resolving the translation text.
         const scopes$ = inlineScope$.pipe(
-            map((inlineScope) => !!inlineScope ? inlineScope : this.providedScope),
+            map((inlineScope) => inlineScope ? inlineScope : this.providedScope),
             distinctUntilChanged(),
-            map((scope) => Array.isArray(scope) ? scope : [!!scope ? scope : undefined]),
+            map((scope) => Array.isArray(scope) ? scope : [scope ? scope : undefined]),
         );
 
         // Using the language$ and scope$ stream obtain the translation$ stream that emits the translation dictionary to use.
@@ -137,7 +136,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
                     return { value: '', translation };
                 }
 
-                const useFallbackTranslation = this.translocoService.config.missingHandler!.useFallbackTranslation ?? false;
+                const useFallbackTranslation = this.translocoService.config.missingHandler.useFallbackTranslation;
                 const firstFallbackLanguage = asArray(this.translocoService.config.fallbackLang ?? [])[0];
                 const fallbackTranslation =
                     useFallbackTranslation && firstFallbackLanguage ? [this.translocoService.getTranslation(firstFallbackLanguage)] : [];
@@ -186,7 +185,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
      * @returns              An object that defines the translation value and the translation dictionary containing the value.
      */
     private getTranslationValue(key: string, translations: Translation[]): { value: string; translation: Translation } {
-        const allowEmptyValues = this.translocoService.config.missingHandler!.allowEmpty;
+        const allowEmptyValues = this.translocoService.config.missingHandler.allowEmpty;
 
         // Find the first translation containing the specified translation key and obtain the translation value.
         const result = selectFirstWhere(

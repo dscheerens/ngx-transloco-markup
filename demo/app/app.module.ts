@@ -5,7 +5,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { TRANSLOCO_CONFIG, TRANSLOCO_LOADER, Translation, TranslocoLoader, TranslocoModule, translocoConfig } from '@ngneat/transloco';
+import { Translation, TranslocoLoader, TranslocoModule, provideTransloco, translocoConfig } from '@ngneat/transloco';
 import { defaultTranslocoMarkupTranspilers } from 'ngx-transloco-markup';
 import { Observable } from 'rxjs';
 
@@ -41,19 +41,15 @@ export class TranslocoHttpLoader implements TranslocoLoader {
         TranslocoModule,
     ],
     providers: [
-        {
-            provide: TRANSLOCO_CONFIG,
-            useValue: translocoConfig({
+        provideTransloco({
+            config: translocoConfig({
                 availableLangs: ['en', 'nl'],
                 defaultLang: 'en',
                 reRenderOnLangChange: true,
                 prodMode: ENVIRONMENT.production,
             }),
-        },
-        {
-            provide: TRANSLOCO_LOADER,
-            useClass: TranslocoHttpLoader,
-        },
+            loader: TranslocoHttpLoader,
+        }),
         defaultTranslocoMarkupTranspilers(),
     ],
     declarations: [

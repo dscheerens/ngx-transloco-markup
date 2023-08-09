@@ -46,6 +46,7 @@ export function tokenize(translationValue: string, transpilers: TranslationMarku
     let offset = 0;
 
     while (offset < translationValue.length) {
+        // eslint-disable-next-line @typescript-eslint/no-loop-func
         const tokenizeResult = selectFirstWhere(transpilers, (transpiler) => transpiler.tokenize(translationValue, offset), notUndefined);
 
         if (tokenizeResult) {

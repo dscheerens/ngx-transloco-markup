@@ -52,6 +52,7 @@ Use the compatibility matrix below to determine which version of this module wor
 | `ngx-transloco-markup` - **3.0.x** | >= **13.0.0**   | **3.x.x**             |
 | `ngx-transloco-markup` - **3.1.x** | >= **13.0.0**   | **3.x.x** + **4.x.x** |
 | `ngx-transloco-markup` - **4.x.x** | >= **14.0.0**   | **4.x.x**             |
+| `ngx-transloco-markup` - **5.x.x** | >= **16.0.0**   | **5.x.x**             |
 
 ## Getting started
 

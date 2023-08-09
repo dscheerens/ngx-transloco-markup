@@ -112,6 +112,7 @@ export class StringInterpolationTranspiler implements TranslationMarkupTranspile
                     interpolationExpression,
                     translationParameters,
                     translation,
+                    '???',
                 )),
             ),
         };

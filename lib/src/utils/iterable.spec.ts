@@ -2,7 +2,7 @@ import { selectFirstWhere } from './iterable';
 
 describe('selectFirstWhere function', () => {
     it('returns undefined for an empty array', () => {
-        expect(selectFirstWhere([], (x) => x, () => true)).toBe(undefined);
+        expect(selectFirstWhere([] as unknown[], (x) => x, () => true)).toBe(undefined);
     });
 
     it('returns the first projected value that matches the specified predicate', () => {

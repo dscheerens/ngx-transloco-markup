@@ -1,5 +1,4 @@
-import { Notification, Observable } from 'rxjs';
-import { materialize } from 'rxjs/operators';
+import { Notification, Observable, materialize } from 'rxjs';
 
 import { observeProperty } from './observe-property';
 

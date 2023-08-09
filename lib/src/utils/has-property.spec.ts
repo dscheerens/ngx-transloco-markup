@@ -7,7 +7,7 @@ describe('hasProperty function', () => {
         expect(hasProperty(1, 'toString')).toBe(false);
         expect(hasProperty(true, 'toString')).toBe(false);
         expect(hasProperty('hello', 'toString')).toBe(false);
-        expect(hasProperty(Symbol(), 'toString')).toBe(false);
+        expect(hasProperty(Symbol('s'), 'toString')).toBe(false);
         expect(hasProperty(() => {}, 'toString')).toBe(false);
     });
 

@@ -1,3 +1,13 @@
-mat-form-field.no-bottom-padding .mat-form-field-wrapper {
-    margin-bottom: -1.34375em;
+.mat-mdc-form-field .mat-mdc-form-field-bottom-align::before {
+    display: none;
+}
+
+.mat-mdc-card-title {
+    font-family: var(--mdc-typography-headline6-font-family,var(--mdc-typography-font-family, Roboto,));
+    font-size: var(--mdc-typography-headline6-font-size, 20px);
+    line-height: var(--mdc-typography-headline6-line-height, 32px);
+    font-weight: var(--mdc-typography-headline6-font-weight, 500);
+    letter-spacing: var(--mdc-typography-headline6-letter-spacing, .0125em);
+    text-decoration: var(--mdc-typography-headline6-text-decoration, inherit);
+    text-transform: var(--mdc-typography-headline6-text-transform, none);
 }

@@ -25,7 +25,7 @@ class TestTranspiler implements TranslationMarkupTranspiler {
 
         return {
             nextOffset: offset + 1,
-            renderer: () => document.createTextNode(this.renderValue !== undefined ? this.renderValue : this.token),
+            renderer: () => document.createTextNode(this.renderValue ?? this.token),
         };
     }
 }

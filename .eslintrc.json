@@ -2,24 +2,19 @@
     "root": true,
     "overrides": [
         {
-            "files": ["lib/**/*.spec.ts"],
-            "parserOptions": {
-                "project": ["./tsconfig.base.json"],
-                "createDefaultProgram": true
-            },
-            "extends": ["@dscheerens/eslint-config-angular/typescript"],
-            "rules": {
-                "max-classes-per-file": "off"
-            }
-        },
-        {
             "files": ["lib/**/*.ts"],
-            "excludedFiles": ["*.spec.ts"],
             "parserOptions": {
                 "project": ["./tsconfig.base.json"],
                 "createDefaultProgram": true
             },
             "extends": ["@dscheerens/eslint-config-angular/typescript"]
+        },
+        {
+            "files": ["lib/**/*.spec.ts"],
+            "extends": ["@dscheerens/eslint-config-angular/spec"],
+            "rules": {
+                "@typescript-eslint/no-non-null-assertion": "off"
+            }
         },
         {
             "files": ["demo/**/*.ts"],

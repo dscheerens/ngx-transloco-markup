@@ -52,8 +52,7 @@ export type UnboundProvider<T> =
     | UnboundClassProvider<T>
     | UnboundExistingProvider<T>
     | UnboundFactoryProvider<T>
-    | UnboundDirectValueProvider<T>
-    ;
+    | UnboundDirectValueProvider<T>;
 
 /** Converts the parameters of a function into a tuple of tokens that resolve to the type of the parameters. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

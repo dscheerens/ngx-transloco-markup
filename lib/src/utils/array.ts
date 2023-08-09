@@ -1,4 +1,4 @@
-import { MaybeArray } from '@ngneat/transloco';
+export type ScalarOrArray<T> = T | T[];
 
 /**
  * Wraps the specified value in an array unless the value already is an array.
@@ -7,7 +7,7 @@ import { MaybeArray } from '@ngneat/transloco';
  * @returns       If the specified value is an array the specified value is returned as is, otherwise it will be wrapped in array,
  *                containing just the value.
  */
-export function asArray<T>(value: MaybeArray<T>): T[] {
+export function asArray<T>(value: ScalarOrArray<T>): T[] {
     return Array.isArray(value) ? value : [value];
 }
 

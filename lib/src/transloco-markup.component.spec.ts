@@ -33,7 +33,9 @@ const TRANSLATIONS = {
     },
 };
 
-function createTestTranslocoConfig(overrides: Partial<TranslocoConfig> = {}): TranslocoConfig {
+type PartialTranslocoConfig = Parameters<typeof translocoConfig>[0];
+
+function createTestTranslocoConfig(overrides: PartialTranslocoConfig = {}): TranslocoConfig {
     return translocoConfig({
         availableLangs: Object.keys(TRANSLATIONS),
         defaultLang: Object.keys(TRANSLATIONS)[0],

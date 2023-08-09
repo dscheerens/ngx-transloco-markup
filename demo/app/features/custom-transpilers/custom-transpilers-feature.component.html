@@ -1,7 +1,7 @@
 <mat-card>
-    <mat-card-title>
-        {{ TRANSLATIONS.TITLE | transloco }}
-    </mat-card-title>
+    <mat-card-header>
+        <mat-card-title>{{ TRANSLATIONS.TITLE | transloco }}</mat-card-title>
+    </mat-card-header>
     <mat-card-content>
         <transloco [key]="TRANSLATIONS.MESSAGE"></transloco>
     </mat-card-content>
