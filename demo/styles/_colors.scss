@@ -1,6 +1,7 @@
-@import './app-theme';
+@use '@angular/material/theming' as mat;
+@use './app-theme' as *;
 
-$panel-background: mat-color(map-get($app-theme, background), background);
-$toolbar-background: mat-color(map-get($app-theme, background), app-bar);
-$primary: mat-color(map-get($app-theme, primary));
-$divider: mat-color(map-get($app-theme, foreground), divider);
+$panel-background: mat.mat-color(map-get($app-theme, background), background);
+$toolbar-background: mat.mat-color(map-get($app-theme, background), app-bar);
+$primary: mat.mat-color(map-get($app-theme, primary));
+$divider: mat.mat-color(map-get($app-theme, foreground), divider);

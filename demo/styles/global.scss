@@ -1,11 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@use './app-theme' as *;
+@use './colors' as *;
 
-@import './app-theme';
-@import './colors';
+@include mat.core();
+@include mat.all-component-themes($app-theme);
+
 @import './overrides';
-
-@include mat-core();
-@include angular-material-theme($app-theme);
 
 html, body {
     height: 100%;
