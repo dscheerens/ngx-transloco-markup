@@ -152,7 +152,14 @@ The `<transloco>` component has the following input properties:
 * **`key`** (_string_)
 
   Key that defines which translation value should be displayed.
-  If no key is specified or the key is `undefined`, nothing will be displayed by the `<transloco>` component.
+  If no key is specified or the key is `undefined`, then the `content` property will be used instead.
+  When that property is also unspecified nothing will be displayed by the `<transloco>` component.
+
+* **`content`** (_string_)
+
+  Pre-translated text to display.
+  Still applies the markup tags, but doesn't do any translation (except possibly for string interpolation expressions, e.g. `{{ SOME_TRANSLATION_KEY }}`).
+  This property will be ignored if a translation `key` is specified.
 
 * **`params`** ([_HashMap_](https://github.com/ngneat/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/types.ts#L1))
 

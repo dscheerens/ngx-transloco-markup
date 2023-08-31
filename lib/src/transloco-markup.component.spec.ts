@@ -76,7 +76,32 @@ describe('Transloco markup component', () => {
         expect(element.querySelector('i')!.textContent).toBe('Markup');
     });
 
-    it('renders an empty element when no translation key is specified', () => {
+    it('can render a pre translated text with markup', () => {
+        const { component, element } = createComponent({
+            props: {
+                content: 'Styled [i]text[/i]',
+            },
+        });
+
+        expect(component).toBeDefined();
+        expect(element.textContent).toBe('Styled text');
+        expect(element.querySelector('i')).toBeDefined();
+        expect(element.querySelector('i')!.textContent).toBe('text');
+    });
+
+    it('ignores the `content` property if a translation key is specified', () => {
+        const { component, element } = createComponent({
+            props: {
+                translationKey: 'TITLE',
+                content: 'Something else',
+            },
+        });
+
+        expect(component).toBeDefined();
+        expect(element.textContent).toBe('Welcome to Transloco Markup');
+    });
+
+    it('renders an empty element when no translation key and content are specified', () => {
         const { element } = createComponent();
 
         expect(element.firstChild).toBeNull();

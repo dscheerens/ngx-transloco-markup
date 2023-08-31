@@ -2,10 +2,12 @@ import {
   ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Optional, ViewEncapsulation,
 } from '@angular/core';
 import {
-  HashMap, InlineLoader, TRANSLOCO_LANG, TRANSLOCO_MISSING_HANDLER, TRANSLOCO_SCOPE, Translation, TranslocoMissingHandler,
-  TranslocoScope, TranslocoService, getPipeValue,
+  HashMap, InlineLoader, TRANSLOCO_LANG, TRANSLOCO_MISSING_HANDLER, TRANSLOCO_SCOPE, Translation, TranslocoMissingHandler, TranslocoScope,
+  TranslocoService, getPipeValue,
 } from '@ngneat/transloco';
-import { EMPTY, Observable, Subscription, combineLatest, concat, distinctUntilChanged, first, map, of, shareReplay, skip, switchMap } from 'rxjs';
+import {
+  EMPTY, Observable, Subscription, combineLatest, concat, distinctUntilChanged, first, map, of, shareReplay, skip, switchMap,
+} from 'rxjs';
 
 import { createTranslationMarkupRenderer } from './create-translation-markup-renderer';
 import { STRING_INTERPOLATION_TRANSPILER } from './string-interpolation-transpiler.token';
@@ -31,8 +33,13 @@ import { notUndefined } from './utils/predicates';
     standalone: true,
 })
 export class TranslocoMarkupComponent implements OnInit, OnDestroy {
-    /** Key of the translation text that needs to be displayed. If no value is specified, the component will render an empty element. */
+    /**
+     * Key of the translation text that needs to be displayed. If no value is specified, then the value of the `content` property will be
+     * used as the translation value. When that property is also unspecified, this component will render an empty element. */
     @Input('key') public translationKey?: string;
+
+    /** Translated text to display. Note that this property will be ignored if a `translationKey` is specified. */
+    @Input() public content?: string;
 
     /** Optional object that contains the values to be used for parameterized translation texts. */
     @Input('params') public translationParameters?: HashMap;
@@ -89,6 +96,7 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         const translationKey$ = observeProperty(this as TranslocoMarkupComponent, 'translationKey');
+        const content$ = observeProperty(this as TranslocoMarkupComponent, 'content');
         const translationParameters$ = observeProperty(this as TranslocoMarkupComponent, 'translationParameters');
         const inlineLanguage$ = observeProperty(this as TranslocoMarkupComponent, 'inlineLanguage');
         const inlineScope$ = observeProperty(this as TranslocoMarkupComponent, 'inlineScope');
@@ -130,10 +138,10 @@ export class TranslocoMarkupComponent implements OnInit, OnDestroy {
         );
 
         // Define the translationValue$ stream that emits the (unparsed) translation text that is to be displayed.
-        const translationValue$ = combineLatest([translationKey$, translation$]).pipe(
-            map(([key, translation]) => {
+        const translationValue$ = combineLatest([translationKey$, content$, translation$]).pipe(
+            map(([key, content, translation]) => {
                 if (key === undefined) {
-                    return { value: '', translation };
+                    return { value: content ?? '', translation };
                 }
 
                 const useFallbackTranslation = this.translocoService.config.missingHandler.useFallbackTranslation;
