@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/dscheerens/ngx-transloco-markup/compare/v5.0.1...v5.1.0) (2023-08-31)
+
+
+### Features
+
+* support rendering of pre-translated content ([df047b6](https://github.com/dscheerens/ngx-transloco-markup/commit/df047b6293087728995f0d58f5bafe6a7b7d6bc3))
+
 ## [5.0.0](https://github.com/dscheerens/ngx-transloco-markup/compare/v4.0.0...v5.0.0) (2023-08-09)
 
 

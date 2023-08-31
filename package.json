@@ -1,6 +1,6 @@
 {
   "name": "ngx-transloco-markup",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "description": "A translation component to render translations with markup",
   "homepage": "https://github.com/dscheerens/ngx-transloco-markup",
   "author": "Daan Scheerens",
