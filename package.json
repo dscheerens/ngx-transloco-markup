@@ -32,7 +32,7 @@
     "publish.dist": "npm publish build/dist"
   },
   "peerDependencies": {
-    "@ngneat/transloco": "^5",
+    "@ngneat/transloco": "^5 || ^6",
     "rxjs": "^7"
   },
   "devDependencies": {
@@ -55,7 +55,7 @@
     "@angular/router": "^16.1.8",
     "@dscheerens/eslint-config-angular": "^3.0.0",
     "@ngneat/spectator": "^15.0.1",
-    "@ngneat/transloco": "^5.0.6",
+    "@ngneat/transloco": "^6.0.4",
     "@types/jasmine": "^4.0.3",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
     "@typescript-eslint/parser": "^6.3.0",
