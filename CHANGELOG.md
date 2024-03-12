@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.2.0](https://github.com/dscheerens/ngx-transloco-markup/compare/v5.1.0...v5.2.0) (2024-03-12)
+
+
+### Features
+
+* support Transloco version 6 ([1272cd9](https://github.com/dscheerens/ngx-transloco-markup/commit/1272cd9392f1d7f2ce08ff68c45731ec69a4c8bd))
+
 ## [5.1.0](https://github.com/dscheerens/ngx-transloco-markup/compare/v5.0.1...v5.1.0) (2023-08-31)
 
 
