@@ -1,9 +1,9 @@
 import { fakeAsync, flushMicrotasks } from '@angular/core/testing';
-import { createComponentFactory } from '@ngneat/spectator';
 import {
   TRANSLOCO_CONFIG, TRANSLOCO_LOADER, TRANSLOCO_MISSING_HANDLER, TRANSLOCO_SCOPE, TestingLoader, TranslocoConfig, TranslocoMissingHandler,
   TranslocoService, TranslocoTestingModule, translocoConfig,
-} from '@ngneat/transloco';
+} from '@jsverse/transloco';
+import { createComponentFactory } from '@ngneat/spectator';
 import { of } from 'rxjs';
 
 import { defaultTranslocoMarkupTranspilers } from './default-transloco-markup-transpilers';
@@ -62,11 +62,8 @@ describe('Transloco markup component', () => {
     });
 
     it('can render translations with markup', () => {
-        const { component, element } = createComponent({
-            props: {
-                translationKey: 'TITLE',
-            },
-        });
+        const { component, element } = createComponent();
+        component.translationKey = 'TITLE';
 
         expect(component).toBeDefined();
         expect(element.textContent).toBe('Welcome to Transloco Markup');
@@ -77,11 +74,8 @@ describe('Transloco markup component', () => {
     });
 
     it('can render a pre translated text with markup', () => {
-        const { component, element } = createComponent({
-            props: {
-                content: 'Styled [i]text[/i]',
-            },
-        });
+        const { component, element } = createComponent();
+        component.content = 'Styled [i]text[/i]';
 
         expect(component).toBeDefined();
         expect(element.textContent).toBe('Styled text');
@@ -90,12 +84,9 @@ describe('Transloco markup component', () => {
     });
 
     it('ignores the `content` property if a translation key is specified', () => {
-        const { component, element } = createComponent({
-            props: {
-                translationKey: 'TITLE',
-                content: 'Something else',
-            },
-        });
+        const { component, element } = createComponent();
+        component.translationKey = 'TITLE';
+        component.content = 'Something else';
 
         expect(component).toBeDefined();
         expect(element.textContent).toBe('Welcome to Transloco Markup');
@@ -108,12 +99,9 @@ describe('Transloco markup component', () => {
     });
 
     it('supports inline language specification', () => {
-        const { element } = createComponent({
-            props: {
-                translationKey: 'TITLE',
-                inlineLanguage: 'nl',
-            },
-        });
+        const { component, element } = createComponent();
+        component.translationKey = 'TITLE';
+        component.inlineLanguage = 'nl';
 
         expect(element.textContent).toBe('Welkom bij Transloco Markup');
         expect(element.querySelector('b')).toBeDefined();
@@ -121,11 +109,9 @@ describe('Transloco markup component', () => {
     });
 
     it('renders the translation when the inline language specification changes', () => {
-        const { element, component } = createComponent({
-            props: {
-                translationKey: 'TITLE',
-            },
-        });
+        const { element, component } = createComponent();
+
+        component.translationKey = 'TITLE';
 
         expect(element.textContent).toBe('Welcome to Transloco Markup');
         expect(element.querySelector('b')).toBeDefined();
@@ -145,10 +131,7 @@ describe('Transloco markup component', () => {
     });
 
     it('will rerender when the language is changed via the `TranslocoService` and the reRenderOnLangChange option is enabled', () => {
-        const { element, inject } = createComponent({
-            props: {
-                translationKey: 'TITLE',
-            },
+        const { component, element, inject } = createComponent({
             providers: [
                 {
                     provide: TRANSLOCO_CONFIG,
@@ -158,6 +141,7 @@ describe('Transloco markup component', () => {
                 },
             ],
         });
+        component.translationKey = 'TITLE';
 
         const translocoService = inject(TranslocoService);
 
@@ -169,11 +153,8 @@ describe('Transloco markup component', () => {
     });
 
     it('will not rerender when the language is changed via the `TranslocoService` and the reRenderOnLangChange option is disabled', () => {
-        const { element, inject } = createComponent({
-            props: {
-                translationKey: 'TITLE',
-            },
-        });
+        const { component, element, inject } = createComponent();
+        component.translationKey = 'TITLE';
 
         const translocoService = inject(TranslocoService);
 
@@ -185,11 +166,7 @@ describe('Transloco markup component', () => {
     });
 
     it('ignores the language changes of the `TranslocoService` when a static inline language is specified', () => {
-        const { element, inject } = createComponent({
-            props: {
-                translationKey: 'TITLE',
-                inlineLanguage: 'l33t|static',
-            },
+        const { component, element, inject } = createComponent({
             providers: [
                 {
                     provide: TRANSLOCO_CONFIG,
@@ -199,6 +176,8 @@ describe('Transloco markup component', () => {
                 },
             ],
         });
+        component.translationKey = 'TITLE';
+        component.inlineLanguage = 'l33t|static';
 
         const translocoService = inject(TranslocoService);
 
@@ -210,15 +189,12 @@ describe('Transloco markup component', () => {
     });
 
     it('uses the provided translation parameters to render the translation text with markup', () => {
-        const { component, element } = createComponent({
-            props: {
-                translationKey: 'CALL_TO_ACTION',
-                translationParameters: {
-                    presents: 'https://tooth-fairy.webshops.com/',
-                    name: 'the Tooth Fairy',
-                },
-            },
-        });
+        const { component, element } = createComponent();
+        component.translationKey = 'CALL_TO_ACTION';
+        component.translationParameters = {
+            presents: 'https://tooth-fairy.webshops.com/',
+            name: 'the Tooth Fairy',
+        };
 
         expect(element.textContent).toBe('Click here for some awesome presents provided by the Tooth Fairy');
         expect(element.querySelector('a')).toBeDefined();
@@ -253,11 +229,8 @@ describe('Transloco markup component', () => {
     });
 
     it('uses the `TranslocoMissingHandler` to resolve translation texts for translations not available in the active language', () => {
-        const { element, inject, component } = createComponent({
-            props: {
-                translationKey: 'TITLE',
-            },
-        });
+        const { element, inject, component } = createComponent();
+        component.translationKey = 'TITLE';
 
         const missingHandler = inject<TranslocoMissingHandler>(TRANSLOCO_MISSING_HANDLER);
         const handleMissingTranslationSpy = spyOn(missingHandler, 'handle').and.callThrough();
@@ -284,9 +257,6 @@ describe('Transloco markup component', () => {
 
     it('renders an empty texts for empty translation texts and the `allowEmptyValues` option is enabled in the Transloco config', () => {
         const { element, inject, component } = createComponent({
-            props: {
-                translationKey: 'TITLE',
-            },
             providers: [
                 {
                     provide: TRANSLOCO_CONFIG,
@@ -296,6 +266,7 @@ describe('Transloco markup component', () => {
                 },
             ],
         });
+        component.translationKey = 'TITLE';
 
         const missingHandler = inject<TranslocoMissingHandler>(TRANSLOCO_MISSING_HANDLER);
         const handleMissingTranslationSpy = spyOn(missingHandler, 'handle').and.callThrough();
@@ -309,10 +280,7 @@ describe('Transloco markup component', () => {
     });
 
     it('uses the configured fallback language for translations not available in the active language', () => {
-        const { element } = createComponent({
-            props: {
-                translationKey: 'SECRET',
-            },
+        const { component, element } = createComponent({
             providers: [
                 {
                     provide: TRANSLOCO_CONFIG,
@@ -323,6 +291,7 @@ describe('Transloco markup component', () => {
                 },
             ],
         });
+        component.translationKey = 'SECRET';
 
         expect(element.textContent).toBe('b335 m4k3 h0n3y');
     });
@@ -333,12 +302,9 @@ describe('Transloco markup component', () => {
             ['[/b]', '**'],
         ]));
 
-        const { element } = createComponent({
-            props: {
-                translationKey: 'TITLE',
-                inlineTranspilers: convertBoldTagsToMarkdown,
-            },
-        });
+        const { component, element } = createComponent();
+        component.translationKey = 'TITLE';
+        component.inlineTranspilers = convertBoldTagsToMarkdown;
 
         expect(element.textContent).toBe('Welcome to **Transloco Markup**');
         expect(element.querySelector('b')).toBeNull();
@@ -351,13 +317,10 @@ describe('Transloco markup component', () => {
             ['[/b]', '**'],
         ]));
 
-        const { element } = createComponent({
-            props: {
-                translationKey: 'TITLE',
-                inlineTranspilers: convertBoldTagsToMarkdown,
-                mergeTranspilers: false,
-            },
-        });
+        const { component, element } = createComponent();
+        component.translationKey = 'TITLE';
+        component.inlineTranspilers = convertBoldTagsToMarkdown;
+        component.mergeTranspilers = false;
 
         expect(element.textContent).toBe('Welcome to **Transloco [i]Markup[/i]**');
         expect(element.querySelector('b')).toBeNull();
@@ -366,9 +329,6 @@ describe('Transloco markup component', () => {
 
     it('supports provided scopes', fakeAsync(() => {
         const { element, component } = createComponent({
-            props: {
-                translationKey: 'alt.TITLE',
-            },
             providers: [
                 {
                     provide: TRANSLOCO_SCOPE,
@@ -386,6 +346,7 @@ describe('Transloco markup component', () => {
                 },
             ],
         });
+        component.translationKey = 'alt.TITLE';
 
         flushMicrotasks();
 
@@ -408,12 +369,10 @@ describe('Transloco markup component', () => {
 
     it('supports inlines scopes', () => {
         const { element, inject, fixture, component } = createComponent({
-            props: {
-                translationKey: 'alt.SECRET',
-                inlineScope: 'alt',
-            },
             detectChanges: false,
         });
+        component.translationKey = 'alt.SECRET';
+        component.inlineScope = 'alt';
 
         const testingLoader: TestingLoader = inject<TestingLoader>(TRANSLOCO_LOADER);
 

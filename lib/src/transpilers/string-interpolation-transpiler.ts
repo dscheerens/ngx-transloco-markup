@@ -1,5 +1,5 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { TRANSLOCO_TRANSPILER, TranslocoTranspiler } from '@ngneat/transloco';
+import { TRANSLOCO_TRANSPILER, TranslocoTranspiler } from '@jsverse/transloco';
 
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import {
@@ -108,12 +108,12 @@ export class StringInterpolationTranspiler implements TranslationMarkupTranspile
         return {
             nextOffset: offset + 1,
             renderer: this.rendererFactory.createTextRenderer(
-                (translationParameters) => String(this.translocoTranspiler.transpile(
-                    interpolationExpression,
-                    translationParameters,
+                (translationParameters) => String(this.translocoTranspiler.transpile({
+                    value: interpolationExpression,
+                    params: translationParameters,
                     translation,
-                    '???',
-                )),
+                    key: '???',
+                })),
             ),
         };
     }

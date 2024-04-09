@@ -1,4 +1,4 @@
-import { HashMap, Translation } from '@ngneat/transloco';
+import { HashMap, Translation } from '@jsverse/transloco';
 
 import { TranslationMarkupRenderer } from './translation-markup-renderer.model';
 import { TranslationMarkupTranspiler, TranslationMarkupTranspilerContext } from './translation-markup-transpiler.model';

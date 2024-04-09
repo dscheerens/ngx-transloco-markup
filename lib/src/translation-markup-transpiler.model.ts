@@ -1,4 +1,4 @@
-import { Translation } from '@ngneat/transloco';
+import { Translation } from '@jsverse/transloco';
 
 import { TranslationMarkupRenderer } from './translation-markup-renderer.model';
 import { selectFirstWhere } from './utils/iterable';

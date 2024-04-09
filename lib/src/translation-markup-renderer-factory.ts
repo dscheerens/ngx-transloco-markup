@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { HashMap } from '@ngneat/transloco';
+import { HashMap } from '@jsverse/transloco';
 
 import { TranslationMarkupRenderer } from './translation-markup-renderer.model';
 

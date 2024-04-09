@@ -1,4 +1,4 @@
-import { HashMap } from '@ngneat/transloco';
+import { HashMap } from '@jsverse/transloco';
 
 import { LinkRenderer } from '../link-renderer.model';
 import { ResolveLinkSpecification } from '../models/resolve-link-specification.model';

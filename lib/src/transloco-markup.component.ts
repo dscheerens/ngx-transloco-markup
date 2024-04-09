@@ -4,7 +4,7 @@ import {
 import {
   HashMap, InlineLoader, TRANSLOCO_LANG, TRANSLOCO_MISSING_HANDLER, TRANSLOCO_SCOPE, Translation, TranslocoMissingHandler, TranslocoScope,
   TranslocoService, getPipeValue,
-} from '@ngneat/transloco';
+} from '@jsverse/transloco';
 import {
   EMPTY, Observable, Subscription, combineLatest, concat, distinctUntilChanged, first, map, of, shareReplay, skip, switchMap,
 } from 'rxjs';

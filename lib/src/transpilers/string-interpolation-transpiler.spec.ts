@@ -1,4 +1,4 @@
-import { TranslocoTranspiler } from '@ngneat/transloco';
+import { TranslocoTranspiler } from '@jsverse/transloco';
 
 import { TranslationMarkupRendererFactory } from '../translation-markup-renderer-factory';
 import { TranslationMarkupTranspilerContext } from '../translation-markup-transpiler.model';
@@ -134,7 +134,7 @@ describe('StringInterpolationTranspiler', () => {
             const renderResult = renderTranslation({});
 
             expect(transpileSpy).toHaveBeenCalled();
-            expect(transpileSpy.calls.argsFor(0)[0]).toBe('{{ a }}');
+            expect(transpileSpy.calls.argsFor(0)[0].value).toBe('{{ a }}');
 
             expect(renderResult).toBeInstanceOf(Text);
             expect((renderResult as Text).textContent).toBe('(expanded)');

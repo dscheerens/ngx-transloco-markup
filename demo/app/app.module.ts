@@ -5,7 +5,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { Translation, TranslocoLoader, TranslocoModule, provideTransloco, translocoConfig } from '@ngneat/transloco';
+import { Translation, TranslocoLoader, TranslocoModule, provideTransloco, translocoConfig } from '@jsverse/transloco';
 import { defaultTranslocoMarkupTranspilers } from 'ngx-transloco-markup';
 import { Observable } from 'rxjs';
 

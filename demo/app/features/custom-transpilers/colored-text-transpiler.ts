@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HashMap } from '@ngneat/transloco';
+import { HashMap } from '@jsverse/transloco';
 import {
   TokenizeResult, TranslationMarkupRenderer, TranslationMarkupRendererFactory, TranslationMarkupTranspiler,
   TranslationMarkupTranspilerContext, TranspileResult,

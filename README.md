@@ -2,8 +2,8 @@
 
 # ngx-transloco-markup: Markup support for Transloco
 
-This library is an extension for [Transloco](https://github.com/ngneat/transloco) that provides support for displaying translations with markup.
-**ngx-transloco-markup** offers an alternative to the Transloco [directive](https://ngneat.github.io/transloco/docs/translation-in-the-template#structural-directive) and [pipe](https://ngneat.github.io/transloco/docs/translation-in-the-template#pipe): the `<transloco>` component, that takes care of rendering your translations with markup.
+This library is an extension for [Transloco](https://github.com/jsverse/transloco) that provides support for displaying translations with markup.
+**ngx-transloco-markup** offers an alternative to the Transloco [directive](https://jsverse.github.io/transloco/docs/translation-in-the-template#structural-directive) and [pipe](https://jsverse.github.io/transloco/docs/translation-in-the-template#pipe): the `<transloco>` component, that takes care of rendering your translations with markup.
 By using this component, you no longer need to split your translations or use an `[innerHtml]`-binding.
 This allows for a much simpler syntax in your translation files and you no longer need to worry about potential markup-injection issues that could cause the layout of your application to break.
 
@@ -30,7 +30,7 @@ Fortunately, thanks to the extensible architecture, you can do this quite easily
 ## Installation
 
 Since this library is an extension for Transloco, first make sure your application has been configured to use transloco.
-If this is not the case follow the easy [installation instructions](https://ngneat.github.io/transloco/docs/installation) from Transloco.
+If this is not the case follow the easy [installation instructions](https://jsverse.github.io/transloco/docs/installation) from Transloco.
 
 Next you'll need to install the `ngx-transloco-markup` package from NPM:
 
@@ -54,6 +54,7 @@ Use the compatibility matrix below to determine which version of this module wor
 | `ngx-transloco-markup` - **4.x.x** | >= **14.0.0**   | **4.x.x**             |
 | `ngx-transloco-markup` - **5.x.x** | >= **16.0.0**   | **5.x.x**             |
 | `ngx-transloco-markup` - **5.2.x** | >= **16.0.0**   | **5.x.x** + **6.x.x** |
+| `ngx-transloco-markup` - **6.x.x** | >= **17.0.0**   | **7.x.x**             |
 
 ## Getting started
 
@@ -162,7 +163,7 @@ The `<transloco>` component has the following input properties:
   Still applies the markup tags, but doesn't do any translation (except possibly for string interpolation expressions, e.g. `{{ SOME_TRANSLATION_KEY }}`).
   This property will be ignored if a translation `key` is specified.
 
-* **`params`** ([_HashMap_](https://github.com/ngneat/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/types.ts#L1))
+* **`params`** ([_HashMap_](https://github.com/jsverse/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/types.ts#L1))
 
   An object containing the translation parameters, which will be used to expand interpolation expressions (`{{ paramKey }}`).
 
@@ -170,12 +171,12 @@ The `<transloco>` component has the following input properties:
 
   Language in which the text should be displayed.
   Usually you do not need to specify this, unless you want to override the default language.
-  The default language is either the current language of the [`TranslocoService`](https://github.com/ngneat/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/transloco.service.ts), or the language that was specified using the [`TRANSLOCO_LANG`](https://github.com/ngneat/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/transloco-lang.ts) injection token.
+  The default language is either the current language of the [`TranslocoService`](https://github.com/jsverse/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/transloco.service.ts), or the language that was specified using the [`TRANSLOCO_LANG`](https://github.com/jsverse/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/transloco-lang.ts) injection token.
 
 * **`scope`** (string)
 
   Scope which is to be used.
-  If this property is specified it will override the scope provide via the [`TRANSLOCO_SCOPE`](https://github.com/ngneat/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/transloco-scope.ts) injection token.
+  If this property is specified it will override the scope provide via the [`TRANSLOCO_SCOPE`](https://github.com/jsverse/transloco/blob/v2.17.2/projects/ngneat/transloco/src/lib/transloco-scope.ts) injection token.
 
 * **`transpilers`** (_TranslationMarkupTranspiler | TranslationMarkupTranspiler[]_)
 
@@ -601,9 +602,9 @@ A complete implementation of the colored text transpiler can be found in the dem
 One of Transloco's features is the support for interpolation expressions.
 Such expressions allow you to insert parameter values or other translations using the `{{ expression }}` syntax.
 The syntax and expression types can be customized.
-One example is the [message format](https://ngneat.github.io/transloco/docs/plugins/message-format) plugin to support translations that use the ICU syntax for expressing pluralization and gender.
+One example is the [message format](https://jsverse.github.io/transloco/docs/plugins/message-format) plugin to support translations that use the ICU syntax for expressing pluralization and gender.
 
-Transloco itself also uses a [transpiler](https://ngneat.github.io/transloco/docs/hack#the-transpiler) for this purpose: the `TranslocoTranspiler`.
+Transloco itself also uses a [transpiler](https://jsverse.github.io/transloco/docs/hack#the-transpiler) for this purpose: the `TranslocoTranspiler`.
 Plugins can override the default transloco Transpiler to support a different (customized) syntax and evaluation scheme for interpolation expressions.
 Since `ngx-transloco-markup` is meant to support all Transloco features, it also uses the `TranslocoTranspiler` to expand interpolation expressions.
 This means that it also supports custom implementations, like the _message format_ plugin.

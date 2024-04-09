@@ -1,4 +1,4 @@
-import { HashMap } from '@ngneat/transloco';
+import { HashMap } from '@jsverse/transloco';
 
 /**
  * Specification of how to resolve a link value, which can be done in the following ways:
