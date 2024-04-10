@@ -339,7 +339,7 @@ The factory also provides two signatures of the `ContextualLinkTranspilerFactory
 
 The whole architecture of `ngx-transloco-markup` is based on the concept of transpilers: small units that are responsible for converting (part) of translation values into rendering functions.
 For example the `BoldTextTranspiler` is capable of recognizing blocks that start with `[b]` and end with `[/b]`.
-Once it has recognized such a block, it transforms it to a rendering function that creates `<b>` HTML element and appends the content between the start and end tags to that element.
+Once it has recognized such a block, it transforms it to a rendering function that creates a `<b>` HTML element and appends the content between the start and end tags to that element.
 
 While the `ngx-transloco-markup` library ships with a set of standard transpilers for the most common use cases, there are surely a lot of other different markup requirements which are not supported out-of-the-box.
 Instead of trying to cover all these different requirements into a single library, you are offered the option to expand the set of transpilers if necessary.
