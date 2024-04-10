@@ -45,16 +45,16 @@ For custom build setups: the library is published in the [Angular Package Format
 
 Use the compatibility matrix below to determine which version of this module works with your project's Angular version.
 
-| Library version                    | Angular version | Transloco version     |
-| ---------------------------------- | --------------- | --------------------- |
-| `ngx-transloco-markup` - **1.x.x** | >= **8.0.0**    | **2.x.x**             |
-| `ngx-transloco-markup` - **2.x.x** | >= **10.0.0**   | **2.x.x**             |
-| `ngx-transloco-markup` - **3.0.x** | >= **13.0.0**   | **3.x.x**             |
-| `ngx-transloco-markup` - **3.1.x** | >= **13.0.0**   | **3.x.x** + **4.x.x** |
-| `ngx-transloco-markup` - **4.x.x** | >= **14.0.0**   | **4.x.x**             |
-| `ngx-transloco-markup` - **5.x.x** | >= **16.0.0**   | **5.x.x**             |
-| `ngx-transloco-markup` - **5.2.x** | >= **16.0.0**   | **5.x.x** + **6.x.x** |
-| `ngx-transloco-markup` - **6.x.x** | >= **17.0.0**   | **7.x.x**             |
+| Library version                    | Angular version | Transloco version                            |
+| ---------------------------------- | --------------- | -------------------------------------------- |
+| `ngx-transloco-markup` - **1.x.x** | >= **8.0.0**    | `@ngneat/transloco`  - **2.x.x**             |
+| `ngx-transloco-markup` - **2.x.x** | >= **10.0.0**   | `@ngneat/transloco`  - **2.x.x**             |
+| `ngx-transloco-markup` - **3.0.x** | >= **13.0.0**   | `@ngneat/transloco`  - **3.x.x**             |
+| `ngx-transloco-markup` - **3.1.x** | >= **13.0.0**   | `@ngneat/transloco`  - **3.x.x** + **4.x.x** |
+| `ngx-transloco-markup` - **4.x.x** | >= **14.0.0**   | `@ngneat/transloco`  - **4.x.x**             |
+| `ngx-transloco-markup` - **5.x.x** | >= **16.0.0**   | `@ngneat/transloco`  - **5.x.x**             |
+| `ngx-transloco-markup` - **5.2.x** | >= **16.0.0**   | `@ngneat/transloco`  - **5.x.x** + **6.x.x** |
+| `ngx-transloco-markup` - **6.x.x** | >= **17.0.0**   | `@jsverse/transloco` - **7.x.x**             |
 
 ## Getting started
 
