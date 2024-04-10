@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.1](https://github.com/dscheerens/ngx-transloco-markup/compare/v6.0.0...v6.0.1) (2024-04-10)
+
+
+### Bug Fixes
+
+* incorrect peer dependency for transloco ([ffd55fd](https://github.com/dscheerens/ngx-transloco-markup/commit/ffd55fd9eb1d4d0f92a68b357e9897850cb704e9))
+
 ## [6.0.0](https://github.com/dscheerens/ngx-transloco-markup/compare/v5.2.0...v6.0.0) (2024-04-09)
 
 
