@@ -33,7 +33,7 @@
   },
   "peerDependencies": {
     "@angular/core": ">=17",
-    "@ngneat/jsverse": "^7",
+    "@jsverse/transloco": "^7",
     "rxjs": "^7"
   },
   "devDependencies": {
